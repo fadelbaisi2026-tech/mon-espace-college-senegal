@@ -11,6 +11,11 @@ const seedResources = [
   {id:'math-adem-3e',title:'Fascicule d’exercices de mathématiques · 3e',grade:'3e',subject:'Mathématiques',kind:'Exercices',description:'Activités numériques et géométriques couvrant le programme de mathématiques de troisième. 66 pages.',source:'ADEM-Dakar · APPRENDRE / AUF',url:'https://apprendre.auf.org/wp-content/uploads/2021/08/fascicule_adem_math_3e.pdf',personal:false},
   {id:'math-babacar-3e',title:'Réussir les maths au BFEM · Cours, exercices et corrigés',grade:'3e',subject:'Mathématiques',kind:'Cours et exercices',description:'Document complet sur le programme de troisième : résumés de cours par chapitre, séries d’exercices avec corrections, épreuves blanches et sujets de concours.',source:'Babacar Diarra · SunuMaths',url:'https://sunumaths.com/wp-content/uploads/2021/03/cours-3ieme-et-exercices-Babacar-DIARRA.pdf',personal:false},
 
+  // Cours de mathématiques retrouvés pour les niveaux 6e et 5e.
+  {id:'math-cours-coly-6e',title:'Cours de mathématiques · 6e',grade:'6e',subject:'Mathématiques',kind:'Cours',description:'Support de cours de 82 pages : progression harmonisée, leçons détaillées, objectifs, notions et exercices d’application.',source:'Ibrahima Coly · Professeur de mathématiques · IA Kaolack',url:'https://topeducationsn.com/wp-content/uploads/2022/11/COLY-MATHS-6e.pdf',personal:false},
+  {id:'math-livret-men-6e',title:'Mon livret de mathématiques · 6e',grade:'6e',subject:'Mathématiques',kind:'Cours et exercices',description:'Livret de la Direction de l’Enseignement moyen secondaire général : essentiel du cours pour chaque leçon, exercices de contrôle et exercices d’application.',source:'Ministère de l’Éducation nationale · DEMSG',url:'https://topeducationsn.com/wp-content/uploads/2024/09/Livret_Math_6e-_juin_23.pdf',personal:false},
+  {id:'math-cours-coly-5e',title:'Cours de mathématiques · 5e',grade:'5e',subject:'Mathématiques',kind:'Cours',description:'Support de cours de 61 pages : progression harmonisée, chapitres, définitions, propriétés, méthodes et exercices d’application.',source:'Ibrahima Coly · Professeur de mathématiques · IA Kaolack',url:'https://topeducationsn.com/wp-content/uploads/2022/11/COLY-MATHS-5e.pdf',personal:false},
+
   // Physique-Chimie : uniquement en 4e et 3e dans le parcours collège sénégalais.
   {id:'pc-adem-3e',title:'Fascicule ADEM de sciences physiques · 3e',grade:'3e',subject:'Physique-Chimie',kind:'Cours et exercices',description:'Support ADEM-Dakar de sciences physiques pour la troisième : optique, forces, travail, électricité, solutions, acides et bases.',source:'ADEM-Dakar · Sénégal',url:ADEM_ROOT+'ADEM_PC_3e.pdf?ver=1791159802009',personal:false},
   {id:'pc-exos-phys-3e',title:'Séries d’exercices de physique · 3e',grade:'3e',subject:'Physique-Chimie',kind:'Exercices',description:'Entraînement de physique pour la classe de troisième : lentilles, lumière, forces, électricité et résistance.',source:'IREMPT Sénégal',url:ADEM_ROOT+'Exercice_physique_3e_irempt.pdf?ver=1791159802009',personal:false},
@@ -30,8 +35,6 @@ const seedResources = [
     ['3e','Cours de SVT · 3e','Fascicule de cours de SVT pour la classe de troisième.','FASCICULE%20SVT%20COURS%203%20IEME.pdf']
   ].map(([grade,title,description,file])=>({id:'svt-cours-'+grade, title, grade, subject:'SVT', kind:'Cours', description, source:'Inspection d’Académie de Kédougou · Sénégal', url:ADEM_ROOT+file+ADEM_VER, personal:false})),
 
-  // Français : fascicule commun aux quatre classes du collège.
-  {id:'fr-adem-college',title:'200 exercices pour bien écrire · Français 6e à 3e',grade:'6e–3e',subject:'Français',kind:'Exercices',description:'Fascicule ADEM de travaux dirigés et de remédiation : 200 exercices organisés pour les quatre niveaux du collège. 88 pages.',source:'ADEM-Dakar · APPRENDRE / AUF',url:'https://apprendre.auf.org/wp-content/uploads/2021/08/fascicule_adem_francais_college.pdf',personal:false},
   // Compléments de Mathématiques 6e : devoirs et évaluations sénégalais.
   {id:'math-6e-eval-2022',title:'Évaluation de mathématiques · 6e · Semestre 1',grade:'6e',subject:'Mathématiques',kind:'Devoirs',description:'Évaluation de niveau sixième portant sur les nombres décimaux, les ensembles et la géométrie.',source:'Top Education Sénégal · IA Saint-Louis',url:'https://topeducationsn.com/wp-content/uploads/2022/11/Evaluation-MATHS-N%C2%B01-Semestre1-Classe-6e-2022-2023.pdf',personal:false},
   {id:'math-6e-eval-dec-2022',title:'Évaluation de mathématiques · 6e · Décembre 2022',grade:'6e',subject:'Mathématiques',kind:'Devoirs',description:'Devoir de mathématiques de sixième : vocabulaire géométrique, solides, nombres et calculs.',source:'Top Education Sénégal · IA Saint-Louis',url:'https://topeducationsn.com/wp-content/uploads/2022/12/Evaluation-N%C2%B01-MATHS-Semestre-1-Classe-6eme-2022-2023.pdf',personal:false},
@@ -208,7 +211,6 @@ function resourceCard(item){
 }
 const LIBRARY_SUBJECTS = [
   {name:'Mathématiques',description:'Nombres, calcul, géométrie et résolution de problèmes.'},
-  {name:'Français',description:'Grammaire, expression écrite, lecture et rédaction.'},
   {name:'Physique-Chimie',description:'Matière, énergie, électricité et transformations · 4e et 3e.'},
   {name:'SVT',description:'Sciences de la vie, de la Terre et environnement.'}
 ];
@@ -281,7 +283,7 @@ function renderLibrary(){
     intro.innerHTML='<div class="eyebrow">PARCOURS 1 · PAR NIVEAU</div><h2>Choisis ton niveau</h2><p>Retrouve les ressources associées à la 6e, 5e, 4e ou 3e.</p>';
     browser.innerHTML='<div class="library-tile-grid grade-grid">'+['6e','5e','4e','3e'].map(grade=>{
       const count=resources.filter(item=>isInLibraryGrade(item,grade)).length;
-      return '<button type="button" class="library-tile class-tile" data-library-grade="'+grade+'"><span class="library-tile-main"><span class="library-tile-badge">'+grade+'</span><span class="library-tile-copy"><strong>Classe de '+grade+'</strong><small>'+(grade==='6e'||grade==='5e'?'Mathématiques · Français · SVT':'Mathématiques · Français · Physique-Chimie · SVT')+'</small></span></span><span class="library-tile-tail"><b>'+count+'</b><small>ressources</small><span>→</span></span></button>';
+      return '<button type="button" class="library-tile class-tile" data-library-grade="'+grade+'"><span class="library-tile-main"><span class="library-tile-badge">'+grade+'</span><span class="library-tile-copy"><strong>Classe de '+grade+'</strong><small>'+(grade==='6e'||grade==='5e'?'Mathématiques · SVT':'Mathématiques · Physique-Chimie · SVT')+'</small></span></span><span class="library-tile-tail"><b>'+count+'</b><small>ressources</small><span>→</span></span></button>';
     }).join('')+'</div><div class="library-start-actions"><button type="button" class="secondary-button" data-library-by-subject>Explorer par matière</button><button type="button" class="secondary-button" data-library-all>Toutes les ressources ('+resources.length+')</button></div>';
     return;
   }
@@ -357,6 +359,15 @@ function renderFavorites(){
   document.getElementById('favoritesEmpty').classList.toggle('hidden',resources.length>0);
 }
 let returnToLibraryAfterSave=false;
+function syncResourceSubjectOptions(){
+  const grade=document.querySelector('#resourceForm select[name="grade"]');
+  const subject=document.querySelector('#resourceForm select[name="subject"]');
+  if(!grade||!subject)return;
+  const pc=Array.from(subject.options).find(option=>option.value==='Physique-Chimie');
+  if(!pc)return;
+  pc.disabled=['6e','5e'].includes(grade.value);
+  if(pc.disabled&&subject.value==='Physique-Chimie')subject.value='Mathématiques';
+}
 function openModal(prefill={}){
   document.getElementById('resourceModal').classList.remove('hidden');
   document.body.style.overflow='hidden';
@@ -365,6 +376,7 @@ function openModal(prefill={}){
   if(prefill.grade) form.elements.grade.value=prefill.grade;
   if(prefill.subject) form.elements.subject.value=prefill.subject;
   if(prefill.kind) form.elements.kind.value=prefill.kind;
+  syncResourceSubjectOptions();
 }
 function closeModal(){document.getElementById('resourceModal').classList.add('hidden');document.body.style.overflow='';}
 function updateUserName(){
@@ -456,6 +468,8 @@ document.addEventListener('click',async event=>{
  }
 });
 document.getElementById('searchInput').addEventListener('input',renderLibrary);
+document.querySelector('#resourceForm select[name="grade"]').addEventListener('change',syncResourceSubjectOptions);
+syncResourceSubjectOptions();
 document.getElementById('resourceForm').addEventListener('submit',async event=>{
  event.preventDefault();
  const form=event.currentTarget;
