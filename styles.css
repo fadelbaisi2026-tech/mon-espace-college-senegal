@@ -117,3 +117,20 @@
 .library-all-row .secondary-button{min-height:42px;padding:0 19px;border:1px solid #dfe6f4;background:#fff;color:#3e5fc2;font-size:11px}
 .library-all-row .secondary-button:hover{background:#f2f5ff;border-color:#cbd7f3}
 @media(max-width:680px){.library-all-row{margin-top:11px}.library-all-row .secondary-button{width:100%;min-height:44px}}
+
+/* Library is the central learning space */
+.library-selfstudy{display:flex;align-items:center;gap:14px;margin:18px 0 6px;padding:15px 17px;border:1px solid #dfe7f7;border-radius:15px;background:linear-gradient(110deg,#f1f5ff,#fff)}
+.library-selfstudy-icon{width:43px;height:43px;flex:0 0 43px;display:grid;place-items:center;border-radius:13px;background:#e5edff;font-size:21px}
+.library-selfstudy-copy strong{display:block;font-family:Manrope;font-size:12px;color:#2a3856;margin-bottom:5px}
+.library-selfstudy-copy p{font-size:10px;line-height:1.6;color:#79869d;margin:0;max-width:850px}
+.library-start-actions{display:flex;gap:10px;justify-content:center;margin-top:17px;flex-wrap:wrap}
+.library-start-actions .secondary-button{border:1px solid #dfe6f4;background:#fff;color:#3e5fc2;min-height:43px;padding:0 18px}
+.library-start-actions .secondary-button:hover{background:#f2f5ff;border-color:#cbd7f3}
+@media(max-width:680px){
+ .library-selfstudy{align-items:flex-start;gap:10px;padding:12px;margin:12px 0 3px}
+ .library-selfstudy-icon{width:35px;height:35px;flex-basis:35px;font-size:17px;border-radius:10px}
+ .library-selfstudy-copy strong{font-size:11px}
+ .library-selfstudy-copy p{font-size:9px}
+ .library-start-actions{display:grid;grid-template-columns:1fr;gap:7px;margin-top:11px}
+ .library-start-actions .secondary-button{width:100%;min-height:42px}
+}
