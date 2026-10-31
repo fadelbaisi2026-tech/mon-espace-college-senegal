@@ -1,55 +1,37 @@
 'use strict';
 
-const PC_SOURCE = 'https://physiquechimie.godaddysites.com/fascicules';
-const MATH_PAGES = {
-  '6e':'https://sunumaths.com/sixieme/',
-  '5e':'https://sunumaths.com/cinquieme/',
-  '4e':'https://sunumaths.com/quaterieme/',
-  '3e':'https://sunumaths.com/troisieme/'
-};
 const ADEM_ROOT = 'https://img1.wsimg.com/blobby/go/92b1d401-89a0-4fda-accf-6ed9c6d46dd4/downloads/';
-const VER = '?ver=1791159802098';
+const ADEM_VER = '?ver=1791159802098';
 
 const seedResources = [
-  // Maths: four ADEM fascicules, plus chapter index pages from SunuMaths.
-  ...[
-    ['6e','ADEM Maths 6e','Fascicule de mathématiques pour la 6e.','ADEM_MATHS_6e.pdf'],
-    ['5e','ADEM Maths 5e','Fascicule de mathématiques pour la 5e.','ADEM_MATHS_5e.pdf'],
-    ['4e','ADEM Maths 4e','Fascicule de mathématiques pour la 4e.','ADEM_MATHS_4e.pdf'],
-    ['3e','ADEM Maths 3e','Fascicule de mathématiques pour la 3e.','ADEM_MATHS_3e.pdf']
-  ].map(([grade,title,description,file])=>({id:`math-adem-${grade}`,title,grade,subject:'Mathématiques',kind:'Fascicule',description,source:'ADEM · Sénégal',url:ADEM_ROOT+file+VER,origin:'Physique-Chimie · Fascicules',personal:false})),
-  ...[
-    ['6e','Exercices de maths 6e','Exercices par chapitre : nombres décimaux, géométrie, mesures et proportionnalité.'],
-    ['5e','Exercices de maths 5e','Exercices par chapitre : fractions, puissances, symétrie et proportionnalité.'],
-    ['4e','Exercices de maths 4e','Exercices par chapitre : nombres rationnels, calcul algébrique, équations et statistiques.'],
-    ['3e','Exercices de maths 3e','Exercices par chapitre : Thalès, trigonométrie, racines carrées, équations et statistiques.']
-  ].map(([grade,title,description])=>({id:`math-page-${grade}`,title,grade,subject:'Mathématiques',kind:'Exercices',description,source:'SunuMaths',url:MATH_PAGES[grade],origin:'SunuMaths · page de la classe',personal:false})),
-  {id:'math-bfem',title:'Annales BFEM · Mathématiques',grade:'3e',subject:'Mathématiques',kind:'Annales',description:'Retrouve les sujets de mathématiques et leurs corrections lorsqu’ils sont publiés.',source:'Sama Bac',url:'https://samabac.sn/category/epreuves-bfem',origin:'Sama Bac · Épreuves BFEM',personal:false},
+  // Mathématiques : les quatre fascicules ADEM sont des cahiers d'exercices.
+  {id:'math-adem-6e',title:'Fascicule d’exercices de mathématiques · 6e',grade:'6e',subject:'Mathématiques',kind:'Exercices',description:'Activités numériques et géométriques couvrant le programme de mathématiques de sixième. 76 pages.',source:'ADEM-Dakar · APPRENDRE / AUF',url:'https://apprendre.auf.org/wp-content/uploads/2021/08/fascicule_adem_math_6e.pdf',personal:false},
+  {id:'math-adem-5e',title:'Fascicule d’exercices de mathématiques · 5e',grade:'5e',subject:'Mathématiques',kind:'Exercices',description:'Activités numériques et géométriques couvrant le programme de mathématiques de cinquième. 73 pages.',source:'ADEM-Dakar · APPRENDRE / AUF',url:'https://apprendre.auf.org/wp-content/uploads/2021/08/fascicule_adem_math_5e.pdf',personal:false},
+  {id:'math-adem-4e',title:'Fascicule d’exercices de mathématiques · 4e',grade:'4e',subject:'Mathématiques',kind:'Exercices',description:'Activités numériques et géométriques couvrant le programme de mathématiques de quatrième. 63 pages.',source:'ADEM-Dakar · APPRENDRE / AUF',url:'https://apprendre.auf.org/wp-content/uploads/2021/08/fascicule_adem_math_4e.pdf',personal:false},
+  {id:'math-adem-3e',title:'Fascicule d’exercices de mathématiques · 3e',grade:'3e',subject:'Mathématiques',kind:'Exercices',description:'Activités numériques et géométriques couvrant le programme de mathématiques de troisième. 66 pages.',source:'ADEM-Dakar · APPRENDRE / AUF',url:'https://apprendre.auf.org/wp-content/uploads/2021/08/fascicule_adem_math_3e.pdf',personal:false},
+  {id:'math-babacar-3e',title:'Réussir les maths au BFEM · Cours, exercices et corrigés',grade:'3e',subject:'Mathématiques',kind:'Cours et exercices',description:'Document complet sur le programme de troisième : résumés de cours par chapitre, séries d’exercices avec corrections, épreuves blanches et sujets de concours.',source:'Babacar Diarra · SunuMaths',url:'https://sunumaths.com/wp-content/uploads/2021/03/cours-3ieme-et-exercices-Babacar-DIARRA.pdf',personal:false},
 
-  // Physics and chemistry: confirmed collège resources for 4e and 3e only.
-  {id:'pc-adem-3e',title:'ADEM Sciences physiques 3e',grade:'3e',subject:'Physique-Chimie',kind:'Fascicule',description:'Fascicule ADEM-Dakar : optique, forces, travail, électricité, solutions, acides et bases.',source:'ADEM · Sénégal',url:ADEM_ROOT+'ADEM_PC_3e.pdf?ver=1791159802009',origin:'Physique-Chimie · Fascicules',personal:false},
-  {id:'pc-exos-phys-3e',title:'Exercices de physique 3e · IREΜPT',grade:'3e',subject:'Physique-Chimie',kind:'Exercices',description:'Séries d’exercices de physique : lentilles, lumière, forces, électricité et résistance.',source:'IREMPT Sénégal',url:ADEM_ROOT+'Exercice_physique_3e_irempt.pdf?ver=1791159802009',origin:'Physique-Chimie · Fascicules',personal:false},
-  {id:'pc-exos-chim-3e',title:'Exercices de chimie 3e · IREMPT',grade:'3e',subject:'Physique-Chimie',kind:'Exercices',description:'Séries d’exercices de chimie pour la classe de 3e.',source:'IREMPT Sénégal',url:ADEM_ROOT+'Exercice_chimie_3e_irempt.pdf?ver=1791159802009',origin:'Physique-Chimie · Fascicules',personal:false},
-  {id:'pc-adem-4e',title:'ADEM Sciences physiques 4e',grade:'4e',subject:'Physique-Chimie',kind:'Fascicule',description:'Fascicule de sciences physiques ADEM pour la classe de 4e.',source:'ADEM · Sénégal',url:ADEM_ROOT+'ADEM_PC_4e.pdf?ver=1791159802067',origin:'Physique-Chimie · Fascicules',personal:false},
-  {id:'pc-wahab-4e',title:'Fascicule de sciences physiques 4e',grade:'4e',subject:'Physique-Chimie',kind:'Fascicule',description:'Support complémentaire de sciences physiques pour la 4e.',source:'Wahab Diop · Sénégal',url:ADEM_ROOT+'fascicule-sciences-physiques-4eme-_wahabdiop.pdf?ver=1791159802067',origin:'Physique-Chimie · Fascicules',personal:false},
-  {id:'pc-bfem',title:'Annales BFEM · Physique-Chimie',grade:'3e',subject:'Physique-Chimie',kind:'Annales',description:'Sujets de physique-chimie du BFEM publiés dans la rubrique des épreuves.',source:'Sama Bac',url:'https://samabac.sn/category/epreuves-bfem',origin:'Sama Bac · Épreuves BFEM',personal:false},
+  // Physique-Chimie : uniquement en 4e et 3e dans le parcours collège sénégalais.
+  {id:'pc-adem-3e',title:'Fascicule ADEM de sciences physiques · 3e',grade:'3e',subject:'Physique-Chimie',kind:'Cours et exercices',description:'Support ADEM-Dakar de sciences physiques pour la troisième : optique, forces, travail, électricité, solutions, acides et bases.',source:'ADEM-Dakar · Sénégal',url:ADEM_ROOT+'ADEM_PC_3e.pdf?ver=1791159802009',personal:false},
+  {id:'pc-exos-phys-3e',title:'Séries d’exercices de physique · 3e',grade:'3e',subject:'Physique-Chimie',kind:'Exercices',description:'Entraînement de physique pour la classe de troisième : lentilles, lumière, forces, électricité et résistance.',source:'IREMPT Sénégal',url:ADEM_ROOT+'Exercice_physique_3e_irempt.pdf?ver=1791159802009',personal:false},
+  {id:'pc-exos-chim-3e',title:'Séries d’exercices de chimie · 3e',grade:'3e',subject:'Physique-Chimie',kind:'Exercices',description:'Séries d’exercices de chimie adaptées à la classe de troisième.',source:'IREMPT Sénégal',url:ADEM_ROOT+'Exercice_chimie_3e_irempt.pdf?ver=1791159802009',personal:false},
+  {id:'pc-adem-4e-auf',title:'Fascicule d’exercices de sciences physiques et chimie · 4e',grade:'4e',subject:'Physique-Chimie',kind:'Exercices',description:'Activités expérimentales, séries d’exercices et activités d’intégration couvrant le programme de physique-chimie de quatrième. 55 pages.',source:'ADEM-Dakar · APPRENDRE / AUF',url:'https://apprendre.auf.org/wp-content/uploads/2021/08/fascicule_adem_sciences_physiques_4e.pdf',personal:false},
+  {id:'pc-wahab-4e',title:'Fascicule complémentaire de sciences physiques · 4e',grade:'4e',subject:'Physique-Chimie',kind:'Cours et exercices',description:'Support complémentaire de sciences physiques pour la classe de quatrième.',source:'Wahab Diop · Sénégal',url:ADEM_ROOT+'fascicule-sciences-physiques-4eme-_wahabdiop.pdf?ver=1791159802067',personal:false},
 
-  // SVT: ADEM fascicules for all four grades.
+  // SVT : fascicules ADEM par niveau et fascicules de cours IA Kédougou.
+  {id:'svt-adem-6e',title:'Fascicule ADEM de SVT · 6e',grade:'6e',subject:'SVT',kind:'Cours et exercices',description:'Fascicule sénégalais de sciences de la vie et de la Terre pour la sixième.',source:'ADEM-Dakar · SENPROF',url:'https://senprof.education.sn/ADEM/SVT%206e/res/SVT-6e.pdf',personal:false},
+  {id:'svt-adem-5e',title:'Fascicule ADEM de SVT · 5e',grade:'5e',subject:'SVT',kind:'Cours et exercices',description:'Leçons, thèmes et exercices de maîtrise des connaissances, de méthode et d’intégration pour la cinquième. 50 pages.',source:'ADEM-Dakar · APPRENDRE / AUF',url:'https://apprendre.auf.org/wp-content/uploads/2021/08/fascicule_adem-_svt_5e.pdf',personal:false},
+  {id:'svt-adem-4e',title:'Fascicule ADEM de SVT · 4e',grade:'4e',subject:'SVT',kind:'Cours et exercices',description:'Leçons et activités de sciences de la vie et de la Terre pour la quatrième. 70 pages.',source:'ADEM-Dakar · APPRENDRE / AUF',url:'https://apprendre.auf.org/wp-content/uploads/2021/08/fascicule_adem-_svt_4e.pdf',personal:false},
+  {id:'svt-adem-3e',title:'Fascicule ADEM de SVT · 3e',grade:'3e',subject:'SVT',kind:'Cours et exercices',description:'Leçons et activités de sciences de la vie et de la Terre pour la troisième. 86 pages.',source:'ADEM-Dakar · APPRENDRE / AUF',url:'https://apprendre.auf.org/wp-content/uploads/2021/08/fascicule_adem-_svt_3e.pdf',personal:false},
   ...[
-    ['6e','ADEM SVT 6e','Fascicule de Sciences de la Vie et de la Terre pour la 6e.','ADEM_SVT_6e.pdf'],
-    ['5e','ADEM SVT 5e','Fascicule de Sciences de la Vie et de la Terre pour la 5e.','ADEM_SVT_5e.pdf'],
-    ['4e','ADEM SVT 4e','Fascicule de Sciences de la Vie et de la Terre pour la 4e.','ADEM_SVT_4e.pdf'],
-    ['3e','ADEM SVT 3e','Fascicule de Sciences de la Vie et de la Terre pour la 3e.','ADEM_SVT_3e.pdf']
-  ].map(([grade,title,description,file])=>({id:`svt-adem-${grade}`,title,grade,subject:'SVT',kind:'Fascicule',description,source:'ADEM · Sénégal',url:ADEM_ROOT+file+VER,origin:'Physique-Chimie · Fascicules',personal:false})),
-  ...[
-    ['6e','Cours de SVT 6e','Fascicule de cours préparé par la cellule SVT de l’Inspection d’Académie de Kédougou.','FASCICULE%20SVT%20COURS%206%20i%C3%A8me.pdf'],
-    ['5e','Cours de SVT 5e','Fascicule de cours de SVT pour la classe de 5e.','FASCICULE%20SVT%20COURS%205%20i%C3%A8me.pdf'],
-    ['4e','Cours de SVT 4e','Fascicule de cours de SVT pour la classe de 4e.','FASCICULE%20SVT%20COURS%204%20i%C3%A8me.pdf'],
-    ['3e','Cours de SVT 3e','Fascicule de cours de SVT pour la classe de 3e.','FASCICULE%20SVT%20COURS%203%20IEME.pdf']
-  ].map(([grade,title,description,file])=>({id:`svt-cours-${grade}`,title,grade,subject:'SVT',kind:'Cours',description,source:'IA Kédougou · Sénégal',url:ADEM_ROOT+file+VER,origin:'Physique-Chimie · Fascicules',personal:false})),
-  {id:'svt-guides',title:'Guides pratiques de SVT · 6e à 3e',grade:'6e–3e',subject:'SVT',kind:'Cours',description:'Guides pratiques et guides d’usage par classe, référencés sur la page SVT de Sama Bac.',source:'Sama Bac · Sénégal',url:'https://www.samabac.sn/svt-au-college',origin:'Sama Bac · Programmes SVT collège',personal:false},
-  {id:'svt-exercises-auf',title:'Fascicules d’exercices SVT · 6e à 3e',grade:'6e–3e',subject:'SVT',kind:'Exercices',description:'Fascicules d’exercices de SVT du collège, répertoriés dans la bibliothèque de ressources APPRENDRE.',source:'APPRENDRE · AUF',url:'https://apprendre.auf.org/discipline_ressource/sciences-de-la-vie-et-de-la-terre/page/12/',origin:'APPRENDRE · AUF',personal:false},
-  {id:'svt-bfem',title:'Annales BFEM · SVT',grade:'3e',subject:'SVT',kind:'Annales',description:'Sujets de SVT du BFEM, avec corrections lorsqu’elles sont disponibles.',source:'Sama Bac',url:'https://samabac.sn/category/epreuves-bfem',origin:'Sama Bac · Épreuves BFEM',personal:false}
+    ['6e','Cours de SVT · 6e','Fascicule de cours préparé par la cellule SVT de l’Inspection d’Académie de Kédougou.','FASCICULE%20SVT%20COURS%206%20i%C3%A8me.pdf'],
+    ['5e','Cours de SVT · 5e','Fascicule de cours de SVT pour la classe de cinquième.','FASCICULE%20SVT%20COURS%205%20i%C3%A8me.pdf'],
+    ['4e','Cours de SVT · 4e','Fascicule de cours de SVT pour la classe de quatrième.','FASCICULE%20SVT%20COURS%204%20i%C3%A8me.pdf'],
+    ['3e','Cours de SVT · 3e','Fascicule de cours de SVT pour la classe de troisième.','FASCICULE%20SVT%20COURS%203%20IEME.pdf']
+  ].map(([grade,title,description,file])=>({id:'svt-cours-'+grade, title, grade, subject:'SVT', kind:'Cours', description, source:'Inspection d’Académie de Kédougou · Sénégal', url:ADEM_ROOT+file+ADEM_VER, personal:false})),
+
+  // Français : fascicule commun aux quatre classes du collège.
+  {id:'fr-adem-college',title:'200 exercices pour bien écrire · Français 6e à 3e',grade:'6e–3e',subject:'Français',kind:'Exercices',description:'Fascicule ADEM de travaux dirigés et de remédiation : 200 exercices organisés pour les quatre niveaux du collège. 88 pages.',source:'ADEM-Dakar · APPRENDRE / AUF',url:'https://apprendre.auf.org/wp-content/uploads/2021/08/fascicule_adem_francais_college.pdf',personal:false}
 ];
 
 const state = {
@@ -94,8 +76,8 @@ function shortDate(dateStr){
   const d = new Date(`${dateStr}T12:00:00`);
   return new Intl.DateTimeFormat('fr-FR',{day:'2-digit',month:'short'}).format(d).replace('.','');
 }
-function subjectClass(subject){ return subject === 'Mathématiques' ? 'subject-math' : subject === 'Physique-Chimie' ? 'subject-pc' : subject === 'SVT' ? 'subject-svt' : ''; }
-function subjectSymbol(subject){ return subject === 'Mathématiques' ? '∑' : subject === 'Physique-Chimie' ? '⚗' : subject === 'SVT' ? '⌁' : '▤'; }
+function subjectClass(subject){ return subject === 'Mathématiques' ? 'subject-math' : subject === 'Physique-Chimie' ? 'subject-pc' : subject === 'SVT' ? 'subject-svt' : subject === 'Français' ? 'subject-fr' : ''; }
+function subjectSymbol(subject){ return subject === 'Mathématiques' ? '∑' : subject === 'Physique-Chimie' ? '⚗' : subject === 'SVT' ? '⌁' : subject === 'Français' ? 'F' : '▤'; }
 function isFavorite(id){ return state.favorites.includes(id); }
 function isCompleted(id){ return state.completed.includes(id); }
 function isPersonal(item){ return Boolean(item.personal); }
@@ -166,7 +148,8 @@ function resourceCard(item){
 }
 const LIBRARY_SUBJECTS = [
   {name:'Mathématiques',description:'Nombres, calcul, géométrie et résolution de problèmes.'},
-  {name:'Physique-Chimie',description:'Matière, énergie, électricité et transformations.'},
+  {name:'Français',description:'Grammaire, expression écrite, lecture et rédaction.'},
+  {name:'Physique-Chimie',description:'Matière, énergie, électricité et transformations · 4e et 3e.'},
   {name:'SVT',description:'Sciences de la vie, de la Terre et environnement.'}
 ];
 const LIBRARY_CATEGORIES = [
@@ -179,8 +162,9 @@ const LIBRARY_CATEGORIES = [
 ];
 function libraryCategory(item){
   const kind=String(item.kind||'Autre').toLocaleLowerCase('fr-FR').normalize('NFD').replace(/[\u0300-\u036f]/g,'');
-  if(kind.includes('cours')||kind.includes('fascicule')) return 'Cours';
+  if(kind.includes('cours')) return 'Cours';
   if(kind.includes('exercice')) return 'Exercices';
+  if(kind.includes('fascicule')) return 'Cours';
   if(kind.includes('devoir')) return 'Devoirs';
   if(kind.includes('examen')||kind.includes('composition')) return 'Examens';
   if(kind.includes('epreuve')||kind.includes('annale')||kind.includes('bfem')) return 'Épreuves';
@@ -227,7 +211,7 @@ function renderLibrary(){
     intro.innerHTML='<div class="eyebrow">PARCOURS 1 · PAR NIVEAU</div><h2>Choisis ton niveau</h2><p>Retrouve les ressources associées à la 6e, 5e, 4e ou 3e.</p>';
     browser.innerHTML='<div class="library-tile-grid grade-grid">'+['6e','5e','4e','3e'].map(grade=>{
       const count=resources.filter(item=>isInLibraryGrade(item,grade)).length;
-      return '<button type="button" class="library-tile class-tile" data-library-grade="'+grade+'"><span class="library-tile-main"><span class="library-tile-badge">'+grade+'</span><span class="library-tile-copy"><strong>Classe de '+grade+'</strong><small>Mathématiques · Physique-Chimie · SVT</small></span></span><span class="library-tile-tail"><b>'+count+'</b><small>ressources</small><span>→</span></span></button>';
+      return '<button type="button" class="library-tile class-tile" data-library-grade="'+grade+'"><span class="library-tile-main"><span class="library-tile-badge">'+grade+'</span><span class="library-tile-copy"><strong>Classe de '+grade+'</strong><small>'+(grade==='6e'||grade==='5e'?'Mathématiques · Français · SVT':'Mathématiques · Français · Physique-Chimie · SVT')+'</small></span></span><span class="library-tile-tail"><b>'+count+'</b><small>ressources</small><span>→</span></span></button>';
     }).join('')+'</div><div class="library-start-actions"><button type="button" class="secondary-button" data-library-by-subject>Explorer par matière</button><button type="button" class="secondary-button" data-library-all>Toutes les ressources ('+resources.length+')</button></div>';
     return;
   }
@@ -236,7 +220,8 @@ function renderLibrary(){
     const count=resources.filter(item=>isInLibraryGrade(item,path.grade)).length;
     const allLevels=path.grade==='Toutes';
     intro.innerHTML='<div class="eyebrow">'+(allLevels?'PARCOURS 2 · TOUS LES NIVEAUX':'ÉTAPE 2 · CLASSE '+esc(path.grade.toUpperCase()))+'</div><h2>Choisis une matière</h2><p>'+count+' ressource'+(count>1?'s':'')+' disponible'+(count>1?'s':'')+(allLevels?' pour l’ensemble du collège.':' pour cette classe.')+' Tu peux explorer chaque matière, même si tu étudies seul.</p>';
-    browser.innerHTML='<div class="library-tile-grid subject-grid">'+LIBRARY_SUBJECTS.map(subject=>{
+    const visibleSubjects=LIBRARY_SUBJECTS.filter(subject=>subject.name!=='Physique-Chimie'||allLevels||['4e','3e'].includes(path.grade));
+    browser.innerHTML='<div class="library-tile-grid subject-grid">'+visibleSubjects.map(subject=>{
       const total=resources.filter(item=>isInLibraryGrade(item,path.grade)&&item.subject===subject.name).length;
       return '<button type="button" class="library-tile subject-tile '+subjectClass(subject.name)+'" data-library-subject="'+esc(subject.name)+'"><span class="library-tile-main"><span class="library-tile-symbol">'+subjectSymbol(subject.name)+'</span><span class="library-tile-copy"><strong>'+esc(subject.name)+'</strong><small>'+esc(subject.description)+'</small></span></span><span class="library-tile-tail"><b>'+total+'</b><small>documents</small><span>→</span></span></button>';
     }).join('')+'</div>';
