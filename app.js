@@ -208,7 +208,7 @@ function renderLibrary(){
     browser.innerHTML='<div class="library-tile-grid grade-grid">'+['6e','5e','4e','3e'].map(grade=>{
       const count=resources.filter(item=>isInLibraryGrade(item,grade)).length;
       return '<button type="button" class="library-tile class-tile" data-library-grade="'+grade+'"><span class="library-tile-main"><span class="library-tile-badge">'+grade+'</span><span class="library-tile-copy"><strong>Classe de '+grade+'</strong><small>Mathématiques · Physique-Chimie · SVT</small></span></span><span class="library-tile-tail"><b>'+count+'</b><small>ressources</small><span>→</span></span></button>';
-    }).join('')+'</div>';
+    }).join('')+'</div><div class="library-all-row"><button type="button" class="secondary-button" data-library-all>Afficher toutes les ressources ('+resources.length+')</button></div>';
     return;
   }
 
@@ -317,6 +317,17 @@ document.addEventListener('click',async event=>{
     openModal({grade:path.grade,subject:path.subject,kind:path.category==='Autres'?'Autre':path.category,returnToLibrary:true});
     return;
   }
+  if(event.target.closest('[data-library-all]')){
+    const resources=allResources();
+    document.getElementById('libraryBrowser').classList.add('hidden');
+    document.getElementById('libraryResults').classList.remove('hidden');
+    document.getElementById('libraryBackBtn').classList.add('hidden');
+    document.getElementById('libraryBreadcrumb').innerHTML='<button type="button" data-library-step="root">Bibliothèque</button><span>›</span><strong>Toutes les ressources</strong>';
+    document.getElementById('libraryIntro').innerHTML='<div class="eyebrow">BIBLIOTHÈQUE COMPLÈTE</div><h2>Toutes les ressources</h2><p>'+resources.length+' documents disponibles, toutes classes et matières confondues.</p>';
+    document.getElementById('libraryResults').innerHTML=resources.map(item=>resourceCard(item)).join('');
+    document.getElementById('libraryEmpty').classList.add('hidden');
+    return;
+  }
   const libraryGrade=event.target.closest('[data-library-grade]');
   if(libraryGrade){state.libraryPath={grade:libraryGrade.dataset.libraryGrade,subject:'',category:''};renderLibrary();return;}
   const librarySubject=event.target.closest('[data-library-subject]');
@@ -326,7 +337,7 @@ document.addEventListener('click',async event=>{
   const libraryStep=event.target.closest('[data-library-step]');
   if(libraryStep){
     const step=libraryStep.dataset.libraryStep;
-    if(step==='root') state.libraryPath={grade:'',subject:'',category:''};
+    if(step==='root') { state.libraryPath={grade:'',subject:'',category:''}; document.getElementById('searchInput').value=''; }
     else if(step==='grade') state.libraryPath={grade:state.libraryPath.grade,subject:'',category:''};
     else if(step==='subject') state.libraryPath.category='';
     renderLibrary();return;
