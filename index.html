@@ -19,8 +19,8 @@
       </a>
       <div class="side-label">ESPACE DE TRAVAIL</div>
       <nav class="side-nav">
-        <button class="nav-link" data-nav="library"><span class="nav-icon">▤</span>Bibliothèque <span class="nav-count" id="libraryCount">0</span></button>
-        <button class="nav-link active" data-nav="dashboard"><span class="nav-icon">⌂</span>Vue d’ensemble</button>
+        <button class="nav-link active" data-nav="library"><span class="nav-icon">▤</span>Bibliothèque <span class="nav-count" id="libraryCount">0</span></button>
+        <button class="nav-link" data-nav="dashboard"><span class="nav-icon">⌂</span>Vue d’ensemble</button>
         <button class="nav-link" data-nav="planner"><span class="nav-icon">▦</span>Devoirs & examens</button>
         <button class="nav-link" data-nav="files"><span class="nav-icon">▣</span>Mon classeur</button>
         <button class="nav-link" data-nav="favorites"><span class="nav-icon">☆</span>Favoris</button>
@@ -40,7 +40,7 @@
     <main class="main-area">
       <header class="topbar">
         <div class="mobile-brand"><span class="brand-mark">mc</span><strong>Mon Espace Collège</strong></div>
-        <div class="breadcrumb" id="breadcrumb">ESPACE PERSONNEL <span>/</span> VUE D’ENSEMBLE</div>
+        <div class="breadcrumb" id="breadcrumb">ESPACE PERSONNEL <span>/</span> BIBLIOTHÈQUE</div>
         <div class="top-actions">
           <button class="icon-button" id="globalSearchBtn" aria-label="Aller à la recherche" title="Rechercher">⌕</button>
           <button class="profile-pill" id="profileBtn" title="Personnaliser le prénom"><span class="avatar">É</span><span id="profileName">Élève</span><span class="chevron">⌄</span></button>
@@ -49,7 +49,7 @@
 
       <div class="page-wrap">
         <!-- DASHBOARD -->
-        <section class="page active" id="page-dashboard">
+        <section class="page" id="page-dashboard">
           <div class="home-welcome">
             <div class="eyebrow">TON ESPACE COLLÈGE</div>
             <h1>Salut <span id="welcomeName">!</span></h1>
@@ -81,7 +81,7 @@
         </section>
 
         <!-- LIBRARY -->
-        <section class="page" id="page-library">
+        <section class="page active" id="page-library">
           <div class="page-heading-row"><div><div class="eyebrow">OUVERTE À TOUS · 6E À 3E</div><h1>Bibliothèque</h1><p class="subheading">Des ressources pour apprendre, réviser et progresser à ton rythme, avec ou sans établissement scolaire.</p></div><button class="primary-button" data-open-resource>＋ Ajouter</button></div>
           <section class="library-selfstudy">
             <div class="library-selfstudy-icon" aria-hidden="true">📚</div>
@@ -147,8 +147,8 @@
   </div>
 
   <nav class="mobile-nav" aria-label="Navigation mobile">
-    <button class="mobile-nav-link" data-nav="library"><span>▤</span><small>Bibliothèque</small></button>
-    <button class="mobile-nav-link active" data-nav="dashboard"><span>⌂</span><small>Accueil</small></button>
+    <button class="mobile-nav-link active" data-nav="library"><span>▤</span><small>Bibliothèque</small></button>
+    <button class="mobile-nav-link" data-nav="dashboard"><span>⌂</span><small>Accueil</small></button>
     <button class="mobile-nav-link" data-nav="planner"><span>▦</span><small>Agenda</small></button>
     <button class="mobile-nav-link" data-nav="files"><span>▣</span><small>Classeur</small></button>
     <button class="mobile-nav-link" data-nav="favorites"><span>☆</span><small>Favoris</small></button>
@@ -162,12 +162,22 @@
         <label>Nom du document<input name="title" required maxlength="120" placeholder="Ex. : Leçon sur la digestion"></label>
         <div class="two-fields"><label>Classe<select name="grade" required><option value="6e">6e</option><option value="5e">5e</option><option value="4e">4e</option><option value="3e">3e</option></select></label><label>Matière<select name="subject" required><option>Mathématiques</option><option>Physique-Chimie</option><option>SVT</option><option>Autre</option></select></label></div>
         <label>Type de document<select name="kind"><option>Cours</option><option>Exercices</option><option>Devoirs</option><option>Examens</option><option>Épreuves</option><option>Fascicule</option><option>Autre</option></select></label>
-        <label>Lien web (facultatif)<input name="url" type="url" placeholder="https://…"></label>
-        <label>Ou choisir un fichier sur ton appareil<input name="file" type="file" accept=".pdf,.doc,.docx,.ppt,.pptx,.jpg,.jpeg,.png,.webp,.txt"></label>
+        <label>Lien direct vers un PDF (facultatif)<input name="url" type="url" placeholder="https://…/document.pdf"></label>
+        <label>Ou choisir un fichier sur ton appareil<input name="file" type="file" accept=".pdf,application/pdf"></label>
         <label>Notes (facultatif)<textarea name="notes" rows="3" maxlength="350" placeholder="Chapitre, page, enseignant…"></textarea></label>
         <div class="modal-actions"><button type="button" class="secondary-button" data-close-modal>Annuler</button><button class="primary-button" type="submit">Enregistrer</button></div>
       </form>
     </div>
+  </div>
+
+  <div class="modal-backdrop pdf-viewer-backdrop hidden" id="pdfViewerModal" role="dialog" aria-modal="true" aria-labelledby="pdfViewerTitle">
+    <section class="pdf-viewer-card">
+      <header class="pdf-viewer-header">
+        <div><div class="eyebrow">LECTURE DANS MON ESPACE COLLÈGE</div><h2 id="pdfViewerTitle">Document PDF</h2></div>
+        <button class="close-button" type="button" data-close-pdf aria-label="Fermer le PDF">×</button>
+      </header>
+      <iframe id="pdfFrame" title="Lecteur PDF intégré" src="about:blank"></iframe>
+    </section>
   </div>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
