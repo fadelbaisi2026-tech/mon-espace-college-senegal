@@ -33,7 +33,7 @@
           <div class="library-browser" id="libraryBrowser"></div>
           <div class="resource-grid hidden" id="libraryResults"></div>
           <div class="empty-state hidden" id="libraryEmpty"><div class="empty-illustration">⌕</div><h3>Aucun document pour le moment</h3><p>Tu peux ajouter ton propre document dans cette rubrique.</p><button class="primary-button" data-add-to-library>＋ Ajouter un document</button></div>
-          <div class="coverage-note"><div class="coverage-icon">i</div><div><strong>Repères pour réviser en autonomie</strong><p>La Physique-Chimie est proposée uniquement en 4e et en 3e. Les ressources ADEM de Mathématiques et de SVT couvrent les quatre niveaux, et le fascicule de Français est commun de la 6e à la 3e. Pour les Maths, le document qui réunit explicitement résumés de cours, exercices corrigés et épreuves blanches est actuellement celui de 3e ; je n’ai pas ajouté de faux cours aux niveaux où je n’ai trouvé que des fascicules d’exercices.</p></div></div>
+          <div class="coverage-note"><div class="coverage-icon">i</div><div><strong>Repères pour réviser en autonomie</strong><p>La Physique-Chimie est proposée uniquement en 4e et en 3e. Les cours de Mathématiques de 6e et de 5e sont maintenant disponibles, avec un livret du Ministère en complément pour la 6e. Les fascicules ADEM de Mathématiques sont, eux, classés comme exercices et non comme cours lorsqu’ils ne contiennent pas de leçons.</p></div></div>
         </section></div>
  </main>
  <nav class="class-bottom-nav" aria-label="Navigation par classe">
@@ -48,7 +48,7 @@
       <div class="modal-header"><div><div class="eyebrow">CLASSEUR PERSONNEL</div><h2 id="resourceModalTitle">Ajouter une ressource</h2></div><button class="close-button" data-close-modal aria-label="Fermer">×</button></div>
       <form id="resourceForm" class="stack-form">
         <label>Nom du document<input name="title" required maxlength="120" placeholder="Ex. : Leçon sur la digestion"></label>
-        <div class="two-fields"><label>Classe<select name="grade" required><option value="6e">6e</option><option value="5e">5e</option><option value="4e">4e</option><option value="3e">3e</option></select></label><label>Matière<select name="subject" required><option>Mathématiques</option><option>Français</option><option>Physique-Chimie</option><option>SVT</option></select></label></div>
+        <div class="two-fields"><label>Classe<select name="grade" id="resourceGradeSelect" required><option value="6e">6e</option><option value="5e">5e</option><option value="4e">4e</option><option value="3e">3e</option></select></label><label>Matière<select name="subject" required><option>Mathématiques</option><option>Physique-Chimie</option><option>SVT</option></select></label></div>
         <label>Type de document<select name="kind"><option>Cours</option><option>Exercices</option><option>Devoirs</option><option>Examens</option><option>Épreuves</option><option>Fascicule</option><option>Autre</option></select></label>
         <label>Lien direct vers un PDF (facultatif)<input name="url" type="url" placeholder="https://…/document.pdf"></label>
         <label>Ou choisir un fichier sur ton appareil<input name="file" type="file" accept=".pdf,application/pdf"></label>
