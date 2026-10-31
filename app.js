@@ -167,7 +167,7 @@ function libraryCategory(item){
   return 'Autres';
 }
 function isInLibraryGrade(item,grade){
-  return item.grade===grade || item.grade==='6e–3e' || item.grade==='6e-3e';
+  return grade==='Toutes' || item.grade===grade || item.grade==='6e–3e' || item.grade==='6e-3e';
 }
 function renderLibrary(){
   const query=(document.getElementById('searchInput')?.value||'').trim().toLocaleLowerCase('fr-FR');
@@ -198,23 +198,24 @@ function renderLibrary(){
   empty.classList.add('hidden');
   back.classList.toggle('hidden',!path.grade);
   const crumbs=['<button type="button" data-library-step="root">Bibliothèque</button>'];
-  if(path.grade) crumbs.push('<button type="button" data-library-step="grade">'+esc(path.grade)+'</button>');
+  if(path.grade) crumbs.push('<button type="button" data-library-step="grade">'+(path.grade==='Toutes'?'Tous niveaux':esc(path.grade))+'</button>');
   if(path.subject) crumbs.push('<button type="button" data-library-step="subject">'+esc(path.subject)+'</button>');
   if(path.category) crumbs.push('<strong>'+esc(path.category)+'</strong>');
   breadcrumb.innerHTML=crumbs.join('<span>›</span>');
 
-  if(!path.grade){
-    intro.innerHTML='<div class="eyebrow">ÉTAPE 1 · CHOISIR LE NIVEAU</div><h2>Quelle est ta classe ?</h2><p>Commence par sélectionner ton niveau pour accéder à tes matières.</p>';
+  if(!path.grade && !path.subject){
+    intro.innerHTML='<div class="eyebrow">PARCOURS 1 · PAR NIVEAU</div><h2>Choisis ton niveau</h2><p>Retrouve les ressources associées à la 6e, 5e, 4e ou 3e.</p>';
     browser.innerHTML='<div class="library-tile-grid grade-grid">'+['6e','5e','4e','3e'].map(grade=>{
       const count=resources.filter(item=>isInLibraryGrade(item,grade)).length;
       return '<button type="button" class="library-tile class-tile" data-library-grade="'+grade+'"><span class="library-tile-main"><span class="library-tile-badge">'+grade+'</span><span class="library-tile-copy"><strong>Classe de '+grade+'</strong><small>Mathématiques · Physique-Chimie · SVT</small></span></span><span class="library-tile-tail"><b>'+count+'</b><small>ressources</small><span>→</span></span></button>';
-    }).join('')+'</div><div class="library-all-row"><button type="button" class="secondary-button" data-library-all>Afficher toutes les ressources ('+resources.length+')</button></div>';
+    }).join('')+'</div><div class="library-start-actions"><button type="button" class="secondary-button" data-library-by-subject>Explorer par matière</button><button type="button" class="secondary-button" data-library-all>Toutes les ressources ('+resources.length+')</button></div>';
     return;
   }
 
   if(!path.subject){
     const count=resources.filter(item=>isInLibraryGrade(item,path.grade)).length;
-    intro.innerHTML='<div class="eyebrow">ÉTAPE 2 · CLASSE '+esc(path.grade.toUpperCase())+'</div><h2>Choisis une matière</h2><p>'+count+' ressource'+(count>1?'s':'')+' répertoriée'+(count>1?'s':'')+' pour cette classe. Les trois matières restent accessibles, même lorsqu’une rubrique est encore vide.</p>';
+    const allLevels=path.grade==='Toutes';
+    intro.innerHTML='<div class="eyebrow">'+(allLevels?'PARCOURS 2 · TOUS LES NIVEAUX':'ÉTAPE 2 · CLASSE '+esc(path.grade.toUpperCase()))+'</div><h2>Choisis une matière</h2><p>'+count+' ressource'+(count>1?'s':'')+' disponible'+(count>1?'s':'')+(allLevels?' pour l’ensemble du collège.':' pour cette classe.')+' Tu peux explorer chaque matière, même si tu étudies seul.</p>';
     browser.innerHTML='<div class="library-tile-grid subject-grid">'+LIBRARY_SUBJECTS.map(subject=>{
       const total=resources.filter(item=>isInLibraryGrade(item,path.grade)&&item.subject===subject.name).length;
       return '<button type="button" class="library-tile subject-tile '+subjectClass(subject.name)+'" data-library-subject="'+esc(subject.name)+'"><span class="library-tile-main"><span class="library-tile-symbol">'+subjectSymbol(subject.name)+'</span><span class="library-tile-copy"><strong>'+esc(subject.name)+'</strong><small>'+esc(subject.description)+'</small></span></span><span class="library-tile-tail"><b>'+total+'</b><small>documents</small><span>→</span></span></button>';
@@ -326,6 +327,11 @@ document.addEventListener('click',async event=>{
     document.getElementById('libraryIntro').innerHTML='<div class="eyebrow">BIBLIOTHÈQUE COMPLÈTE</div><h2>Toutes les ressources</h2><p>'+resources.length+' documents disponibles, toutes classes et matières confondues.</p>';
     document.getElementById('libraryResults').innerHTML=resources.map(item=>resourceCard(item)).join('');
     document.getElementById('libraryEmpty').classList.add('hidden');
+    return;
+  }
+  if(event.target.closest('[data-library-by-subject]')){
+    state.libraryPath={grade:'Toutes',subject:'',category:''};
+    renderLibrary();
     return;
   }
   const libraryGrade=event.target.closest('[data-library-grade]');
