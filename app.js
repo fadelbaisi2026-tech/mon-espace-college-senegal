@@ -285,7 +285,7 @@ function renderTasks(){
   document.querySelectorAll('[data-task-filter]').forEach(b=>b.classList.toggle('active',b.dataset.taskFilter===state.taskFilter));
 }
 function renderFilesCounts(){
-  const personal=state.resources;
+  const personal=state.resources.filter(r=>(r.fileId&&/\.pdf$/i.test(r.fileName||''))||isPdfUrl(r.url));
   const by=s=>personal.filter(r=>r.subject===s).length;
   document.getElementById('folderMath').textContent=`${by('Mathématiques')} document${by('Mathématiques')>1?'s':''}`;
   document.getElementById('folderPC').textContent=`${by('Physique-Chimie')} document${by('Physique-Chimie')>1?'s':''}`;
@@ -293,7 +293,7 @@ function renderFilesCounts(){
   document.getElementById('folderOther').textContent=`${by('Autre')} document${by('Autre')>1?'s':''}`;
 }
 function renderFiles(){
-  const items=state.resources.filter(r=>state.fileSubjectFilter==='all'||r.subject===state.fileSubjectFilter);
+  const items=state.resources.filter(r=>((r.fileId&&/\.pdf$/i.test(r.fileName||''))||isPdfUrl(r.url))&&(state.fileSubjectFilter==='all'||r.subject===state.fileSubjectFilter));
   document.getElementById('personalFilesGrid').innerHTML=items.map(item=>resourceCard(item)).join('');
   document.getElementById('filesEmpty').classList.toggle('hidden',items.length>0);
   renderFilesCounts();
