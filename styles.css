@@ -161,3 +161,6 @@
 /* French subject card color */
 .subject-fr .resource-symbol{background:#fff0f2;color:#c45d78}
 .subject-tile.subject-fr .library-tile-symbol{background:#fff0f2;color:#c45d78}
+
+/* Keep combined course-and-exercise documents in both library categories */
+.library-type-actions{gap:12px}
