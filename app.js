@@ -131,12 +131,8 @@ async function deleteLocalFile(id){
 function showToast(message){
   const el=document.getElementById('toast'); el.textContent=message; el.classList.add('show'); clearTimeout(toastTimer); toastTimer=setTimeout(()=>el.classList.remove('show'),2600);
 }
-function goTo(page){
-  const valid=['dashboard','library','planner','files','favorites']; if(!valid.includes(page)) return;
-  document.querySelectorAll('.page').forEach(el=>el.classList.toggle('active',el.id===`page-${page}`));
-  document.querySelectorAll('[data-nav]').forEach(el=>el.classList.toggle('active',el.dataset.nav===page));
-  document.getElementById('breadcrumb').innerHTML=`ESPACE PERSONNEL <span>/</span> ${({dashboard:'VUE D’ENSEMBLE',library:'BIBLIOTHÈQUE',planner:'DEVOIRS & EXAMENS',files:'MON CLASSEUR',favorites:'FAVORIS'})[page]}`;
-  if(page==='library') renderLibrary(); if(page==='planner') renderTasks(); if(page==='files'){state.fileSubjectFilter='all';renderFiles();} if(page==='favorites') renderFavorites();
+function goTo(){
+  renderLibrary();
   window.scrollTo({top:0,behavior:'smooth'});
 }
 let activePdfObjectUrl='';
@@ -154,16 +150,18 @@ function closePdfViewer(){
   document.body.style.overflow='';
   if(activePdfObjectUrl){URL.revokeObjectURL(activePdfObjectUrl);activePdfObjectUrl='';}
 }
-function resourceCard(item, compact=false){
-  const done=isCompleted(item.id); const fav=isFavorite(item.id);
-  const action = item.fileId ? `<button class="resource-open" data-open-file="${esc(item.fileId)}">Lire le PDF <span>→</span></button>` : isPdfUrl(item.url) ? `<button class="resource-open" data-open-pdf="${esc(item.url)}">Lire le PDF <span>→</span></button>` : '<span class="source-label">PDF indisponible</span>';
-  return `<article class="resource-card ${subjectClass(item.subject)} ${done?'is-done':''}">
-    <div class="resource-card-top"><span class="resource-symbol">${subjectSymbol(item.subject)}</span><div class="resource-actions-top">${done?'<span class="done-indicator">✓ Étudié</span>':''}<span class="resource-grade">${esc(item.grade||'—')}</span><button class="favorite-button ${fav?'active':''}" data-favorite="${esc(item.id)}" aria-label="${fav?'Retirer des':'Ajouter aux'} favoris">${fav?'★':'☆'}</button></div></div>
-    <h4>${esc(item.title)}</h4><p>${esc(item.description||item.notes||'Document personnel.')}</p>
+function resourceCard(item){
+  const action = item.fileId
+    ? `<button class="resource-open" data-open-file="${esc(item.fileId)}">Lire le PDF <span>→</span></button>`
+    : isPdfUrl(item.url)
+      ? `<button class="resource-open" data-open-pdf="${esc(item.url)}">Lire le PDF <span>→</span></button>`
+      : '<span class="source-label">PDF indisponible</span>';
+  return `<article class="resource-card ${subjectClass(item.subject)}">
+    <div class="resource-card-top"><span class="resource-symbol">${subjectSymbol(item.subject)}</span><span class="resource-grade">${esc(item.grade||'—')}</span></div>
+    <h4>${esc(item.title)}</h4><p>${esc(item.description||item.notes||'Document PDF.')}</p>
     <div class="resource-meta"><span class="meta-chip">${esc(item.subject)}</span><span class="meta-chip">${esc(item.kind||'Autre')}</span></div>
-    <div class="resource-footer"><span class="source-label" title="${esc(item.source||'Document personnel')}">${esc(item.source||'Document personnel')}</span>${action}</div>
-    ${!item.fileId?`<button class="mark-done" data-complete="${esc(item.id)}">${done?'Marquer comme non étudié':'Marquer comme étudié'}</button>`:''}
-    ${isPersonal(item)?`<button class="delete-resource" data-delete-resource="${esc(item.id)}">Supprimer de mon classeur</button>`:''}
+    <div class="resource-footer"><span class="source-label" title="${esc(item.source||'Document PDF')}">${esc(item.source||'Document PDF')}</span>${action}</div>
+    ${isPersonal(item)?`<button class="delete-resource" data-delete-resource="${esc(item.id)}">Supprimer ce PDF</button>`:''}
   </article>`;
 }
 const LIBRARY_SUBJECTS = [
@@ -329,100 +327,98 @@ function exportBackup(){
 function importBackup(file){
   const reader=new FileReader();reader.onload=()=>{try{const data=JSON.parse(reader.result);if(!data||!Array.isArray(data.tasks)||!Array.isArray(data.resources))throw new Error('Format inconnu');state.resources=data.resources.map(r=>({...r,personal:true,fileId:undefined}));state.tasks=Array.isArray(data.tasks)?data.tasks:[];state.favorites=Array.isArray(data.favorites)?data.favorites:[];state.completed=Array.isArray(data.completed)?data.completed:[];state.userName=typeof data.userName==='string'?data.userName:'Élève';persist();setUserName();renderAll();showToast('Sauvegarde importée. Réajoute séparément tes fichiers locaux si nécessaire.');}catch(e){showToast('Ce fichier ne semble pas être une sauvegarde compatible.');}};reader.readAsText(file);
 }
-function renderAll(){renderDashboard();renderLibrary();renderTasks();renderFiles();renderFavorites();setUserName();}
+function renderAll(){renderLibrary();}
 
-// Navigation and shared buttons.
+// Interactions de la bibliothèque uniquement.
 document.addEventListener('click',async event=>{
-  const nav=event.target.closest('[data-nav]');if(nav){event.preventDefault();goTo(nav.dataset.nav);return;}
-  if(event.target.closest('[data-open-resource]')){openModal();return;}
-  if(event.target.closest('[data-add-to-library]')){
-    const path=state.libraryPath;
-    openModal({grade:path.grade,subject:path.subject,kind:path.category==='Autres'?'Autre':path.category,returnToLibrary:true});
-    return;
-  }
-  if(event.target.closest('[data-library-all]')){
-    const resources=allResources();
-    document.getElementById('libraryBrowser').classList.add('hidden');
-    document.getElementById('libraryResults').classList.remove('hidden');
-    document.getElementById('libraryBackBtn').classList.add('hidden');
-    document.getElementById('libraryBreadcrumb').innerHTML='<button type="button" data-library-step="root">Bibliothèque</button><span>›</span><strong>Toutes les ressources</strong>';
-    document.getElementById('libraryIntro').innerHTML='<div class="eyebrow">BIBLIOTHÈQUE COMPLÈTE</div><h2>Toutes les ressources</h2><p>'+resources.length+' documents disponibles, toutes classes et matières confondues.</p>';
-    document.getElementById('libraryResults').innerHTML=resources.map(item=>resourceCard(item)).join('');
-    document.getElementById('libraryEmpty').classList.add('hidden');
-    return;
-  }
-  if(event.target.closest('[data-library-by-subject]')){
-    state.libraryPath={grade:'Toutes',subject:'',category:''};
-    renderLibrary();
-    return;
-  }
-  const libraryGrade=event.target.closest('[data-library-grade]');
-  if(libraryGrade){state.libraryPath={grade:libraryGrade.dataset.libraryGrade,subject:'',category:''};renderLibrary();return;}
-  const librarySubject=event.target.closest('[data-library-subject]');
-  if(librarySubject){state.libraryPath.subject=librarySubject.dataset.librarySubject;state.libraryPath.category='';renderLibrary();return;}
-  const libraryCategory=event.target.closest('[data-library-category]');
-  if(libraryCategory){state.libraryPath.category=libraryCategory.dataset.libraryCategory;renderLibrary();return;}
-  const libraryStep=event.target.closest('[data-library-step]');
-  if(libraryStep){
-    const step=libraryStep.dataset.libraryStep;
-    if(step==='root') { state.libraryPath={grade:'',subject:'',category:''}; document.getElementById('searchInput').value=''; }
-    else if(step==='grade') state.libraryPath={grade:state.libraryPath.grade,subject:'',category:''};
-    else if(step==='subject') state.libraryPath.category='';
-    renderLibrary();return;
-  }
-  if(event.target.closest('[data-library-back]')||event.target.closest('#libraryBackBtn')){
-    if(state.libraryPath.category) state.libraryPath.category='';
-    else if(state.libraryPath.subject) state.libraryPath.subject='';
-    else state.libraryPath.grade='';
-    renderLibrary();return;
-  }
-  if(event.target.closest('[data-close-modal]')){closeModal();return;}
-  const fav=event.target.closest('[data-favorite]');if(fav){const id=fav.dataset.favorite;state.favorites=isFavorite(id)?state.favorites.filter(x=>x!==id):[...state.favorites,id];persist();renderAll();showToast(isFavorite(id)?'Ajouté aux favoris.':'Retiré des favoris.');return;}
-  const complete=event.target.closest('[data-complete]');if(complete){const id=complete.dataset.complete;state.completed=isCompleted(id)?state.completed.filter(x=>x!==id):[...state.completed,id];persist();renderAll();if(document.getElementById('page-library').classList.contains('active'))renderLibrary();showToast(isCompleted(id)?'Ressource marquée comme étudiée.':'Progression mise à jour.');return;}
-  const delResource=event.target.closest('[data-delete-resource]');if(delResource){const id=delResource.dataset.deleteResource;const item=state.resources.find(r=>r.id===id);if(!item||!confirm('Supprimer ce document de ton classeur ?'))return;if(item.fileId){try{await deleteLocalFile(item.fileId);}catch(e){console.warn(e);}}state.resources=state.resources.filter(r=>r.id!==id);state.favorites=state.favorites.filter(x=>x!==id);state.completed=state.completed.filter(x=>x!==id);persist();renderAll();showToast('Document supprimé du classeur.');return;}
-  const delTask=event.target.closest('[data-delete-task]');if(delTask){state.tasks=state.tasks.filter(t=>t.id!==delTask.dataset.deleteTask);persist();renderAll();showToast('Tâche supprimée.');return;}
-  const folder=event.target.closest('[data-folder-subject]');if(folder){state.fileSubjectFilter=folder.dataset.folderSubject;renderFiles();document.getElementById('personalFilesGrid').scrollIntoView({behavior:'smooth',block:'start'});return;}
-  if(event.target.closest('#exportBtn')){exportBackup();return;}
-  if(event.target.closest('#importBtn')){document.getElementById('importFile').click();return;}
-  if(event.target.closest('#allFilesBtn')){state.fileSubjectFilter='all';renderFiles();return;}
-  if(event.target.closest('#profileBtn')){updateUserName();return;}
-  if(event.target.closest('#globalSearchBtn')){goTo('library');setTimeout(()=>document.getElementById('searchInput').focus(),80);return;}
-  if(event.target.closest('#clearFilters')||event.target.closest('#emptyReset')){document.getElementById('searchInput').value='';document.getElementById('gradeFilter').value='all';document.getElementById('subjectFilter').value='all';document.getElementById('typeFilter').value='all';renderLibrary();return;}
-  const doneTask=event.target.closest('[data-task-done]');if(doneTask){const t=state.tasks.find(t=>t.id===doneTask.dataset.taskDone);if(t)t.done=doneTask.checked;persist();renderAll();return;}
-  const openPdf=event.target.closest('[data-open-pdf]');
-  if(openPdf){showPdfViewer(openPdf.dataset.openPdf,openPdf.closest('.resource-card')?.querySelector('h4')?.textContent||'Document PDF');return;}
-  if(event.target.closest('[data-close-pdf]')||event.target.id==='pdfViewerModal'){closePdfViewer();return;}
-  const openFile=event.target.closest('[data-open-file]');if(openFile){try{const item=await getLocalFile(openFile.dataset.openFile);if(!item||!/\.pdf$/i.test(item.name||''))throw new Error('PDF introuvable');activePdfObjectUrl=URL.createObjectURL(item.blob);showPdfViewer(activePdfObjectUrl,item.name);}catch(e){showToast('Fichier PDF local introuvable. Réimporte-le dans ton classeur.');}return;}
+ if(event.target.closest('#globalSearchBtn')){document.getElementById('searchInput').focus();window.scrollTo({top:0,behavior:'smooth'});return;}
+ if(event.target.closest('[data-open-resource]')){openModal();return;}
+ if(event.target.closest('[data-add-to-library]')){
+  const path=state.libraryPath;
+  openModal({grade:path.grade==='Toutes'?'6e':path.grade,subject:path.subject,kind:path.category==='Autres'?'Autre':path.category,returnToLibrary:true});
+  return;
+ }
+ if(event.target.closest('[data-library-all]')){
+  const resources=allResources();
+  document.getElementById('libraryBrowser').classList.add('hidden');
+  document.getElementById('libraryResults').classList.remove('hidden');
+  document.getElementById('libraryBackBtn').classList.add('hidden');
+  document.getElementById('libraryBreadcrumb').innerHTML='<button type="button" data-library-step="root">Bibliothèque</button><span>›</span><strong>Toutes les ressources</strong>';
+  document.getElementById('libraryIntro').innerHTML='<div class="eyebrow">BIBLIOTHÈQUE COMPLÈTE</div><h2>Tous les PDF disponibles</h2><p>'+resources.length+' documents PDF à consulter dans la bibliothèque.</p>';
+  document.getElementById('libraryResults').innerHTML=resources.map(item=>resourceCard(item)).join('');
+  document.getElementById('libraryEmpty').classList.add('hidden');
+  return;
+ }
+ if(event.target.closest('[data-library-by-subject]')){state.libraryPath={grade:'Toutes',subject:'',category:''};renderLibrary();return;}
+ const grade=event.target.closest('[data-library-grade]');
+ if(grade){state.libraryPath={grade:grade.dataset.libraryGrade,subject:'',category:''};renderLibrary();return;}
+ const subject=event.target.closest('[data-library-subject]');
+ if(subject){state.libraryPath.subject=subject.dataset.librarySubject;state.libraryPath.category='';renderLibrary();return;}
+ const category=event.target.closest('[data-library-category]');
+ if(category){state.libraryPath.category=category.dataset.libraryCategory;renderLibrary();return;}
+ const stepButton=event.target.closest('[data-library-step]');
+ if(stepButton){
+  const step=stepButton.dataset.libraryStep;
+  if(step==='root'){state.libraryPath={grade:'',subject:'',category:''};document.getElementById('searchInput').value='';}
+  else if(step==='grade')state.libraryPath={grade:state.libraryPath.grade,subject:'',category:''};
+  else if(step==='subject')state.libraryPath.category='';
+  renderLibrary();return;
+ }
+ if(event.target.closest('[data-library-back]')||event.target.closest('#libraryBackBtn')){
+  if(state.libraryPath.category)state.libraryPath.category='';
+  else if(state.libraryPath.subject)state.libraryPath.subject='';
+  else state.libraryPath.grade='';
+  renderLibrary();return;
+ }
+ if(event.target.closest('[data-close-modal]')){closeModal();return;}
+ const openPdf=event.target.closest('[data-open-pdf]');
+ if(openPdf){showPdfViewer(openPdf.dataset.openPdf,openPdf.closest('.resource-card')?.querySelector('h4')?.textContent||'Document PDF');return;}
+ if(event.target.closest('[data-close-pdf]')||event.target.id==='pdfViewerModal'){closePdfViewer();return;}
+ const openFile=event.target.closest('[data-open-file]');
+ if(openFile){
+  try{
+   const item=await getLocalFile(openFile.dataset.openFile);
+   if(!item||!/\.pdf$/i.test(item.name||''))throw new Error('PDF introuvable');
+   activePdfObjectUrl=URL.createObjectURL(item.blob);
+   showPdfViewer(activePdfObjectUrl,item.name);
+  }catch(error){showToast('Fichier PDF local introuvable. Réimporte-le.');}
+  return;
+ }
+ const del=event.target.closest('[data-delete-resource]');
+ if(del){
+  const id=del.dataset.deleteResource;
+  const item=state.resources.find(resource=>resource.id===id);
+  if(!item||!confirm('Supprimer ce PDF de la bibliothèque ?'))return;
+  if(item.fileId){try{await deleteLocalFile(item.fileId);}catch(error){console.warn(error);}}
+  state.resources=state.resources.filter(resource=>resource.id!==id);
+  persist();renderAll();showToast('PDF supprimé.');return;
+ }
 });
-document.addEventListener('change',event=>{
-  if(event.target.matches('[data-task-filter]'))return;
-  if(event.target.matches('[data-task-done]'))return;
-  if(['gradeFilter','subjectFilter','typeFilter'].includes(event.target.id))renderLibrary();
-});
-['searchInput'].forEach(id=>document.getElementById(id).addEventListener('input',renderLibrary));
-document.getElementById('taskList').addEventListener('change',event=>{const id=event.target.dataset.taskDone;if(!id)return;const task=state.tasks.find(t=>t.id===id);if(task){task.done=event.target.checked;persist();renderAll();}});
-document.querySelectorAll('[data-task-filter]').forEach(button=>button.addEventListener('click',()=>{state.taskFilter=button.dataset.taskFilter;renderTasks();}));
-document.getElementById('taskForm').addEventListener('submit',event=>{
-  event.preventDefault();const form=new FormData(event.currentTarget);const task={id:`task-${Date.now()}`,title:String(form.get('title')).trim(),grade:String(form.get('grade')),subject:String(form.get('subject')),kind:String(form.get('kind')),dueDate:String(form.get('dueDate')),notes:String(form.get('notes')).trim(),done:false};
-  if(!task.title||!task.dueDate)return;state.tasks.push(task);persist();event.currentTarget.reset();renderAll();showToast('Tâche ajoutée à ton agenda.');
-});
+document.getElementById('searchInput').addEventListener('input',renderLibrary);
 document.getElementById('resourceForm').addEventListener('submit',async event=>{
-  event.preventDefault();const form=event.currentTarget;const data=new FormData(form);const title=String(data.get('title')).trim();const url=String(data.get('url')).trim();const file=form.elements.file.files[0];
-  if(!title){showToast('Ajoute un nom à ce document.');return;}
-  if(url&&!isPdfUrl(url)){showToast('Le lien doit pointer directement vers un fichier PDF. Les pages de sites web ne sont pas acceptées.');return;}
-  if(file&&file.type!=='application/pdf'&&!/\.pdf$/i.test(file.name)){showToast('Seuls les fichiers PDF sont acceptés.');return;}
-  if(!url&&!file){showToast('Ajoute un lien PDF direct ou choisis un fichier PDF.');return;}
-  const item={id:`personal-${Date.now()}`,title,grade:String(data.get('grade')),subject:String(data.get('subject')),kind:String(data.get('kind')),description:String(data.get('notes')).trim()||'Document ajouté à ton classeur.',notes:String(data.get('notes')).trim(),source:file?'Fichier personnel':'Lien personnel',url:url||'',personal:true,createdAt:Date.now()};
-  if(file){try{item.fileId=await saveLocalFile(file);item.fileName=file.name;item.fileSize=file.size;item.url='';}catch(err){showToast('Impossible de stocker ce fichier dans le navigateur.');return;}}
-  state.resources.unshift(item);persist();form.reset();const backToLibrary=returnToLibraryAfterSave;returnToLibraryAfterSave=false;closeModal();renderAll();if(backToLibrary){goTo('library');showToast('Document ajouté à la rubrique.');}else{goTo('files');showToast('Document ajouté à ton classeur.');}
+ event.preventDefault();
+ const form=event.currentTarget;
+ const data=new FormData(form);
+ const title=String(data.get('title')).trim();
+ const url=String(data.get('url')).trim();
+ const file=form.elements.file.files[0];
+ if(!title){showToast('Ajoute un nom à ce document.');return;}
+ if(url&&!isPdfUrl(url)){showToast('Le lien doit pointer directement vers un fichier PDF. Les pages web ne sont pas acceptées.');return;}
+ if(file&&file.type!=='application/pdf'&&!/\.pdf$/i.test(file.name)){showToast('Seuls les fichiers PDF sont acceptés.');return;}
+ if(!url&&!file){showToast('Ajoute un lien PDF direct ou choisis un fichier PDF.');return;}
+ const item={id:`personal-${Date.now()}`,title,grade:String(data.get('grade')),subject:String(data.get('subject')),kind:String(data.get('kind')),description:String(data.get('notes')).trim()||'Document PDF ajouté à la bibliothèque.',notes:String(data.get('notes')).trim(),source:file?'PDF personnel':'PDF ajouté',url:url||'',personal:true,createdAt:Date.now()};
+ if(file){
+  try{item.fileId=await saveLocalFile(file);item.fileName=file.name;item.fileSize=file.size;item.url='';}
+  catch(error){showToast('Impossible d’enregistrer ce PDF sur cet appareil.');return;}
+ }
+ state.resources.unshift(item);
+ persist();form.reset();closeModal();renderAll();showToast('PDF ajouté à la bibliothèque.');
 });
-document.getElementById('importFile').addEventListener('change',event=>{const file=event.target.files[0];if(file)importBackup(file);event.target.value='';});
-// Folder controls are local filters. Resetting to the main folder list is done by reopening Mon classeur.
-
-readState();renderAll();
-
+readState();
+renderAll();
 if('serviceWorker' in navigator && location.protocol.startsWith('http')){
-  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(err=>console.info('Mode hors ligne non activé :',err)));
+ window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(error=>console.info('Mode hors ligne non activé :',error)));
 }
-
-document.addEventListener('keydown',event=>{if(event.key==='Escape'&&!document.getElementById('pdfViewerModal').classList.contains('hidden'))closePdfViewer();});
+document.addEventListener('keydown',event=>{
+ if(event.key==='Escape'&&!document.getElementById('pdfViewerModal').classList.contains('hidden'))closePdfViewer();
+});
