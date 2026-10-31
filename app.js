@@ -932,6 +932,41 @@ const seedResources = [
     "url": "https://topeducationsn.com/wp-content/uploads/2024/09/ANNALE-DE-SVT-3eme.pdf",
     "personal": false
   }
+,
+
+  {
+    "id": "svt6-eval-ief-grand-dakar-2018",
+    "title": "Évaluation standardisée de SVT · 6e · 2e semestre",
+    "grade": "6e",
+    "subject": "SVT",
+    "kind": "Devoirs",
+    "description": "Évaluation standardisée du second semestre 2018-2019, Inspection d’Académie de Dakar, IEF Grand-Dakar.",
+    "source": "Halwar · IA Dakar · IEF Grand-Dakar",
+    "url": "https://www.halwar.sn/IMG/pdf/svt_6_eme_standardisee.pdf",
+    "personal": false
+  },
+  {
+    "id": "svt5-eval-ief-grand-dakar-2018",
+    "title": "Évaluation standardisée de SVT · 5e · 2e semestre",
+    "grade": "5e",
+    "subject": "SVT",
+    "kind": "Devoirs",
+    "description": "Évaluation standardisée du second semestre 2018-2019, Inspection d’Académie de Dakar, IEF Grand-Dakar.",
+    "source": "Halwar · IA Dakar · IEF Grand-Dakar",
+    "url": "https://www.halwar.sn/IMG/pdf/svt_5eme.pdf",
+    "personal": false
+  },
+  {
+    "id": "svt3-bfem-compilation-2018",
+    "title": "Compilation de sujets BFEM · SVT · 3e",
+    "grade": "3e",
+    "subject": "SVT",
+    "kind": "Devoirs",
+    "description": "Compilation de sujets du BFEM de sciences de la vie et de la Terre, dont l’épreuve 2018.",
+    "source": "Halwar · RESAFAD Sénégal · OIF",
+    "url": "https://www.halwar.sn/IMG/pdf/compile_sujets_svt_3eme.pdf",
+    "personal": false
+  }
 ];
 
 const state = {
