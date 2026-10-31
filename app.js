@@ -160,15 +160,17 @@ const LIBRARY_CATEGORIES = [
   {name:'Épreuves',icon:'▣',description:'Sujets d’examen et annales, dont le BFEM.'},
   {name:'Autres',icon:'＋',description:'Les autres documents que tu ajoutes.'}
 ];
-function libraryCategory(item){
+function libraryCategories(item){
   const kind=String(item.kind||'Autre').toLocaleLowerCase('fr-FR').normalize('NFD').replace(/[\u0300-\u036f]/g,'');
-  if(kind.includes('cours')) return 'Cours';
-  if(kind.includes('exercice')) return 'Exercices';
-  if(kind.includes('fascicule')) return 'Cours';
-  if(kind.includes('devoir')) return 'Devoirs';
-  if(kind.includes('examen')||kind.includes('composition')) return 'Examens';
-  if(kind.includes('epreuve')||kind.includes('annale')||kind.includes('bfem')) return 'Épreuves';
-  return 'Autres';
+  const categories=[];
+  if(kind.includes('cours')) categories.push('Cours');
+  if(kind.includes('exercice')) categories.push('Exercices');
+  if(kind.includes('devoir')) categories.push('Devoirs');
+  if(kind.includes('examen')||kind.includes('composition')) categories.push('Examens');
+  if(kind.includes('epreuve')||kind.includes('annale')||kind.includes('bfem')) categories.push('Épreuves');
+  if(!categories.length&&kind.includes('fascicule')) categories.push('Cours');
+  if(!categories.length) categories.push('Autres');
+  return [...new Set(categories)];
 }
 function isInLibraryGrade(item,grade){
   return grade==='Toutes' || item.grade===grade || item.grade==='6e–3e' || item.grade==='6e-3e';
@@ -231,13 +233,13 @@ function renderLibrary(){
   if(!path.category){
     intro.innerHTML='<div class="eyebrow">ÉTAPE 3 · '+esc(path.grade.toUpperCase())+' / '+esc(path.subject.toUpperCase())+'</div><h2>Que veux-tu consulter ?</h2><p>Les documents sont rangés par type. Ouvre une rubrique pour voir ses ressources ou en ajouter.</p>';
     browser.innerHTML='<div class="library-tile-grid category-grid">'+LIBRARY_CATEGORIES.map(category=>{
-      const total=resources.filter(item=>isInLibraryGrade(item,path.grade)&&item.subject===path.subject&&libraryCategory(item)===category.name).length;
+      const total=resources.filter(item=>isInLibraryGrade(item,path.grade)&&item.subject===path.subject&&libraryCategories(item).includes(category.name)).length;
       return '<button type="button" class="library-tile category-tile" data-library-category="'+esc(category.name)+'"><span class="library-tile-main"><span class="library-tile-symbol category-symbol">'+category.icon+'</span><span class="library-tile-copy"><strong>'+esc(category.name)+'</strong><small>'+esc(category.description)+'</small></span></span><span class="library-tile-tail"><b>'+total+'</b><small>documents</small><span>→</span></span></button>';
     }).join('')+'</div>';
     return;
   }
 
-  const items=resources.filter(item=>isInLibraryGrade(item,path.grade)&&item.subject===path.subject&&libraryCategory(item)===path.category);
+  const items=resources.filter(item=>isInLibraryGrade(item,path.grade)&&item.subject===path.subject&&libraryCategories(item).includes(path.category));
   intro.innerHTML='<div class="eyebrow">DOCUMENTS · '+esc(path.grade.toUpperCase())+' / '+esc(path.subject.toUpperCase())+'</div><h2>'+esc(path.category)+'</h2><p>'+items.length+' document'+(items.length>1?'s':'')+' dans cette rubrique.</p>';
   browser.innerHTML='<div class="library-type-actions"><button type="button" class="secondary-button" data-library-back>← Retour aux rubriques</button><button type="button" class="primary-button" data-add-to-library>＋ Ajouter un document</button></div>'+(items.length?'<div class="resource-grid library-resource-grid">'+items.map(item=>resourceCard(item)).join('')+'</div>':'');
   empty.classList.toggle('hidden',items.length>0);
