@@ -1,87 +1,24 @@
 <!doctype html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#101d3a">
-  <meta name="description" content="Un espace personnel pour ranger et retrouver ses cours, exercices, devoirs et examens du collège au Sénégal.">
-  <title>Mon Espace Collège</title>
-  <link rel="manifest" href="manifest.webmanifest">
-  <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="styles.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#101d3a">
+<meta name="description" content="Bibliothèque de PDF pour apprendre et réviser les matières du collège au Sénégal, en autonomie.">
+<title>Bibliothèque · Mon Espace Collège</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="app-shell">
-    <aside class="sidebar" aria-label="Navigation principale">
-      <a class="brand" href="#accueil" data-nav="dashboard" aria-label="Mon Espace Collège, accueil">
-        <span class="brand-mark">mc</span>
-        <span class="brand-copy"><strong>Mon Espace</strong><small>Collège · Sénégal</small></span>
-      </a>
-      <div class="side-label">ESPACE DE TRAVAIL</div>
-      <nav class="side-nav">
-        <button class="nav-link active" data-nav="library"><span class="nav-icon">▤</span>Bibliothèque <span class="nav-count" id="libraryCount">0</span></button>
-        <button class="nav-link" data-nav="dashboard"><span class="nav-icon">⌂</span>Vue d’ensemble</button>
-        <button class="nav-link" data-nav="planner"><span class="nav-icon">▦</span>Devoirs & examens</button>
-        <button class="nav-link" data-nav="files"><span class="nav-icon">▣</span>Mon classeur</button>
-        <button class="nav-link" data-nav="favorites"><span class="nav-icon">☆</span>Favoris</button>
-      </nav>
-      <div class="sidebar-bottom">
-        <div class="storage-card">
-          <div class="storage-icon">⌁</div>
-          <strong>Tes données restent ici</strong>
-          <p>Les documents ajoutés et ton organisation sont enregistrés dans ce navigateur.</p>
-          <button class="text-button" id="exportBtn">Exporter ma sauvegarde <span>↗</span></button>
-          <button class="text-button import-link" id="importBtn">Importer une sauvegarde <span>↙</span></button>
-        </div>
-        <div class="sidebar-foot">Version personnelle · 2026</div>
-      </div>
-    </aside>
-
-    <main class="main-area">
-      <header class="topbar">
-        <div class="mobile-brand"><span class="brand-mark">mc</span><strong>Mon Espace Collège</strong></div>
-        <div class="breadcrumb" id="breadcrumb">ESPACE PERSONNEL <span>/</span> BIBLIOTHÈQUE</div>
-        <div class="top-actions">
-          <button class="icon-button" id="globalSearchBtn" aria-label="Aller à la recherche" title="Rechercher">⌕</button>
-          <button class="profile-pill" id="profileBtn" title="Personnaliser le prénom"><span class="avatar">É</span><span id="profileName">Élève</span><span class="chevron">⌄</span></button>
-        </div>
-      </header>
-
-      <div class="page-wrap">
-        <!-- DASHBOARD -->
-        <section class="page" id="page-dashboard">
-          <div class="home-welcome">
-            <div class="eyebrow">TON ESPACE COLLÈGE</div>
-            <h1>Salut <span id="welcomeName">!</span></h1>
-            <p>Tu veux travailler sur quoi aujourd’hui ?</p>
-          </div>
-
-          <section class="home-library-card">
-            <div class="home-library-copy">
-              <span class="home-kicker">TA BIBLIOTHÈQUE</span>
-              <h2>Tous tes cours au même endroit.</h2>
-              <p>Révise à ton rythme, même sans être inscrit dans un établissement scolaire.</p>
-              <button class="primary-button" data-nav="library">Ouvrir ma bibliothèque <span>→</span></button>
-            </div>
-            <div class="home-library-mark" aria-hidden="true">▤</div>
-          </section>
-
-          <div class="home-shortcuts" aria-label="Accès rapides">
-            <button class="home-shortcut" data-nav="planner">
-              <span class="home-shortcut-icon agenda-shortcut">▦</span>
-              <span class="home-shortcut-copy"><strong>Mon agenda</strong><small>Devoirs et examens</small></span>
-              <span class="home-shortcut-arrow">→</span>
-            </button>
-            <button class="home-shortcut" data-nav="files">
-              <span class="home-shortcut-icon files-shortcut">▣</span>
-              <span class="home-shortcut-copy"><strong>Mon classeur</strong><small>Mes documents</small></span>
-              <span class="home-shortcut-arrow">→</span>
-            </button>
-          </div>
-        </section>
-
-        <!-- LIBRARY -->
-        <section class="page active" id="page-library">
+<div class="app-shell library-only-shell">
+ <main class="main-area">
+  <header class="topbar library-topbar">
+   <div class="mobile-brand"><span class="brand-mark">mc</span><strong>Mon Espace Collège</strong></div>
+   <div class="breadcrumb">ESPACE DE RÉVISION AUTONOME <span>/</span> BIBLIOTHÈQUE</div>
+   <div class="top-actions"><button class="icon-button" id="globalSearchBtn" aria-label="Rechercher dans les PDF" title="Rechercher">⌕</button></div>
+  </header>
+  <div class="page-wrap library-page-wrap"><section class="page active" id="page-library">
           <div class="page-heading-row"><div><div class="eyebrow">OUVERTE À TOUS · 6E À 3E</div><h1>Bibliothèque</h1><p class="subheading">Des ressources pour apprendre, réviser et progresser à ton rythme, avec ou sans établissement scolaire.</p></div><button class="primary-button" data-open-resource>＋ Ajouter</button></div>
           <section class="library-selfstudy">
             <div class="library-selfstudy-icon" aria-hidden="true">📚</div>
@@ -97,65 +34,10 @@
           <div class="resource-grid hidden" id="libraryResults"></div>
           <div class="empty-state hidden" id="libraryEmpty"><div class="empty-illustration">⌕</div><h3>Aucun document pour le moment</h3><p>Tu peux ajouter ton propre document dans cette rubrique.</p><button class="primary-button" data-add-to-library>＋ Ajouter un document</button></div>
           <div class="coverage-note"><div class="coverage-icon">i</div><div><strong>À propos des ressources par niveau</strong><p>Les catalogues consultés proposent surtout des fascicules PC pour la 4e et la 3e. Aucune ressource PC 6e/5e suffisamment fiable n’a été repérée dans ces sources. Les rubriques restent visibles pour que tu puisses y ajouter les documents de ton établissement.</p></div></div>
-        </section>
-
-        <!-- PLANNER -->
-        <section class="page" id="page-planner">
-          <div class="page-heading-row"><div><div class="eyebrow">NE RIEN OUBLIER</div><h1>Devoirs & examens</h1><p class="subheading">Note les dates importantes et coche ce que tu as terminé.</p></div></div>
-          <div class="planner-layout">
-            <section class="panel planner-form-panel">
-              <div class="section-heading"><div><div class="eyebrow">AJOUTER À TON AGENDA</div><h3>Nouvelle tâche</h3></div><span class="form-symbol">＋</span></div>
-              <form id="taskForm" class="stack-form">
-                <label>Titre de la tâche<input name="title" required maxlength="100" placeholder="Ex. : Exercices sur les fractions"></label>
-                <div class="two-fields"><label>Classe<select name="grade" required><option value="6e">6e</option><option value="5e">5e</option><option value="4e">4e</option><option value="3e">3e</option></select></label><label>Matière<select name="subject" required><option>Mathématiques</option><option>Physique-Chimie</option><option>SVT</option><option>Autre</option></select></label></div>
-                <div class="two-fields"><label>Type<select name="kind"><option>Devoir</option><option>Examen</option><option>Révision</option><option>Projet</option></select></label><label>Pour le<input name="dueDate" type="date" required></label></div>
-                <label>Note (facultatif)<textarea name="notes" rows="3" maxlength="300" placeholder="Chapitre, pages, consignes…"></textarea></label>
-                <button class="primary-button full-button" type="submit">Ajouter à l’agenda <span>→</span></button>
-              </form>
-            </section>
-            <section class="panel agenda-panel">
-              <div class="section-heading"><div><div class="eyebrow">TON PROGRAMME</div><h3>Liste des tâches</h3></div><div class="agenda-filters"><button class="mini-tab active" data-task-filter="all">Tout</button><button class="mini-tab" data-task-filter="open">À faire</button><button class="mini-tab" data-task-filter="done">Terminées</button></div></div>
-              <div class="task-list" id="taskList"></div>
-              <div class="empty-state small-empty" id="tasksEmpty"><div class="empty-illustration">▦</div><h3>Ton agenda est libre</h3><p>Ajoute un devoir ou une date d’examen pour t’organiser.</p></div>
-            </section>
-          </div>
-        </section>
-
-        <!-- FILES -->
-        <section class="page" id="page-files">
-          <div class="page-heading-row"><div><div class="eyebrow">TON ESPACE PERSONNEL</div><h1>Mon classeur</h1><p class="subheading">Ajoute tes propres cours, photos de notes et fichiers PDF.</p></div><button class="primary-button" data-open-resource>＋ Ajouter un fichier</button></div>
-          <div class="folder-grid">
-            <button class="folder-card" data-folder-subject="Mathématiques"><span class="folder-icon math-folder">∑</span><strong>Mathématiques</strong><small id="folderMath">0 document</small></button>
-            <button class="folder-card" data-folder-subject="Physique-Chimie"><span class="folder-icon pc-folder">⚗</span><strong>Physique-Chimie</strong><small id="folderPC">0 document</small></button>
-            <button class="folder-card" data-folder-subject="SVT"><span class="folder-icon svt-folder">⌁</span><strong>SVT</strong><small id="folderSVT">0 document</small></button>
-            <button class="folder-card" data-folder-subject="Autre"><span class="folder-icon other-folder">＋</span><strong>Autres</strong><small id="folderOther">0 document</small></button>
-          </div>
-          <div class="section-heading file-heading"><div><div class="eyebrow">TES AJOUTS</div><h3>Documents personnels</h3></div><button class="text-button" id="allFilesBtn">Afficher tout</button></div>
-          <div class="resource-grid" id="personalFilesGrid"></div>
-          <div class="empty-state" id="filesEmpty"><div class="empty-illustration">▣</div><h3>Ton classeur est vide</h3><p>Ajoute un document pour commencer à ranger tes ressources personnelles.</p><button class="secondary-button" data-open-resource>Ajouter un document</button></div>
-          <div class="local-warning"><strong>À savoir :</strong> les fichiers importés sont enregistrés dans le navigateur de cet appareil. Ils ne sont pas envoyés sur Internet. Pense à exporter régulièrement ta sauvegarde et à conserver les fichiers originaux.</div>
-        </section>
-
-        <!-- FAVORITES -->
-        <section class="page" id="page-favorites">
-          <div class="page-heading-row"><div><div class="eyebrow">TES INDISPENSABLES</div><h1>Favoris</h1><p class="subheading">Les ressources que tu veux retrouver en un geste.</p></div></div>
-          <div class="resource-grid" id="favoritesGrid"></div>
-          <div class="empty-state" id="favoritesEmpty"><div class="empty-illustration">☆</div><h3>Pas encore de favoris</h3><p>Appuie sur l’étoile d’une ressource pour la garder ici.</p><button class="secondary-button" data-nav="library">Explorer la bibliothèque</button></div>
-        </section>
-      </div>
-    </main>
-  </div>
-
-  <nav class="mobile-nav" aria-label="Navigation mobile">
-    <button class="mobile-nav-link active" data-nav="library"><span>▤</span><small>Bibliothèque</small></button>
-    <button class="mobile-nav-link" data-nav="dashboard"><span>⌂</span><small>Accueil</small></button>
-    <button class="mobile-nav-link" data-nav="planner"><span>▦</span><small>Agenda</small></button>
-    <button class="mobile-nav-link" data-nav="files"><span>▣</span><small>Classeur</small></button>
-    <button class="mobile-nav-link" data-nav="favorites"><span>☆</span><small>Favoris</small></button>
-  </nav>
-
-  <!-- RESOURCE MODAL -->
-  <div class="modal-backdrop hidden" id="resourceModal" role="dialog" aria-modal="true" aria-labelledby="resourceModalTitle">
+        </section></div>
+ </main>
+</div>
+<div class="modal-backdrop hidden" id="resourceModal" role="dialog" aria-modal="true" aria-labelledby="resourceModalTitle">
     <div class="modal-card">
       <div class="modal-header"><div><div class="eyebrow">CLASSEUR PERSONNEL</div><h2 id="resourceModalTitle">Ajouter une ressource</h2></div><button class="close-button" data-close-modal aria-label="Fermer">×</button></div>
       <form id="resourceForm" class="stack-form">
@@ -169,8 +51,7 @@
       </form>
     </div>
   </div>
-
-  <div class="modal-backdrop pdf-viewer-backdrop hidden" id="pdfViewerModal" role="dialog" aria-modal="true" aria-labelledby="pdfViewerTitle">
+<div class="modal-backdrop pdf-viewer-backdrop hidden" id="pdfViewerModal" role="dialog" aria-modal="true" aria-labelledby="pdfViewerTitle">
     <section class="pdf-viewer-card">
       <header class="pdf-viewer-header">
         <div><div class="eyebrow">LECTURE DANS MON ESPACE COLLÈGE</div><h2 id="pdfViewerTitle">Document PDF</h2></div>
@@ -179,9 +60,7 @@
       <iframe id="pdfFrame" title="Lecteur PDF intégré" src="about:blank"></iframe>
     </section>
   </div>
-
-  <div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <input type="file" id="importFile" accept="application/json,.json" hidden>
-  <script src="app.js"></script>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="app.js"></script>
 </body>
 </html>
