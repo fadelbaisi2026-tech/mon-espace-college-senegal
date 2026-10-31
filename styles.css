@@ -157,3 +157,7 @@
  .library-page-wrap{padding:20px 14px 40px}
  .library-page-wrap .page-heading-row{align-items:flex-start;gap:8px}
 }
+
+/* French subject card color */
+.subject-fr .resource-symbol{background:#fff0f2;color:#c45d78}
+.subject-tile.subject-fr .library-tile-symbol{background:#fff0f2;color:#c45d78}
