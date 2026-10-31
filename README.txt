@@ -17,7 +17,8 @@ DÉMARRER
 FONCTIONS
 ---------
 - Bibliothèque préremplie avec des ressources trouvées sur des sites sénégalais.
-- Filtres par classe, matière et type ; recherche par mots-clés.
+- Navigation hiérarchique de la bibliothèque : classe → matière → cours, exercices, devoirs, examens et épreuves.
+- Recherche globale par mots-clés et ajout direct d'un document dans la rubrique sélectionnée.
 - Favoris et indicateur « étudié » pour suivre sa progression.
 - Agenda pour les devoirs, examens, révisions et projets.
 - Ajout de liens ou de fichiers personnels (PDF, documents, images).
