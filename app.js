@@ -235,8 +235,16 @@ function libraryCategories(item){
 function isInLibraryGrade(item,grade){
   return grade==='Toutes' || item.grade===grade || item.grade==='6e–3e' || item.grade==='6e-3e';
 }
+function syncClassBottomNav(query=''){
+  document.querySelectorAll('.class-nav-link').forEach(button=>{
+    const active=!query && state.libraryPath.grade===button.dataset.libraryGrade;
+    button.classList.toggle('active',active);
+    button.setAttribute('aria-pressed',String(active));
+  });
+}
 function renderLibrary(){
   const query=(document.getElementById('searchInput')?.value||'').trim().toLocaleLowerCase('fr-FR');
+  syncClassBottomNav(query);
   const path=state.libraryPath;
   const browser=document.getElementById('libraryBrowser');
   const results=document.getElementById('libraryResults');
@@ -398,7 +406,13 @@ document.addEventListener('click',async event=>{
  }
  if(event.target.closest('[data-library-by-subject]')){state.libraryPath={grade:'Toutes',subject:'',category:''};renderLibrary();return;}
  const grade=event.target.closest('[data-library-grade]');
- if(grade){state.libraryPath={grade:grade.dataset.libraryGrade,subject:'',category:''};renderLibrary();return;}
+ if(grade){
+  document.getElementById('searchInput').value='';
+  state.libraryPath={grade:grade.dataset.libraryGrade,subject:'',category:''};
+  renderLibrary();
+  document.getElementById('libraryIntro').scrollIntoView({behavior:'smooth',block:'start'});
+  return;
+ }
  const subject=event.target.closest('[data-library-subject]');
  if(subject){state.libraryPath.subject=subject.dataset.librarySubject;state.libraryPath.category='';renderLibrary();return;}
  const category=event.target.closest('[data-library-category]');
