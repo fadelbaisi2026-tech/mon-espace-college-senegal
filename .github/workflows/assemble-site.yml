@@ -1,0 +1,28 @@
+name: Assemble website
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".deploy-parts/**"
+      - ".github/workflows/assemble-site.yml"
+permissions:
+  contents: write
+jobs:
+  assemble:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Rebuild site files
+        run: |
+          set -euo pipefail
+          cat .deploy-parts/*.b64 | base64 --decode | tar -xz
+          rm -rf .deploy-parts
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if ! git diff --cached --quiet; then
+            git commit -m "Publish Mon Espace Collège website"
+            git push
+          fi
