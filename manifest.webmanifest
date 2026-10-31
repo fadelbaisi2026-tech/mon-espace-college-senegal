@@ -1,0 +1,10 @@
+{
+  "name": "Mon Espace Collège — Sénégal",
+  "short_name": "Espace Collège",
+  "lang": "fr",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f7f8fb",
+  "theme_color": "#101d3a",
+  "description": "Bibliothèque personnelle et agenda scolaire du collège."
+}
