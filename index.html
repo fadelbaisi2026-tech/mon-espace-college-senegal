@@ -103,17 +103,17 @@
 
         <!-- LIBRARY -->
         <section class="page" id="page-library">
-          <div class="page-heading-row"><div><div class="eyebrow">TOUT AU MÊME ENDROIT</div><h1>Bibliothèque</h1><p class="subheading">Des ressources classées par niveau, matière et type.</p></div><button class="primary-button" data-open-resource>＋ Ajouter</button></div>
-          <div class="library-toolbar">
-            <label class="search-field"><span>⌕</span><input id="searchInput" type="search" placeholder="Rechercher un cours, un chapitre…" autocomplete="off"></label>
-            <select id="gradeFilter" aria-label="Filtrer par classe"><option value="all">Toutes les classes</option><option value="6e">6e</option><option value="5e">5e</option><option value="4e">4e</option><option value="3e">3e</option></select>
-            <select id="subjectFilter" aria-label="Filtrer par matière"><option value="all">Toutes les matières</option><option value="Mathématiques">Mathématiques</option><option value="Physique-Chimie">Physique-Chimie</option><option value="SVT">SVT</option></select>
-            <select id="typeFilter" aria-label="Filtrer par type"><option value="all">Tous les types</option><option value="Cours">Cours</option><option value="Exercices">Exercices</option><option value="Fascicule">Fascicules</option><option value="Annales">Annales / examens</option><option value="Autre">Autres</option></select>
+          <div class="page-heading-row"><div><div class="eyebrow">TON ESPACE SCOLAIRE</div><h1>Bibliothèque</h1><p class="subheading">Choisis une classe, une matière, puis le type de document à consulter.</p></div><button class="primary-button" data-open-resource>＋ Ajouter</button></div>
+          <div class="library-tools">
+            <label class="search-field"><span>⌕</span><input id="searchInput" type="search" placeholder="Rechercher dans toute la bibliothèque…" autocomplete="off"></label>
+            <button class="secondary-button library-back hidden" id="libraryBackBtn" type="button">← Retour</button>
           </div>
-          <div class="filter-summary"><span id="resultsCount">0 ressource</span><button class="clear-filters" id="clearFilters">Réinitialiser les filtres</button></div>
-          <div class="resource-grid" id="libraryGrid"></div>
-          <div class="empty-state hidden" id="libraryEmpty"><div class="empty-illustration">⌕</div><h3>Aucun résultat</h3><p>Essaie un autre mot ou enlève un filtre.</p><button class="secondary-button" id="emptyReset">Réinitialiser</button></div>
-          <div class="coverage-note"><div class="coverage-icon">i</div><div><strong>À propos des ressources par niveau</strong><p>Les catalogues consultés proposent surtout des fascicules PC pour la 4e et la 3e. Aucune ressource PC 6e/5e suffisamment fiable n’a été repérée dans ces sources. Tu peux ajouter les documents de ton établissement dans « Mon classeur ».</p></div></div>
+          <nav class="library-breadcrumb" id="libraryBreadcrumb" aria-label="Emplacement dans la bibliothèque"></nav>
+          <div class="library-intro" id="libraryIntro"></div>
+          <div class="library-browser" id="libraryBrowser"></div>
+          <div class="resource-grid hidden" id="libraryResults"></div>
+          <div class="empty-state hidden" id="libraryEmpty"><div class="empty-illustration">⌕</div><h3>Aucun document pour le moment</h3><p>Tu peux ajouter ton propre document dans cette rubrique.</p><button class="primary-button" data-add-to-library>＋ Ajouter un document</button></div>
+          <div class="coverage-note"><div class="coverage-icon">i</div><div><strong>À propos des ressources par niveau</strong><p>Les catalogues consultés proposent surtout des fascicules PC pour la 4e et la 3e. Aucune ressource PC 6e/5e suffisamment fiable n’a été repérée dans ces sources. Les rubriques restent visibles pour que tu puisses y ajouter les documents de ton établissement.</p></div></div>
         </section>
 
         <!-- PLANNER -->
@@ -178,7 +178,7 @@
       <form id="resourceForm" class="stack-form">
         <label>Nom du document<input name="title" required maxlength="120" placeholder="Ex. : Leçon sur la digestion"></label>
         <div class="two-fields"><label>Classe<select name="grade" required><option value="6e">6e</option><option value="5e">5e</option><option value="4e">4e</option><option value="3e">3e</option></select></label><label>Matière<select name="subject" required><option>Mathématiques</option><option>Physique-Chimie</option><option>SVT</option><option>Autre</option></select></label></div>
-        <label>Type de document<select name="kind"><option>Cours</option><option>Exercices</option><option>Fascicule</option><option>Devoir</option><option>Annales</option><option>Autre</option></select></label>
+        <label>Type de document<select name="kind"><option>Cours</option><option>Exercices</option><option>Devoirs</option><option>Examens</option><option>Épreuves</option><option>Fascicule</option><option>Autre</option></select></label>
         <label>Lien web (facultatif)<input name="url" type="url" placeholder="https://…"></label>
         <label>Ou choisir un fichier sur ton appareil<input name="file" type="file" accept=".pdf,.doc,.docx,.ppt,.pptx,.jpg,.jpeg,.png,.webp,.txt"></label>
         <label>Notes (facultatif)<textarea name="notes" rows="3" maxlength="350" placeholder="Chapitre, page, enseignant…"></textarea></label>
