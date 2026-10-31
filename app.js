@@ -227,7 +227,7 @@ function resourceCard(item){
   return `<article class="resource-card ${subjectClass(item.subject)}">
     <div class="resource-card-top"><span class="resource-symbol">${subjectSymbol(item.subject)}</span><span class="resource-grade">${esc(item.grade||'—')}</span></div>
     <h4>${esc(item.title)}</h4><p>${esc(item.description||item.notes||'Document PDF.')}</p>
-    <div class="resource-meta"><span class="meta-chip">${esc(item.subject)}</span><span class="meta-chip">${esc(item.kind||'Autre')}</span></div>
+    <div class="resource-meta"><span class="meta-chip">${esc(item.subject)}</span><span class="meta-chip">${displayResourceKind(item)}</span></div>
     <div class="resource-footer"><span class="source-label" title="${esc(item.source||'Document PDF')}">${esc(item.source||'Document PDF')}</span>${action}</div>
     ${isPersonal(item)?`<button class="delete-resource" data-delete-resource="${esc(item.id)}">Supprimer ce PDF</button>`:''}
   </article>`;
@@ -240,19 +240,22 @@ const LIBRARY_SUBJECTS = [
 const LIBRARY_CATEGORIES = [
   {name:'Cours',icon:'▤',description:'Leçons, fiches et fascicules de cours.'},
   {name:'Exercices',icon:'✎',description:'Applications, séries et entraînements.'},
-  {name:'Devoirs',icon:'✓',description:'Devoirs à la maison et devoirs surveillés.'},
-  {name:'Examens',icon:'▦',description:'Compositions, examens blancs et évaluations.'},
-  {name:'Épreuves',icon:'▣',description:'Sujets d’examen et annales, dont le BFEM.'},
+  {name:'Devoirs et épreuves',icon:'✓',description:'Devoirs, compositions, examens blancs, sujets et annales.'},
   {name:'Autres',icon:'＋',description:'Les autres documents que tu ajoutes.'}
 ];
+function isAssessmentKind(kind){
+  const value=String(kind||'Autre').toLocaleLowerCase('fr-FR').normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  return ['devoir','examen','composition','epreuve','annale','bfem'].some(term=>value.includes(term));
+}
+function displayResourceKind(item){
+  return isAssessmentKind(item.kind)?'Devoirs et épreuves':(item.kind||'Autre');
+}
 function libraryCategories(item){
   const kind=String(item.kind||'Autre').toLocaleLowerCase('fr-FR').normalize('NFD').replace(/[\u0300-\u036f]/g,'');
   const categories=[];
   if(kind.includes('cours')) categories.push('Cours');
   if(kind.includes('exercice')) categories.push('Exercices');
-  if(kind.includes('devoir')) categories.push('Devoirs');
-  if(kind.includes('examen')||kind.includes('composition')) categories.push('Examens');
-  if(kind.includes('epreuve')||kind.includes('annale')||kind.includes('bfem')) categories.push('Épreuves');
+  if(isAssessmentKind(kind)) categories.push('Devoirs et épreuves');
   if(!categories.length&&kind.includes('fascicule')) categories.push('Cours');
   if(!categories.length) categories.push('Autres');
   return [...new Set(categories)];
