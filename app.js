@@ -118,8 +118,6 @@ const seedResources = [
   {id:'svt-3e-bfem-synthese',title:'SVT 3e · Synthèse d’exercices BFEM',grade:'3e',subject:'SVT',kind:'Exercices',description:'Fascicule de synthèse de 27 pages pour réviser la SVT en vue du BFEM.',source:'Top Education Sénégal',url:'https://topeducationsn.com/wp-content/uploads/2023/01/Synthese-BFEM.pdf',personal:false},
   {id:'svt-3e-recueil',title:'SVT 3e · Recueil d’exercices',grade:'3e',subject:'SVT',kind:'Exercices',description:'Recueil de 6 pages de travaux d’entraînement de SVT pour la troisième.',source:'Top Education Sénégal',url:'https://topeducationsn.com/wp-content/uploads/2022/11/RECEUIL-DEXERCICE-SVT.pdf',personal:false},
 
-,
-
   {
     "id": "math6-d1",
     "title": "Devoir N°1 · Maths · 6e · S1",
