@@ -50,55 +50,34 @@
       <div class="page-wrap">
         <!-- DASHBOARD -->
         <section class="page active" id="page-dashboard">
-          <div class="welcome-row">
-            <div>
-              <div class="eyebrow">SAMEDI 31 OCTOBRE 2026</div>
-              <h1>Bonjour <span id="welcomeName">!</span></h1>
-              <p class="subheading">Tout ton travail scolaire, rangé au même endroit.</p>
-            </div>
-            <button class="primary-button" data-open-resource>＋ Ajouter un document</button>
+          <div class="home-welcome">
+            <div class="eyebrow">TON ESPACE COLLÈGE</div>
+            <h1>Salut <span id="welcomeName">!</span></h1>
+            <p>Tu veux travailler sur quoi aujourd’hui ?</p>
           </div>
 
-          <section class="hero-panel">
-            <div class="hero-content">
-              <div class="hero-kicker"><span class="live-dot"></span> TON ESPACE DE RÉVISION</div>
-              <h2>Apprends à ton rythme.<br><em>Retrouve tout facilement.</em></h2>
-              <p>Cours, exercices, devoirs et annales de la 6e à la 3e, organisés par matière.</p>
-              <button class="hero-button" data-nav="library">Explorer la bibliothèque <span>→</span></button>
+          <section class="home-library-card">
+            <div class="home-library-copy">
+              <span class="home-kicker">TA BIBLIOTHÈQUE</span>
+              <h2>Tous tes cours au même endroit.</h2>
+              <p>Choisis ta classe, puis ta matière.</p>
+              <button class="primary-button" data-nav="library">Ouvrir ma bibliothèque <span>→</span></button>
             </div>
-            <div class="hero-art" aria-hidden="true">
-              <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
-              <div class="book-stack"><div class="book book-back"></div><div class="book book-mid"></div><div class="book book-front"><span>MON</span><strong>COURS</strong><small>6e — 3e</small></div></div>
-              <div class="spark spark-a">✳</div><div class="spark spark-b">＋</div><div class="spark spark-c">·</div>
-            </div>
-            <div class="hero-index">01 <span>/</span> 04</div>
+            <div class="home-library-mark" aria-hidden="true">▤</div>
           </section>
 
-          <div class="stat-grid">
-            <article class="stat-card"><span class="stat-icon purple">▤</span><div><strong id="statResources">0</strong><span>Ressources</span></div><small>dans ta bibliothèque</small></article>
-            <article class="stat-card"><span class="stat-icon blue">✓</span><div><strong id="statCompleted">0</strong><span>Terminées</span></div><small>ressources étudiées</small></article>
-            <article class="stat-card"><span class="stat-icon orange">◷</span><div><strong id="statPending">0</strong><span>À faire</span></div><small>devoirs et révisions</small></article>
-            <article class="stat-card"><span class="stat-icon green">☆</span><div><strong id="statFavorites">0</strong><span>Favoris</span></div><small>à retrouver vite</small></article>
+          <div class="home-shortcuts" aria-label="Accès rapides">
+            <button class="home-shortcut" data-nav="planner">
+              <span class="home-shortcut-icon agenda-shortcut">▦</span>
+              <span class="home-shortcut-copy"><strong>Mon agenda</strong><small>Devoirs et examens</small></span>
+              <span class="home-shortcut-arrow">→</span>
+            </button>
+            <button class="home-shortcut" data-nav="files">
+              <span class="home-shortcut-icon files-shortcut">▣</span>
+              <span class="home-shortcut-copy"><strong>Mon classeur</strong><small>Mes documents</small></span>
+              <span class="home-shortcut-arrow">→</span>
+            </button>
           </div>
-
-          <div class="dashboard-grid">
-            <section class="panel upcoming-panel">
-              <div class="section-heading"><div><div class="eyebrow">TON ORGANISATION</div><h3>À venir</h3></div><button class="subtle-link" data-nav="planner">Voir l’agenda <span>→</span></button></div>
-              <div id="upcomingPreview" class="upcoming-list"></div>
-            </section>
-            <section class="panel progress-panel">
-              <div class="section-heading"><div><div class="eyebrow">PETITS PAS, GRANDS PROGRÈS</div><h3>Ta progression</h3></div><span class="progress-badge" id="progressPercent">0%</span></div>
-              <div class="progress-track"><span id="progressBar"></span></div>
-              <p id="progressMessage" class="muted-copy">Coche une ressource quand tu l’as étudiée pour suivre tes progrès.</p>
-              <div class="subject-progress" id="subjectProgress"></div>
-            </section>
-          </div>
-
-          <section class="resource-section">
-            <div class="section-heading"><div><div class="eyebrow">POUR BIEN COMMENCER</div><h3>Ressources à découvrir</h3></div><button class="subtle-link" data-nav="library">Toute la bibliothèque <span>→</span></button></div>
-            <div class="resource-grid compact-grid" id="featuredResources"></div>
-          </section>
-          <div class="source-note"><span>ⓘ</span> Les liens ouvrent les sites et fichiers d’origine. Vérifie avec ton professeur que le support correspond à la progression de ta classe.</div>
         </section>
 
         <!-- LIBRARY -->
