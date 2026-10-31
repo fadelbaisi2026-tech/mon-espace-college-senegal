@@ -24,9 +24,9 @@
             <div class="library-selfstudy-icon" aria-hidden="true">📚</div>
             <div class="library-selfstudy-copy"><strong>Tu peux apprendre ici en autonomie.</strong><p>Choisis ton niveau pour suivre les notions du collège, ou une matière pour explorer les ressources de toutes les classes. Ouvre les cours, entraîne-toi avec les exercices et révise avec les épreuves.</p></div>
           </section>
-          <div class="library-tools">
+          <div class="library-tools" id="libraryTools">
             <label class="search-field"><span>⌕</span><input id="searchInput" type="search" placeholder="Rechercher dans toute la bibliothèque…" autocomplete="off"></label>
-            <button class="secondary-button library-back hidden" id="libraryBackBtn" type="button">← Retour</button>
+            <button class="secondary-button library-back hidden" id="libraryBackBtn" type="button" aria-label="Revenir à la rubrique précédente">← Retour</button>
           </div>
           <nav class="library-breadcrumb" id="libraryBreadcrumb" aria-label="Emplacement dans la bibliothèque"></nav>
           <div class="library-intro" id="libraryIntro"></div>
@@ -49,7 +49,7 @@
       <form id="resourceForm" class="stack-form">
         <label>Nom du document<input name="title" required maxlength="120" placeholder="Ex. : Leçon sur la digestion"></label>
         <div class="two-fields"><label>Classe<select name="grade" id="resourceGradeSelect" required><option value="6e">6e</option><option value="5e">5e</option><option value="4e">4e</option><option value="3e">3e</option></select></label><label>Matière<select name="subject" required><option>Mathématiques</option><option>Physique-Chimie</option><option>SVT</option></select></label></div>
-        <label>Type de document<select name="kind"><option>Cours</option><option>Exercices</option><option>Devoirs et épreuves</option><option>Fascicule</option><option>Autre</option></select></label>
+        <label>Type de document<select name="kind"><option>Cours</option><option>Exercices</option><option>Devoirs</option><option>Fascicule</option><option>Autre</option></select></label>
         <label>Lien direct vers un PDF (facultatif)<input name="url" type="url" placeholder="https://…/document.pdf"></label>
         <label>Ou choisir un fichier sur ton appareil<input name="file" type="file" accept=".pdf,application/pdf"></label>
         <label>Notes (facultatif)<textarea name="notes" rows="3" maxlength="350" placeholder="Chapitre, page, enseignant…"></textarea></label>
