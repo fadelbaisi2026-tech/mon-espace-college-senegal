@@ -59,7 +59,8 @@ const state = {
   completed: [],
   userName: 'Élève',
   taskFilter: 'all',
-  fileSubjectFilter: 'all'
+  fileSubjectFilter: 'all',
+  libraryPath: {grade:'',subject:'',category:''}
 };
 const STORAGE_KEY = 'mon-espace-college-v1';
 let toastTimer;
@@ -143,18 +144,98 @@ function resourceCard(item, compact=false){
     ${isPersonal(item)?`<button class="delete-resource" data-delete-resource="${esc(item.id)}">Supprimer de mon classeur</button>`:''}
   </article>`;
 }
+const LIBRARY_SUBJECTS = [
+  {name:'Mathématiques',description:'Nombres, calcul, géométrie et résolution de problèmes.'},
+  {name:'Physique-Chimie',description:'Matière, énergie, électricité et transformations.'},
+  {name:'SVT',description:'Sciences de la vie, de la Terre et environnement.'}
+];
+const LIBRARY_CATEGORIES = [
+  {name:'Cours',icon:'▤',description:'Leçons, fiches et fascicules de cours.'},
+  {name:'Exercices',icon:'✎',description:'Applications, séries et entraînements.'},
+  {name:'Devoirs',icon:'✓',description:'Devoirs à la maison et devoirs surveillés.'},
+  {name:'Examens',icon:'▦',description:'Compositions, examens blancs et évaluations.'},
+  {name:'Épreuves',icon:'▣',description:'Sujets d’examen et annales, dont le BFEM.'},
+  {name:'Autres',icon:'＋',description:'Les autres documents que tu ajoutes.'}
+];
+function libraryCategory(item){
+  const kind=String(item.kind||'Autre').toLocaleLowerCase('fr-FR').normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  if(kind.includes('cours')||kind.includes('fascicule')) return 'Cours';
+  if(kind.includes('exercice')) return 'Exercices';
+  if(kind.includes('devoir')) return 'Devoirs';
+  if(kind.includes('examen')||kind.includes('composition')) return 'Examens';
+  if(kind.includes('epreuve')||kind.includes('annale')||kind.includes('bfem')) return 'Épreuves';
+  return 'Autres';
+}
+function isInLibraryGrade(item,grade){
+  return item.grade===grade || item.grade==='6e–3e' || item.grade==='6e-3e';
+}
 function renderLibrary(){
-  const query=(document.getElementById('searchInput')?.value||'').trim().toLowerCase();
-  const grade=document.getElementById('gradeFilter')?.value||'all';
-  const subject=document.getElementById('subjectFilter')?.value||'all';
-  const type=document.getElementById('typeFilter')?.value||'all';
-  const items=allResources().filter(item=>{
-    const text=[item.title,item.description,item.subject,item.grade,item.source,item.kind].join(' ').toLowerCase();
-    return (!query||text.includes(query)) && (grade==='all'||item.grade===grade||item.grade==='6e–3e') && (subject==='all'||item.subject===subject) && (type==='all'||(type==='Autre'&&!['Cours','Exercices','Fascicule','Annales'].includes(item.kind))||item.kind===type);
-  });
-  document.getElementById('libraryGrid').innerHTML=items.map(item=>resourceCard(item)).join('');
-  document.getElementById('resultsCount').textContent=`${items.length} ressource${items.length>1?'s':''}`;
-  document.getElementById('libraryEmpty').classList.toggle('hidden',items.length>0);
+  const query=(document.getElementById('searchInput')?.value||'').trim().toLocaleLowerCase('fr-FR');
+  const path=state.libraryPath;
+  const browser=document.getElementById('libraryBrowser');
+  const results=document.getElementById('libraryResults');
+  const empty=document.getElementById('libraryEmpty');
+  const back=document.getElementById('libraryBackBtn');
+  const breadcrumb=document.getElementById('libraryBreadcrumb');
+  const intro=document.getElementById('libraryIntro');
+  const resources=allResources();
+
+  if(query){
+    const matches=resources.filter(item=>[item.title,item.description,item.subject,item.grade,item.source,item.kind].join(' ').toLocaleLowerCase('fr-FR').includes(query));
+    browser.classList.add('hidden');
+    results.classList.remove('hidden');
+    back.classList.add('hidden');
+    breadcrumb.innerHTML='<button type="button" data-library-step="root">Bibliothèque</button><span>›</span><strong>Recherche</strong>';
+    intro.innerHTML='<div class="eyebrow">RECHERCHE GLOBALE</div><h2>Résultats de recherche</h2><p>'+matches.length+' document'+(matches.length>1?'s':'')+' trouvé'+(matches.length>1?'s':'')+'</p>';
+    results.innerHTML=matches.map(item=>resourceCard(item)).join('');
+    empty.classList.toggle('hidden',matches.length>0);
+    if(!matches.length) empty.innerHTML='<div class="empty-illustration">⌕</div><h3>Aucun résultat</h3><p>Essaie un autre mot-clé ou efface la recherche pour parcourir les classes.</p>';
+    return;
+  }
+
+  results.classList.add('hidden');
+  browser.classList.remove('hidden');
+  empty.classList.add('hidden');
+  back.classList.toggle('hidden',!path.grade);
+  const crumbs=['<button type="button" data-library-step="root">Bibliothèque</button>'];
+  if(path.grade) crumbs.push('<button type="button" data-library-step="grade">'+esc(path.grade)+'</button>');
+  if(path.subject) crumbs.push('<button type="button" data-library-step="subject">'+esc(path.subject)+'</button>');
+  if(path.category) crumbs.push('<strong>'+esc(path.category)+'</strong>');
+  breadcrumb.innerHTML=crumbs.join('<span>›</span>');
+
+  if(!path.grade){
+    intro.innerHTML='<div class="eyebrow">ÉTAPE 1 · CHOISIR LE NIVEAU</div><h2>Quelle est ta classe ?</h2><p>Commence par sélectionner ton niveau pour accéder à tes matières.</p>';
+    browser.innerHTML='<div class="library-tile-grid grade-grid">'+['6e','5e','4e','3e'].map(grade=>{
+      const count=resources.filter(item=>isInLibraryGrade(item,grade)).length;
+      return '<button type="button" class="library-tile class-tile" data-library-grade="'+grade+'"><span class="library-tile-main"><span class="library-tile-badge">'+grade+'</span><span class="library-tile-copy"><strong>Classe de '+grade+'</strong><small>Mathématiques · Physique-Chimie · SVT</small></span></span><span class="library-tile-tail"><b>'+count+'</b><small>ressources</small><span>→</span></span></button>';
+    }).join('')+'</div>';
+    return;
+  }
+
+  if(!path.subject){
+    const count=resources.filter(item=>isInLibraryGrade(item,path.grade)).length;
+    intro.innerHTML='<div class="eyebrow">ÉTAPE 2 · CLASSE '+esc(path.grade.toUpperCase())+'</div><h2>Choisis une matière</h2><p>'+count+' ressource'+(count>1?'s':'')+' répertoriée'+(count>1?'s':'')+' pour cette classe. Les trois matières restent accessibles, même lorsqu’une rubrique est encore vide.</p>';
+    browser.innerHTML='<div class="library-tile-grid subject-grid">'+LIBRARY_SUBJECTS.map(subject=>{
+      const total=resources.filter(item=>isInLibraryGrade(item,path.grade)&&item.subject===subject.name).length;
+      return '<button type="button" class="library-tile subject-tile '+subjectClass(subject.name)+'" data-library-subject="'+esc(subject.name)+'"><span class="library-tile-main"><span class="library-tile-symbol">'+subjectSymbol(subject.name)+'</span><span class="library-tile-copy"><strong>'+esc(subject.name)+'</strong><small>'+esc(subject.description)+'</small></span></span><span class="library-tile-tail"><b>'+total+'</b><small>documents</small><span>→</span></span></button>';
+    }).join('')+'</div>';
+    return;
+  }
+
+  if(!path.category){
+    intro.innerHTML='<div class="eyebrow">ÉTAPE 3 · '+esc(path.grade.toUpperCase())+' / '+esc(path.subject.toUpperCase())+'</div><h2>Que veux-tu consulter ?</h2><p>Les documents sont rangés par type. Ouvre une rubrique pour voir ses ressources ou en ajouter.</p>';
+    browser.innerHTML='<div class="library-tile-grid category-grid">'+LIBRARY_CATEGORIES.map(category=>{
+      const total=resources.filter(item=>isInLibraryGrade(item,path.grade)&&item.subject===path.subject&&libraryCategory(item)===category.name).length;
+      return '<button type="button" class="library-tile category-tile" data-library-category="'+esc(category.name)+'"><span class="library-tile-main"><span class="library-tile-symbol category-symbol">'+category.icon+'</span><span class="library-tile-copy"><strong>'+esc(category.name)+'</strong><small>'+esc(category.description)+'</small></span></span><span class="library-tile-tail"><b>'+total+'</b><small>documents</small><span>→</span></span></button>';
+    }).join('')+'</div>';
+    return;
+  }
+
+  const items=resources.filter(item=>isInLibraryGrade(item,path.grade)&&item.subject===path.subject&&libraryCategory(item)===path.category);
+  intro.innerHTML='<div class="eyebrow">DOCUMENTS · '+esc(path.grade.toUpperCase())+' / '+esc(path.subject.toUpperCase())+'</div><h2>'+esc(path.category)+'</h2><p>'+items.length+' document'+(items.length>1?'s':'')+' dans cette rubrique.</p>';
+  browser.innerHTML='<div class="library-type-actions"><button type="button" class="secondary-button" data-library-back>← Retour aux rubriques</button><button type="button" class="primary-button" data-add-to-library>＋ Ajouter un document</button></div>'+(items.length?'<div class="resource-grid library-resource-grid">'+items.map(item=>resourceCard(item)).join('')+'</div>':'');
+  empty.classList.toggle('hidden',items.length>0);
+  if(!items.length) empty.innerHTML='<div class="empty-illustration">▤</div><h3>Cette rubrique est encore vide</h3><p>Tu peux y ajouter un cours, un devoir ou un sujet de ton établissement.</p><button type="button" class="primary-button" data-add-to-library>＋ Ajouter un document</button>';
 }
 function renderUpcoming(){
   const pending=state.tasks.filter(t=>!t.done).sort((a,b)=>a.dueDate.localeCompare(b.dueDate)).slice(0,3);
@@ -206,7 +287,16 @@ function renderFavorites(){
   document.getElementById('favoritesGrid').innerHTML=resources.map(item=>resourceCard(item)).join('');
   document.getElementById('favoritesEmpty').classList.toggle('hidden',resources.length>0);
 }
-function openModal(){document.getElementById('resourceModal').classList.remove('hidden');document.body.style.overflow='hidden';}
+let returnToLibraryAfterSave=false;
+function openModal(prefill={}){
+  document.getElementById('resourceModal').classList.remove('hidden');
+  document.body.style.overflow='hidden';
+  returnToLibraryAfterSave=Boolean(prefill.returnToLibrary);
+  const form=document.getElementById('resourceForm');
+  if(prefill.grade) form.elements.grade.value=prefill.grade;
+  if(prefill.subject) form.elements.subject.value=prefill.subject;
+  if(prefill.kind) form.elements.kind.value=prefill.kind;
+}
 function closeModal(){document.getElementById('resourceModal').classList.add('hidden');document.body.style.overflow='';}
 function updateUserName(){
   const newName=window.prompt('Quel prénom afficher dans ton espace ?',state.userName);
@@ -229,6 +319,31 @@ function renderAll(){renderDashboard();renderLibrary();renderTasks();renderFiles
 document.addEventListener('click',async event=>{
   const nav=event.target.closest('[data-nav]');if(nav){event.preventDefault();goTo(nav.dataset.nav);return;}
   if(event.target.closest('[data-open-resource]')){openModal();return;}
+  if(event.target.closest('[data-add-to-library]')){
+    const path=state.libraryPath;
+    openModal({grade:path.grade,subject:path.subject,kind:path.category==='Autres'?'Autre':path.category,returnToLibrary:true});
+    return;
+  }
+  const libraryGrade=event.target.closest('[data-library-grade]');
+  if(libraryGrade){state.libraryPath={grade:libraryGrade.dataset.libraryGrade,subject:'',category:''};renderLibrary();return;}
+  const librarySubject=event.target.closest('[data-library-subject]');
+  if(librarySubject){state.libraryPath.subject=librarySubject.dataset.librarySubject;state.libraryPath.category='';renderLibrary();return;}
+  const libraryCategory=event.target.closest('[data-library-category]');
+  if(libraryCategory){state.libraryPath.category=libraryCategory.dataset.libraryCategory;renderLibrary();return;}
+  const libraryStep=event.target.closest('[data-library-step]');
+  if(libraryStep){
+    const step=libraryStep.dataset.libraryStep;
+    if(step==='root') state.libraryPath={grade:'',subject:'',category:''};
+    else if(step==='grade') state.libraryPath={grade:state.libraryPath.grade,subject:'',category:''};
+    else if(step==='subject') state.libraryPath.category='';
+    renderLibrary();return;
+  }
+  if(event.target.closest('[data-library-back]')||event.target.closest('#libraryBackBtn')){
+    if(state.libraryPath.category) state.libraryPath.category='';
+    else if(state.libraryPath.subject) state.libraryPath.subject='';
+    else state.libraryPath.grade='';
+    renderLibrary();return;
+  }
   if(event.target.closest('[data-close-modal]')){closeModal();return;}
   const fav=event.target.closest('[data-favorite]');if(fav){const id=fav.dataset.favorite;state.favorites=isFavorite(id)?state.favorites.filter(x=>x!==id):[...state.favorites,id];persist();renderAll();showToast(isFavorite(id)?'Ajouté aux favoris.':'Retiré des favoris.');return;}
   const complete=event.target.closest('[data-complete]');if(complete){const id=complete.dataset.complete;state.completed=isCompleted(id)?state.completed.filter(x=>x!==id):[...state.completed,id];persist();renderAll();if(document.getElementById('page-library').classList.contains('active'))renderLibrary();showToast(isCompleted(id)?'Ressource marquée comme étudiée.':'Progression mise à jour.');return;}
@@ -261,7 +376,7 @@ document.getElementById('resourceForm').addEventListener('submit',async event=>{
   if(!title){showToast('Ajoute un nom à ce document.');return;}if(!url&&!file){showToast('Ajoute un lien ou choisis un fichier.');return;}
   const item={id:`personal-${Date.now()}`,title,grade:String(data.get('grade')),subject:String(data.get('subject')),kind:String(data.get('kind')),description:String(data.get('notes')).trim()||'Document ajouté à ton classeur.',notes:String(data.get('notes')).trim(),source:file?'Fichier personnel':'Lien personnel',url:url||'',personal:true,createdAt:Date.now()};
   if(file){try{item.fileId=await saveLocalFile(file);item.fileName=file.name;item.fileSize=file.size;}catch(err){showToast('Impossible de stocker ce fichier dans le navigateur.');return;}}
-  state.resources.unshift(item);persist();form.reset();closeModal();renderAll();goTo('files');showToast('Document ajouté à ton classeur.');
+  state.resources.unshift(item);persist();form.reset();const backToLibrary=returnToLibraryAfterSave;returnToLibraryAfterSave=false;closeModal();renderAll();if(backToLibrary){goTo('library');showToast('Document ajouté à la rubrique.');}else{goTo('files');showToast('Document ajouté à ton classeur.');}
 });
 document.getElementById('importFile').addEventListener('change',event=>{const file=event.target.files[0];if(file)importBackup(file);event.target.value='';});
 // Folder controls are local filters. Resetting to the main folder list is done by reopening Mon classeur.
