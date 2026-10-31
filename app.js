@@ -251,15 +251,8 @@ function renderProgress(){
   document.getElementById('subjectProgress').innerHTML=counts.map(x=>`<div class="subject-row"><span>${x.s==='Mathématiques'?'Maths':x.s==='Physique-Chimie'?'Physique-Chimie':'SVT'}</span><b><i style="width:${x.percent}%"></i></b><small>${x.complete}/${x.total}</small></div>`).join('');
 }
 function renderDashboard(){
-  const resources=allResources();
-  document.getElementById('statResources').textContent=resources.length;
-  document.getElementById('statCompleted').textContent=resources.filter(r=>isCompleted(r.id)).length;
-  document.getElementById('statPending').textContent=state.tasks.filter(t=>!t.done).length;
-  document.getElementById('statFavorites').textContent=state.favorites.length;
-  document.getElementById('libraryCount').textContent=resources.length;
-  const pick=['math-adem-3e','pc-adem-3e','svt-adem-4e','math-page-6e'].map(id=>resources.find(r=>r.id===id)).filter(Boolean);
-  document.getElementById('featuredResources').innerHTML=pick.map(x=>resourceCard(x,true)).join('');
-  renderUpcoming(); renderProgress(); renderFilesCounts();
+  document.getElementById('libraryCount').textContent=allResources().length;
+  renderFilesCounts();
 }
 function renderTasks(){
   const list=document.getElementById('taskList');
