@@ -1,4 +1,4 @@
-const CACHE_NAME = 'mon-espace-college-v13-20261105';
+const CACHE_NAME = 'mon-espace-college-v14-20261105';
 const APP_SHELL = ['./', './index.html', './styles.css', './app.js', './manifest.webmanifest', './favicon.svg'];
 
 self.addEventListener('install', event => {
