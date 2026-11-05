@@ -1455,6 +1455,28 @@ const seedResources = [
     "source": "ADEM-Dakar · SUNUMATHS",
     "url": "https://sunumaths.com/wp-content/uploads/2019/04/ADEM_FASCICULE_MATHS_3eme_v10.17-1.pdf",
     "personal": false
+  },
+  {
+    "id": "svt-3e-cahier-exercices-2022-2023",
+    "title": "Cahier d’exercices de SVT · 3e · 2022-2023",
+    "grade": "3e",
+    "subject": "SVT",
+    "kind": "Exercices",
+    "description": "Cahier d’exercices de l’élève en Sciences de la Vie et de la Terre pour la classe de troisième, année scolaire 2022-2023.",
+    "source": "Top Education Sénégal · Cours Sainte Marie de Golf",
+    "url": "https://topeducationsn.com/wp-content/uploads/2024/09/Cahier-d-exercices-SVT-3ieme-2022-2023-1.pdf",
+    "personal": false
+  },
+  {
+    "id": "svt-3e-fascicule-exos-bfem-2023",
+    "title": "Fascicule d’exercices BFEM de SVT · 3e · 2023",
+    "grade": "3e",
+    "subject": "SVT",
+    "kind": "Exercices",
+    "description": "Fascicule d’entraînement en SVT destiné à la préparation du BFEM, édition 2023.",
+    "source": "Top Education Sénégal",
+    "url": "https://topeducationsn.com/wp-content/uploads/2024/09/Fascicule-Exos-BFEM-SVT-2023.pdf",
+    "personal": false
   }
 ];
 
@@ -1542,19 +1564,34 @@ function goTo(){
   window.scrollTo({top:0,behavior:'smooth'});
 }
 let activePdfObjectUrl='';
+let pdfViewerHistoryEntryOpen=false;
 function showPdfViewer(src,title){
   const modal=document.getElementById('pdfViewerModal');
   document.getElementById('pdfViewerTitle').textContent=title||'Document PDF';
   document.getElementById('pdfFrame').src=src;
+  if(!pdfViewerHistoryEntryOpen){
+    try{
+      const currentState=window.history.state;
+      const nextState=currentState&&typeof currentState==='object'?{...currentState,monEspacePdfViewer:true}:{monEspacePdfViewer:true};
+      window.history.pushState(nextState,'',window.location.href);
+      pdfViewerHistoryEntryOpen=true;
+    }catch(error){
+      console.info('Navigation retour PDF indisponible :',error);
+    }
+  }
   modal.classList.remove('hidden');
   document.body.style.overflow='hidden';
 }
-function closePdfViewer(){
+function closePdfViewer(options={}){
   const modal=document.getElementById('pdfViewerModal');
+  if(modal.classList.contains('hidden'))return;
   document.getElementById('pdfFrame').src='about:blank';
   modal.classList.add('hidden');
   document.body.style.overflow='';
   if(activePdfObjectUrl){URL.revokeObjectURL(activePdfObjectUrl);activePdfObjectUrl='';}
+  const shouldReturnToPreviousEntry=pdfViewerHistoryEntryOpen&&options.fromHistory!==true;
+  pdfViewerHistoryEntryOpen=false;
+  if(shouldReturnToPreviousEntry)window.history.back();
 }
 function resourceCard(item){
   const action = item.fileId
@@ -1822,7 +1859,7 @@ document.addEventListener('click',async event=>{
  if(event.target.closest('[data-close-modal]')){closeModal();return;}
  const openPdf=event.target.closest('[data-open-pdf]');
  if(openPdf){showPdfViewer(openPdf.dataset.openPdf,openPdf.closest('.resource-card')?.querySelector('h4')?.textContent||'Document PDF');return;}
- if(event.target.closest('[data-close-pdf]')||event.target.id==='pdfViewerModal'){closePdfViewer();return;}
+ if(event.target.id==='pdfViewerModal'){closePdfViewer();return;}
  const openFile=event.target.closest('[data-open-file]');
  if(openFile){
   try{
@@ -1870,6 +1907,14 @@ renderAll();
 if('serviceWorker' in navigator && location.protocol.startsWith('http')){
  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(error=>console.info('Mode hors ligne non activé :',error)));
 }
+document.getElementById('pdfBackBtn').addEventListener('click',event=>{
+ event.preventDefault();
+ event.stopPropagation();
+ closePdfViewer();
+});
+window.addEventListener('popstate',()=>{
+ if(pdfViewerHistoryEntryOpen)closePdfViewer({fromHistory:true});
+});
 document.addEventListener('keydown',event=>{
  if(event.key==='Escape'&&!document.getElementById('pdfViewerModal').classList.contains('hidden'))closePdfViewer();
 });
