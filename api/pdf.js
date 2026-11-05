@@ -9,8 +9,7 @@ const ALLOWED_HOSTS = new Set([
   'senprof2.education.sn',
   'apprendre.auf.org',
   'topeducationsn.com',
-  'reseauscolaire.com',
-  'www.halwar.sn'
+  'topeducationsn.com'
 ]);
 
 function parseAllowedPdfUrl(raw) {
