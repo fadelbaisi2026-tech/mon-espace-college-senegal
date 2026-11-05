@@ -4,120 +4,743 @@ const ADEM_ROOT = 'https://img1.wsimg.com/blobby/go/92b1d401-89a0-4fda-accf-6ed9
 const ADEM_VER = '?ver=1791159802098';
 
 const seedResources = [
-  // Mathématiques : les quatre fascicules ADEM sont des cahiers d'exercices.
-  {id:'math-adem-6e',title:'Fascicule d’exercices de mathématiques · 6e',grade:'6e',subject:'Mathématiques',kind:'Exercices',description:'Activités numériques et géométriques couvrant le programme de mathématiques de sixième. 76 pages.',source:'ADEM-Dakar · APPRENDRE / AUF',url:'https://apprendre.auf.org/wp-content/uploads/2021/08/fascicule_adem_math_6e.pdf',personal:false},
-  {id:'math-adem-5e',title:'Fascicule d’exercices de mathématiques · 5e',grade:'5e',subject:'Mathématiques',kind:'Exercices',description:'Activités numériques et géométriques couvrant le programme de mathématiques de cinquième. 73 pages.',source:'ADEM-Dakar · APPRENDRE / AUF',url:'https://apprendre.auf.org/wp-content/uploads/2021/08/fascicule_adem_math_5e.pdf',personal:false},
-  {id:'math-adem-4e',title:'Fascicule d’exercices de mathématiques · 4e',grade:'4e',subject:'Mathématiques',kind:'Exercices',description:'Activités numériques et géométriques couvrant le programme de mathématiques de quatrième. 63 pages.',source:'ADEM-Dakar · APPRENDRE / AUF',url:'https://apprendre.auf.org/wp-content/uploads/2021/08/fascicule_adem_math_4e.pdf',personal:false},
-  {id:'math-adem-3e',title:'Fascicule d’exercices de mathématiques · 3e',grade:'3e',subject:'Mathématiques',kind:'Exercices',description:'Activités numériques et géométriques couvrant le programme de mathématiques de troisième. 66 pages.',source:'ADEM-Dakar · APPRENDRE / AUF',url:'https://apprendre.auf.org/wp-content/uploads/2021/08/fascicule_adem_math_3e.pdf',personal:false},
-  {id:'math-babacar-3e',title:'Réussir les maths au BFEM · Cours, exercices et corrigés',grade:'3e',subject:'Mathématiques',kind:'Cours et exercices',description:'Document complet sur le programme de troisième : résumés de cours par chapitre, séries d’exercices avec corrections, épreuves blanches et sujets de concours.',source:'Babacar Diarra · SunuMaths',url:'https://sunumaths.com/wp-content/uploads/2021/03/cours-3ieme-et-exercices-Babacar-DIARRA.pdf',personal:false},
-
-  // Cours de mathématiques retrouvés pour les niveaux 6e et 5e.
-  {id:'math-cours-coly-6e',title:'Cours de mathématiques · 6e',grade:'6e',subject:'Mathématiques',kind:'Cours',description:'Support de cours de 82 pages : progression harmonisée, leçons détaillées, objectifs, notions et exercices d’application.',source:'Ibrahima Coly · Professeur de mathématiques · IA Kaolack',url:'https://topeducationsn.com/wp-content/uploads/2022/11/COLY-MATHS-6e.pdf',personal:false},
-  {id:'math-livret-men-6e',title:'Mon livret de mathématiques · 6e',grade:'6e',subject:'Mathématiques',kind:'Cours et exercices',description:'Livret de la Direction de l’Enseignement moyen secondaire général : essentiel du cours pour chaque leçon, exercices de contrôle et exercices d’application.',source:'Ministère de l’Éducation nationale · DEMSG',url:'https://topeducationsn.com/wp-content/uploads/2024/09/Livret_Math_6e-_juin_23.pdf',personal:false},
-  {id:'math-cours-coly-5e',title:'Cours de mathématiques · 5e',grade:'5e',subject:'Mathématiques',kind:'Cours',description:'Support de cours de 61 pages : progression harmonisée, chapitres, définitions, propriétés, méthodes et exercices d’application.',source:'Ibrahima Coly · Professeur de mathématiques · IA Kaolack',url:'https://topeducationsn.com/wp-content/uploads/2022/11/COLY-MATHS-5e.pdf',personal:false},
-
-  // Compléments de cours de mathématiques issus d'enseignants et de livrets pédagogiques.
-  {id:'math-cours-coly-4e',title:'Cours de mathématiques · 4e',grade:'4e',subject:'Mathématiques',kind:'Cours et exercices',description:'Fascicule de cours de 77 pages : progression, leçons, notions et exercices d’application.',source:'Ibrahima Coly · Professeur de mathématiques · IA Kaolack',url:'https://topeducationsn.com/wp-content/uploads/2022/11/COLY-MATHS-4e.pdf',personal:false},
-  {id:'math-cours-coly-3e',title:'Cours de mathématiques · 3e',grade:'3e',subject:'Mathématiques',kind:'Cours et exercices',description:'Fascicule de cours de 77 pages : notions du programme de troisième, explications et exercices.',source:'Ibrahima Coly · Professeur de mathématiques · IA Kaolack',url:'https://topeducationsn.com/wp-content/uploads/2022/11/COLY-MATHS-3e.pdf',personal:false},
-  {id:'math-livret-men-5e',title:'Mon livret de mathématiques · 5e',grade:'5e',subject:'Mathématiques',kind:'Cours et exercices',description:'Livret de 115 pages conforme au programme sénégalais : essentiel du cours, exercices de contrôle, applications et problèmes.',source:'Ministère de l’Éducation nationale · DEMSG',url:'https://topeducationsn.com/wp-content/uploads/2024/09/Livret_Math_5e_juin-23.pdf',personal:false},
-  {id:'math-livret-men-4e',title:'Mon livret de mathématiques · 4e',grade:'4e',subject:'Mathématiques',kind:'Cours et exercices',description:'Livret de 126 pages conforme au programme sénégalais : essentiel du cours, exercices de contrôle, applications et problèmes.',source:'Ministère de l’Éducation nationale · DEMSG',url:'https://topeducationsn.com/wp-content/uploads/2024/09/Livret_Maths_-4e_juin_23.pdf',personal:false},
-  {id:'math-livret-men-3e',title:'Mon livret de mathématiques · 3e',grade:'3e',subject:'Mathématiques',kind:'Cours et exercices',description:'Livret de 155 pages conforme au programme sénégalais : essentiel du cours par leçon, exercices, problèmes et éléments de correction.',source:'Ministère de l’Éducation nationale · DEMSG',url:'https://topeducationsn.com/wp-content/uploads/2024/09/Livret-_-Maths_3e_juin-_23.pdf',personal:false},
-
-  // Physique-Chimie : uniquement en 4e et 3e dans le parcours collège sénégalais.
-  {id:'pc-adem-3e',title:'Fascicule ADEM de sciences physiques · 3e',grade:'3e',subject:'Physique-Chimie',kind:'Cours et exercices',description:'Support ADEM-Dakar de sciences physiques pour la troisième : optique, forces, travail, électricité, solutions, acides et bases.',source:'ADEM-Dakar · Sénégal',url:ADEM_ROOT+'ADEM_PC_3e.pdf?ver=1791159802009',personal:false},
-  {id:'pc-exos-phys-3e',title:'Séries d’exercices de physique · 3e',grade:'3e',subject:'Physique-Chimie',kind:'Exercices',description:'Entraînement de physique pour la classe de troisième : lentilles, lumière, forces, électricité et résistance.',source:'IREMPT Sénégal',url:ADEM_ROOT+'Exercice_physique_3e_irempt.pdf?ver=1791159802009',personal:false},
-  {id:'pc-exos-chim-3e',title:'Séries d’exercices de chimie · 3e',grade:'3e',subject:'Physique-Chimie',kind:'Exercices',description:'Séries d’exercices de chimie adaptées à la classe de troisième.',source:'IREMPT Sénégal',url:ADEM_ROOT+'Exercice_chimie_3e_irempt.pdf?ver=1791159802009',personal:false},
-  {id:'pc-adem-4e-auf',title:'Fascicule d’exercices de sciences physiques et chimie · 4e',grade:'4e',subject:'Physique-Chimie',kind:'Exercices',description:'Activités expérimentales, séries d’exercices et activités d’intégration couvrant le programme de physique-chimie de quatrième. 55 pages.',source:'ADEM-Dakar · APPRENDRE / AUF',url:'https://apprendre.auf.org/wp-content/uploads/2021/08/fascicule_adem_sciences_physiques_4e.pdf',personal:false},
-  {id:'pc-wahab-4e',title:'Fascicule complémentaire de sciences physiques · 4e',grade:'4e',subject:'Physique-Chimie',kind:'Cours et exercices',description:'Support complémentaire de sciences physiques pour la classe de quatrième.',source:'Wahab Diop · Sénégal',url:ADEM_ROOT+'fascicule-sciences-physiques-4eme-_wahabdiop.pdf?ver=1791159802067',personal:false},
-
-  // Cours et livrets de Physique-Chimie issus de professeurs et de ressources pédagogiques nationales.
-  {id:'pc-cours-coly-3e',title:'Cours de sciences physiques · 3e',grade:'3e',subject:'Physique-Chimie',kind:'Cours',description:'Fascicule de cours de 72 pages : optique, mécanique, électricité et énergie, avec fiches pédagogiques et développements de leçons.',source:'Ibrahima Coly · Professeur de sciences physiques · UCAD',url:'https://topeducationsn.com/wp-content/uploads/2022/11/COLY-SP-3-e-1.pdf',personal:false},
-  {id:'pc-cours-coly-4e',title:'Cours de sciences physiques · 4e',grade:'4e',subject:'Physique-Chimie',kind:'Cours',description:'Fascicule de cours de 68 pages pour la quatrième, avec leçons de physique et de chimie.',source:'Ibrahima Coly · Professeur de sciences physiques · UCAD',url:'https://topeducationsn.com/wp-content/uploads/2022/11/COLY-SP-4-e.pdf',personal:false},
-  {id:'pc-livret-men-3e',title:'Mon livret de Physique-Chimie · 3e',grade:'3e',subject:'Physique-Chimie',kind:'Cours et exercices',description:'Livret de 103 pages conforme au programme sénégalais : objectifs, essentiel du cours, exercices de contrôle et d’application.',source:'Ministère de l’Éducation nationale · DEMSG',url:'https://topeducationsn.com/wp-content/uploads/2024/09/livret-PC__3e_juin_23-1.pdf',personal:false},
-  {id:'pc-livret-men-4e',title:'Mon livret de Physique-Chimie · 4e',grade:'4e',subject:'Physique-Chimie',kind:'Cours et exercices',description:'Livret de 103 pages conforme au programme sénégalais : leçons de physique et de chimie, exercices d’application et éléments de correction.',source:'Ministère de l’Éducation nationale · DEMSG',url:'https://topeducationsn.com/wp-content/uploads/2024/09/livret-PC-4eme_-juin-23.pdf',personal:false},
-
-  // SVT : fascicules ADEM par niveau et fascicules de cours IA Kédougou.
-  {id:'svt-adem-6e',title:'Fascicule ADEM de SVT · 6e',grade:'6e',subject:'SVT',kind:'Cours et exercices',description:'Fascicule sénégalais de sciences de la vie et de la Terre pour la sixième.',source:'ADEM-Dakar · SENPROF',url:'https://senprof.education.sn/ADEM/SVT%206e/res/SVT-6e.pdf',personal:false},
-  {id:'svt-adem-5e',title:'Fascicule ADEM de SVT · 5e',grade:'5e',subject:'SVT',kind:'Cours et exercices',description:'Leçons, thèmes et exercices de maîtrise des connaissances, de méthode et d’intégration pour la cinquième. 50 pages.',source:'ADEM-Dakar · APPRENDRE / AUF',url:'https://apprendre.auf.org/wp-content/uploads/2021/08/fascicule_adem-_svt_5e.pdf',personal:false},
-  {id:'svt-adem-4e',title:'Fascicule ADEM de SVT · 4e',grade:'4e',subject:'SVT',kind:'Cours et exercices',description:'Leçons et activités de sciences de la vie et de la Terre pour la quatrième. 70 pages.',source:'ADEM-Dakar · APPRENDRE / AUF',url:'https://apprendre.auf.org/wp-content/uploads/2021/08/fascicule_adem-_svt_4e.pdf',personal:false},
-  {id:'svt-adem-3e',title:'Fascicule ADEM de SVT · 3e',grade:'3e',subject:'SVT',kind:'Cours et exercices',description:'Leçons et activités de sciences de la vie et de la Terre pour la troisième. 86 pages.',source:'ADEM-Dakar · APPRENDRE / AUF',url:'https://apprendre.auf.org/wp-content/uploads/2021/08/fascicule_adem-_svt_3e.pdf',personal:false},
-  ...[
-    ['6e','Cours de SVT · 6e','Fascicule de cours préparé par la cellule SVT de l’Inspection d’Académie de Kédougou.','FASCICULE%20SVT%20COURS%206%20i%C3%A8me.pdf'],
-    ['5e','Cours de SVT · 5e','Fascicule de cours de SVT pour la classe de cinquième.','FASCICULE%20SVT%20COURS%205%20i%C3%A8me.pdf'],
-    ['4e','Cours de SVT · 4e','Fascicule de cours de SVT pour la classe de quatrième.','FASCICULE%20SVT%20COURS%204%20i%C3%A8me.pdf'],
-    ['3e','Cours de SVT · 3e','Fascicule de cours de SVT pour la classe de troisième.','FASCICULE%20SVT%20COURS%203%20IEME.pdf']
-  ].map(([grade,title,description,file])=>({id:'svt-cours-'+grade, title, grade, subject:'SVT', kind:'Cours', description, source:'Inspection d’Académie de Kédougou · Sénégal', url:ADEM_ROOT+file+ADEM_VER, personal:false})),
-
-  // Ressources de SVT complémentaires publiées par des enseignants et dans les livrets nationaux.
-  {id:'svt-cours-ndao-6e',title:'Fascicule de cours de SVT · 6e',grade:'6e',subject:'SVT',kind:'Cours',description:'Fascicule de 61 pages résumant les leçons du programme de sixième.',source:'Cheikh Ah. Mbacké Ndao · Professeur de SVT · Top Education Sénégal',url:'https://topeducationsn.com/wp-content/uploads/2022/11/FASCICULE-COURS-SVT-6ie%CC%80me-M.NDAO_.pdf',personal:false},
-  {id:'svt-cours-ndao-5e',title:'Fascicule de cours de SVT · 5e',grade:'5e',subject:'SVT',kind:'Cours et exercices',description:'Fascicule de 60 pages synthétisant des supports de cours et des manuels de SVT pour la cinquième.',source:'Cheikh Ah. Mbacké Ndao · Professeur de SVT · Top Education Sénégal',url:'https://topeducationsn.com/wp-content/uploads/2022/11/FASCICULE-COURS-SVT-5ieme-M.NDAO_.pdf',personal:false},
-  {id:'svt-cours-ndao-4e',title:'Fascicule de cours de SVT · 4e',grade:'4e',subject:'SVT',kind:'Cours',description:'Fascicule de cours de SVT de 79 pages préparé pour la classe de quatrième.',source:'Cheikh Ah. Mbacké Ndao · Professeur de SVT · Top Education Sénégal',url:'https://topeducationsn.com/wp-content/uploads/2022/11/FASCICULE-COURS-SVT-4ieme-M.NDAO_.pdf',personal:false},
-  {id:'svt-fascicule-ief-3e',title:'Fascicule de SVT · 3e · Approche par compétences',grade:'3e',subject:'SVT',kind:'Cours et exercices',description:'Fascicule de la cellule mixte SVT de l’IEF de Grand-Dakar et des Parcelles Assainies : activités pédagogiques organisées par thème selon l’approche par compétences.',source:'Équipe de professeurs de SVT · IEF Grand-Dakar',url:'https://topeducationsn.com/wp-content/uploads/2024/09/fascicule-svt-3e.pdf',personal:false},
-  {id:'svt-livret-men-6e',title:'Mon livret de SVT · 6e',grade:'6e',subject:'SVT',kind:'Cours et exercices',description:'Livret de 79 pages conforme au programme en vigueur : essentiel du cours, exercices de contrôle et d’application.',source:'Ministère de l’Éducation nationale · DEMSG',url:'https://topeducationsn.com/wp-content/uploads/2024/09/Livret_SVT_6e_juin_23.docx.pdf',personal:false},
-  {id:'svt-livret-men-5e',title:'Mon livret de SVT · 5e',grade:'5e',subject:'SVT',kind:'Cours et exercices',description:'Livret de 75 pages conforme au programme sénégalais : synthèses de cours, exercices et situations d’application.',source:'Ministère de l’Éducation nationale · DEMSG',url:'https://topeducationsn.com/wp-content/uploads/2024/09/Livret_SVT_5e_juin_23.pdf',personal:false},
-  {id:'svt-livret-men-4e',title:'Mon livret de SVT · 4e',grade:'4e',subject:'SVT',kind:'Cours et exercices',description:'Livret de 102 pages conforme au programme sénégalais : essentiel du cours, exercices et problèmes d’application.',source:'Ministère de l’Éducation nationale · DEMSG',url:'https://topeducationsn.com/wp-content/uploads/2024/09/Livret_SVT_4e_juin_23.pdf',personal:false},
-  {id:'svt-livret-men-3e',title:'Mon livret de SVT · 3e',grade:'3e',subject:'SVT',kind:'Cours et exercices',description:'Livret de 130 pages conforme au programme sénégalais : synthèses des leçons, exercices et situations d’application.',source:'Ministère de l’Éducation nationale · DEMSG',url:'https://topeducationsn.com/wp-content/uploads/2024/09/Livret_SVT_3e_juin_23.pdf',personal:false},
-
-  // Compléments de Mathématiques 6e : devoirs et évaluations sénégalais.
-  {id:'math-6e-eval-2022',title:'Évaluation de mathématiques · 6e · Semestre 1',grade:'6e',subject:'Mathématiques',kind:'Devoirs',description:'Évaluation de niveau sixième portant sur les nombres décimaux, les ensembles et la géométrie.',source:'Top Education Sénégal · IA Saint-Louis',url:'https://topeducationsn.com/wp-content/uploads/2022/11/Evaluation-MATHS-N%C2%B01-Semestre1-Classe-6e-2022-2023.pdf',personal:false},
-  {id:'math-6e-eval-dec-2022',title:'Évaluation de mathématiques · 6e · Décembre 2022',grade:'6e',subject:'Mathématiques',kind:'Devoirs',description:'Devoir de mathématiques de sixième : vocabulaire géométrique, solides, nombres et calculs.',source:'Top Education Sénégal · IA Saint-Louis',url:'https://topeducationsn.com/wp-content/uploads/2022/12/Evaluation-N%C2%B01-MATHS-Semestre-1-Classe-6eme-2022-2023.pdf',personal:false},
-  {id:'math-6e-epreuve-found',title:'Épreuve de mathématiques · 6e',grade:'6e',subject:'Mathématiques',kind:'Devoirs',description:'Devoir semestriel de la cellule zonale de Foundiougne : numération, nombres décimaux et géométrie.',source:'Top Education Sénégal · IA Fatick',url:'https://topeducationsn.com/wp-content/uploads/2023/01/Epreuve-maths-6eme.pdf',personal:false},
-  {id:'math-6e-devoir-oussouye',title:'Devoir départemental de mathématiques · 6e',grade:'6e',subject:'Mathématiques',kind:'Devoirs',description:'Devoir départemental du premier semestre 2022-2023, IEF Oussouye : activités numériques et géométriques.',source:'Top Education Sénégal · IA Ziguinchor',url:'https://topeducationsn.com/wp-content/uploads/2023/01/Devoir-departemental-6eme.pdf',personal:false},
-
-  // Compléments de Mathématiques 5e : entraînements numériques et géométriques.
-  {id:'math-5e-multiples-1',title:'Série d’exercices · Multiples et diviseurs · 5e',grade:'5e',subject:'Mathématiques',kind:'Exercices',description:'Entraînement sur les multiples, les diviseurs, les nombres premiers, le PGCD et le PPCM.',source:'Top Education Sénégal · M. Sow',url:'https://topeducationsn.com/wp-content/uploads/2021/01/serie-dexercice-numerique-N%C2%B01-5eme-2020-2021.pdf',personal:false},
-  {id:'math-5e-multiples-2',title:'Série d’exercices · Nombres et divisibilité · 5e',grade:'5e',subject:'Mathématiques',kind:'Exercices',description:'Exercices complémentaires sur les diviseurs, multiples et nombres premiers.',source:'Top Education Sénégal · M. Sow',url:'https://topeducationsn.com/wp-content/uploads/2021/01/serie-dexercice-numerique-N%C2%B02-5eme-2020-2021.pdf',personal:false},
-  {id:'math-5e-multiples-3',title:'Série d’exercices numériques · 5e · N° 3',grade:'5e',subject:'Mathématiques',kind:'Exercices',description:'Série d’entraînement numérique pour la classe de cinquième.',source:'Top Education Sénégal · M. Sow',url:'https://topeducationsn.com/wp-content/uploads/2021/01/serie-dexercice-numerique-N%C2%B03-5eme-2020-2021.pdf',personal:false},
-  {id:'math-5e-angles',title:'Série d’exercices sur les angles · 5e',grade:'5e',subject:'Mathématiques',kind:'Exercices',description:'Entraînement de géométrie sur les angles.',source:'Top Education Sénégal',url:'https://topeducationsn.com/wp-content/uploads/2023/01/SERIE-DEXERCICE-N%C2%B02-SUR-LES-ANGLES.pdf',personal:false},
-
-  // SVT 5e : fiches d'exercices liées aux leçons du fascicule ADEM.
-  {id:'svt-5e-td1',title:'SVT 5e · Exercices sur les leçons 1 et 2',grade:'5e',subject:'SVT',kind:'Exercices',description:'Travaux dirigés de SVT portant sur les deux premières leçons de cinquième.',source:'Top Education Sénégal',url:'https://topeducationsn.com/wp-content/uploads/2022/11/TD-N%C2%B01-SVT-5eme-Lecon-1-et-Lecon-2.pdf',personal:false},
-  {id:'svt-5e-td2',title:'SVT 5e · Exercices sur la leçon 3',grade:'5e',subject:'SVT',kind:'Exercices',description:'Leçon 3 : alimentation chez les animaux et adaptation aux différents régimes alimentaires.',source:'Top Education Sénégal',url:'https://topeducationsn.com/wp-content/uploads/2022/11/TD-N%C2%B02-SVT-5eme-Lecon-3.pdf',personal:false},
-  {id:'svt-5e-td3',title:'SVT 5e · Exercices sur la leçon 4',grade:'5e',subject:'SVT',kind:'Exercices',description:'Travaux dirigés de SVT sur la quatrième leçon du programme de cinquième.',source:'Top Education Sénégal',url:'https://topeducationsn.com/wp-content/uploads/2022/11/TD-N%C2%B03-SVT-5eme-Lecon-4.pdf',personal:false},
-  {id:'svt-5e-td4',title:'SVT 5e · Exercices sur la leçon 5',grade:'5e',subject:'SVT',kind:'Exercices',description:'Travaux dirigés de SVT sur la cinquième leçon du programme de cinquième.',source:'Top Education Sénégal',url:'https://topeducationsn.com/wp-content/uploads/2022/11/TD-N%C2%B04-SVT-5eme-Lecon-5.pdf',personal:false},
-  {id:'svt-5e-td6',title:'SVT 5e · Exercices sur la leçon 7',grade:'5e',subject:'SVT',kind:'Exercices',description:'Travaux dirigés de SVT sur la septième leçon du programme de cinquième.',source:'Top Education Sénégal',url:'https://topeducationsn.com/wp-content/uploads/2022/11/TD-N%C2%B06-SVT-5eme-Lecon-7.pdf',personal:false},
-  {id:'svt-5e-td7',title:'SVT 5e · Exercices sur la leçon 8',grade:'5e',subject:'SVT',kind:'Exercices',description:'Travaux dirigés de SVT sur la huitième leçon du programme de cinquième.',source:'Top Education Sénégal',url:'https://topeducationsn.com/wp-content/uploads/2022/11/TD-N%C2%B07-SVT-5eme-Lecon-8.pdf',personal:false},
-  {id:'svt-5e-td8',title:'SVT 5e · Exercices sur les leçons 9 et 10',grade:'5e',subject:'SVT',kind:'Exercices',description:'Travaux dirigés de SVT sur les leçons 9 et 10 du programme de cinquième.',source:'Top Education Sénégal',url:'https://topeducationsn.com/wp-content/uploads/2022/11/TD-N%C2%B08-SVT-5eme-Lecon-9-et-Lecon-10.pdf',personal:false},
-  {id:'svt-5e-td9',title:'SVT 5e · Exercices sur les leçons 11 et 12',grade:'5e',subject:'SVT',kind:'Exercices',description:'Travaux dirigés de SVT sur les leçons 11 et 12 du programme de cinquième.',source:'Top Education Sénégal',url:'https://topeducationsn.com/wp-content/uploads/2022/11/TD-N%C2%B09-SVT-5eme-Lecon-L11-et-Lecon-12.pdf',personal:false},
-
-  // Mathématiques 4e : exercices ciblés et recueil de devoirs.
-  {id:'math-4e-rationnels',title:'TD · Nombres rationnels · 4e',grade:'4e',subject:'Mathématiques',kind:'Exercices',description:'Travaux dirigés de mathématiques sur les nombres rationnels.',source:'Top Education Sénégal',url:'https://topeducationsn.com/wp-content/uploads/2021/01/TD-N%C2%B01-Nombre-rationnel.pdf',personal:false},
-  {id:'math-4e-algebre',title:'TD · Calcul algébrique · 4e',grade:'4e',subject:'Mathématiques',kind:'Exercices',description:'Série d’exercices de calcul algébrique pour la quatrième.',source:'Top Education Sénégal',url:'https://topeducationsn.com/wp-content/uploads/2021/01/TD-N%C2%B02-Calcul-Algebrique.pdf',personal:false},
-  {id:'math-4e-milieux',title:'TD · Droite des milieux · 4e',grade:'4e',subject:'Mathématiques',kind:'Exercices',description:'Travaux dirigés de géométrie sur la droite des milieux.',source:'Top Education Sénégal',url:'https://topeducationsn.com/wp-content/uploads/2021/01/TD-N%C2%B02-Droite-des-milieux.pdf',personal:false},
-  {id:'math-4e-recueil',title:'Recueil d’exercices et de devoirs de maths · 4e',grade:'4e',subject:'Mathématiques',kind:'Devoirs',description:'Recueil de 19 pages d’exercices et de devoirs de mathématiques pour la quatrième.',source:'Top Education Sénégal · M. Sow',url:'https://topeducationsn.com/wp-content/uploads/2022/12/RECEUIL-DEXERCICES-ET-DE-DEVOIRS-DE-MATHS-4EME.pdf',personal:false},
-
-  // Physique-Chimie 4e : exercices de chimie et de physique.
-  {id:'pc-4e-chimie1',title:'Chimie 4e · Série d’exercices N° 1',grade:'4e',subject:'Physique-Chimie',kind:'Exercices',description:'Série d’exercices de chimie pour la classe de quatrième.',source:'Top Education Sénégal',url:'https://topeducationsn.com/wp-content/uploads/2020/12/serie-dexercice-chimie-N%C2%B01.pdf',personal:false},
-  {id:'pc-4e-chimie2',title:'Chimie 4e · Série d’exercices N° 2',grade:'4e',subject:'Physique-Chimie',kind:'Exercices',description:'Deuxième série d’exercices de chimie pour la quatrième.',source:'Top Education Sénégal',url:'https://topeducationsn.com/wp-content/uploads/2020/12/serie-dexercice-chimie-N%C2%B02-.pdf',personal:false},
-  {id:'pc-4e-chimie4',title:'Chimie 4e · Série d’exercices N° 4',grade:'4e',subject:'Physique-Chimie',kind:'Exercices',description:'Quatrième série d’exercices de chimie pour la quatrième.',source:'Top Education Sénégal',url:'https://topeducationsn.com/wp-content/uploads/2020/12/serie-dexercice-chimie-N%C2%B04.pdf',personal:false},
-  {id:'pc-4e-intro',title:'Physique 4e · Introduction aux sciences physiques',grade:'4e',subject:'Physique-Chimie',kind:'Exercices',description:'Travaux dirigés d’introduction aux sciences physiques.',source:'Top Education Sénégal',url:'https://topeducationsn.com/wp-content/uploads/2021/01/TD-N%C2%B01-introduction-aux-sciences-physiques.pdf',personal:false},
-  {id:'pc-4e-mesure',title:'Physique 4e · Grandeurs physiques et mesure',grade:'4e',subject:'Physique-Chimie',kind:'Exercices',description:'Exercices sur les grandeurs physiques et la mesure.',source:'Top Education Sénégal',url:'https://topeducationsn.com/wp-content/uploads/2021/01/TD-N%C2%B02-grandeur-physique-et-mesure.pdf',personal:false},
-  {id:'pc-4e-masse',title:'Physique 4e · Masse, masse volumique et densité',grade:'4e',subject:'Physique-Chimie',kind:'Exercices',description:'Travaux dirigés sur la masse, la masse volumique et la densité.',source:'Top Education Sénégal',url:'https://topeducationsn.com/wp-content/uploads/2021/03/TD-N%C2%B03-masse-masse-volumique-et-densite-4eme-2020-2021.pdf',personal:false},
-
-  // SVT 4e : fiches d'exercices thématiques.
-  {id:'svt-4e-td1',title:'SVT 4e · Exercices sur la leçon 1',grade:'4e',subject:'SVT',kind:'Exercices',description:'Travaux dirigés de SVT sur la première leçon de quatrième.',source:'Top Education Sénégal',url:'https://topeducationsn.com/wp-content/uploads/2022/11/TD-N%C2%B01-SVT-4eme-Lecon-1.pdf',personal:false},
-  {id:'svt-4e-td2',title:'SVT 4e · Exercices sur la leçon 2',grade:'4e',subject:'SVT',kind:'Exercices',description:'Travaux dirigés de SVT sur la deuxième leçon de quatrième.',source:'Top Education Sénégal',url:'https://topeducationsn.com/wp-content/uploads/2022/11/TD-N%C2%B02-SVT-4eme-Lecon-2.pdf',personal:false},
-  {id:'svt-4e-td3',title:'SVT 4e · Exercices sur les leçons 3 à 5',grade:'4e',subject:'SVT',kind:'Exercices',description:'Travaux dirigés de SVT sur les leçons 3, 4 et 5 de quatrième.',source:'Top Education Sénégal',url:'https://topeducationsn.com/wp-content/uploads/2022/11/TD-N%C2%B03-SVT-4eme-Lecon-L3_4_5.pdf',personal:false},
-  {id:'svt-4e-td4',title:'SVT 4e · Exercices sur la leçon 6',grade:'4e',subject:'SVT',kind:'Exercices',description:'Travaux dirigés de SVT sur la sixième leçon de quatrième.',source:'Top Education Sénégal',url:'https://topeducationsn.com/wp-content/uploads/2022/11/TD-N%C2%B04-SVT-4eme-Lecon-6.pdf',personal:false},
-  {id:'svt-4e-td5',title:'SVT 4e · Exercices sur la leçon 7',grade:'4e',subject:'SVT',kind:'Exercices',description:'Travaux dirigés de SVT sur la septième leçon de quatrième.',source:'Top Education Sénégal',url:'https://topeducationsn.com/wp-content/uploads/2022/11/TD-N%C2%B05-SVT-4eme-Lecon-7.pdf',personal:false},
-  {id:'svt-4e-td6',title:'SVT 4e · Exercices sur la leçon 8',grade:'4e',subject:'SVT',kind:'Exercices',description:'Travaux dirigés de SVT sur la huitième leçon de quatrième.',source:'Top Education Sénégal',url:'https://topeducationsn.com/wp-content/uploads/2022/11/TD-N%C2%B06-SVT-4eme-Lecon-8.pdf',personal:false},
-
-  // 3e : exercices ciblés de mathématiques, physique-chimie et SVT.
-  {id:'math-3e-racines',title:'Mathématiques 3e · Racines carrées',grade:'3e',subject:'Mathématiques',kind:'Exercices',description:'Série de 4 pages sur la définition, les opérations, les comparaisons et la simplification des racines carrées.',source:'Top Education Sénégal · M. Sow',url:'https://topeducationsn.com/wp-content/uploads/2022/11/TD-N%C2%B01-RACINE-CARREE.pdf',personal:false},
-  {id:'math-3e-thales',title:'Mathématiques 3e · Théorème de Thalès',grade:'3e',subject:'Mathématiques',kind:'Exercices',description:'Travaux dirigés de géométrie sur le théorème de Thalès.',source:'Top Education Sénégal',url:'https://topeducationsn.com/wp-content/uploads/2022/11/TD-N%C2%B01-THEOREME-DE-THALES.pdf',personal:false},
-  {id:'math-3e-equations',title:'Mathématiques 3e · Équations et inéquations',grade:'3e',subject:'Mathématiques',kind:'Exercices',description:'Série sur les équations et inéquations du premier degré à une inconnue.',source:'Top Education Sénégal',url:'https://topeducationsn.com/wp-content/uploads/2022/11/TD-N%C2%B02-EQUATION-INEQUATION-DU-PREMIER-DEGRE-A-UNE-INCONNUE.pdf',personal:false},
-  {id:'math-3e-trigo',title:'Mathématiques 3e · Relations trigonométriques',grade:'3e',subject:'Mathématiques',kind:'Exercices',description:'Entraînement sur les relations trigonométriques dans un triangle.',source:'Top Education Sénégal',url:'https://topeducationsn.com/wp-content/uploads/2023/01/TD-N%C2%B02-RELATION-TRIOGONOMETRIQUE-DANS-UN-TRIANGLE.pdf',personal:false},
-  {id:'math-3e-systemes',title:'Mathématiques 3e · Systèmes d’équations',grade:'3e',subject:'Mathématiques',kind:'Exercices',description:'Travaux dirigés sur les équations et systèmes du premier degré à deux inconnues.',source:'Top Education Sénégal',url:'https://topeducationsn.com/wp-content/uploads/2023/01/TD-N%C2%B03-EQUATION-ET-SYSTEME-DEQUATIONS-DU-PREMIER-DEGRE-A-DEUX-INCONNUES.pdf',personal:false},
-  {id:'math-bfem-2021',title:'Épreuve BFEM · Mathématiques · 2021',grade:'3e',subject:'Mathématiques',kind:'Épreuves',description:'Sujet de mathématiques du BFEM 2021.',source:'Top Education Sénégal',url:'https://topeducationsn.com/wp-content/uploads/2022/11/BFEM-2021-MATHEMATIQUES.pdf',personal:false},
-
-  {id:'pc-3e-solutions',title:'Chimie 3e · Notion de solution',grade:'3e',subject:'Physique-Chimie',kind:'Exercices',description:'Travaux dirigés sur les solutions en chimie.',source:'Top Education Sénégal',url:'https://topeducationsn.com/wp-content/uploads/2022/11/TD-N%C2%B01-NOTION-DE-SOLUTION.pdf',personal:false},
-  {id:'pc-3e-lentilles',title:'Physique 3e · Lentilles minces',grade:'3e',subject:'Physique-Chimie',kind:'Exercices',description:'Exercices sur les lentilles minces et leurs propriétés.',source:'Top Education Sénégal',url:'https://topeducationsn.com/wp-content/uploads/2022/11/TD-N%C2%B01-LENTILLES-MINCES.pdf',personal:false},
-  {id:'pc-3e-forces',title:'Physique 3e · Notion de force',grade:'3e',subject:'Physique-Chimie',kind:'Exercices',description:'Travaux dirigés sur la notion de force.',source:'Top Education Sénégal',url:'https://topeducationsn.com/wp-content/uploads/2023/01/TD-N%C2%B03-NOTION-DE-FORCE.pdf',personal:false},
-  {id:'pc-bfem-2022',title:'Épreuve BFEM · Physique-Chimie · 2022',grade:'3e',subject:'Physique-Chimie',kind:'Épreuves',description:'Sujet de physique-chimie du BFEM 2022.',source:'Top Education Sénégal',url:'https://topeducationsn.com/wp-content/uploads/2022/11/BFEM-2022-PC.pdf',personal:false},
-
-  {id:'svt-3e-bfem-synthese',title:'SVT 3e · Synthèse d’exercices BFEM',grade:'3e',subject:'SVT',kind:'Exercices',description:'Fascicule de synthèse de 27 pages pour réviser la SVT en vue du BFEM.',source:'Top Education Sénégal',url:'https://topeducationsn.com/wp-content/uploads/2023/01/Synthese-BFEM.pdf',personal:false},
-  {id:'svt-3e-recueil',title:'SVT 3e · Recueil d’exercices',grade:'3e',subject:'SVT',kind:'Exercices',description:'Recueil de 6 pages de travaux d’entraînement de SVT pour la troisième.',source:'Top Education Sénégal',url:'https://topeducationsn.com/wp-content/uploads/2022/11/RECEUIL-DEXERCICE-SVT.pdf',personal:false},
-
+  {
+    "id": "math-senumaths-6e",
+    "title": "SENEMATHS · Cours complet de mathématiques · 6e",
+    "grade": "6e",
+    "subject": "Mathématiques",
+    "kind": "Cours",
+    "description": "Cours complet de mathématiques et progression pédagogique pour la classe de sixième, édition SENEMATHS.",
+    "source": "Ibou Sène · SUNUMATHS",
+    "url": "https://sunumaths.com/wp-content/uploads/2021/01/SENEMATHS-6e%CC%80me-2.pdf",
+    "personal": false
+  },
+  {
+    "id": "math-senumaths-5e",
+    "title": "SENEMATHS · Cours complet de mathématiques · 5e",
+    "grade": "5e",
+    "subject": "Mathématiques",
+    "kind": "Cours",
+    "description": "Cours complet de mathématiques et progression pédagogique pour la classe de cinquième, édition SENEMATHS.",
+    "source": "Ibou Sène · SUNUMATHS",
+    "url": "https://sunumaths.com/wp-content/uploads/2021/01/SENEMATHS-5e%CC%80me-2.pdf",
+    "personal": false
+  },
+  {
+    "id": "math-senumaths-4e",
+    "title": "SENEMATHS · Cours complet de mathématiques · 4e",
+    "grade": "4e",
+    "subject": "Mathématiques",
+    "kind": "Cours",
+    "description": "Cours complet de mathématiques et progression pédagogique pour la classe de quatrième, édition SENEMATHS.",
+    "source": "Ibou Sène · SUNUMATHS",
+    "url": "https://sunumaths.com/wp-content/uploads/2021/01/SENEMATHS-4e%CC%80me-2.pdf",
+    "personal": false
+  },
+  {
+    "id": "math-senumaths-3e",
+    "title": "SENEMATHS · Cours complet de mathématiques · 3e",
+    "grade": "3e",
+    "subject": "Mathématiques",
+    "kind": "Cours",
+    "description": "Cours complet de mathématiques et progression pédagogique pour la classe de troisième, édition SENEMATHS.",
+    "source": "Ibou Sène · SUNUMATHS",
+    "url": "https://sunumaths.com/wp-content/uploads/2021/01/SENEMATHS-3e%CC%80me-1.pdf",
+    "personal": false
+  },
+  {
+    "id": "pc-wahab-fascicule-4e",
+    "title": "Fascicule de cours et exercices de Physique-Chimie · 4e",
+    "grade": "4e",
+    "subject": "Physique-Chimie",
+    "kind": "Cours et exercices",
+    "description": "Fascicule de sciences physiques pour la quatrième, issu de la collection de Wahab Diop.",
+    "source": "Wahab Diop · PhysiqueChimie Sénégal",
+    "url": "https://img1.wsimg.com/blobby/go/92b1d401-89a0-4fda-accf-6ed9c6d46dd4/downloads/FASCICULE%20pc%204%C3%A8m_wahabdiop.pdf?ver=1773146128104",
+    "personal": false
+  },
+  {
+    "id": "pc-wahab-fascicule-3e",
+    "title": "Fascicule de cours et exercices de Physique-Chimie · 3e",
+    "grade": "3e",
+    "subject": "Physique-Chimie",
+    "kind": "Cours et exercices",
+    "description": "Fascicule de sciences physiques pour la troisième, édition 2020, de la collection de Wahab Diop.",
+    "source": "Wahab Diop · PhysiqueChimie Sénégal",
+    "url": "https://img1.wsimg.com/blobby/go/92b1d401-89a0-4fda-accf-6ed9c6d46dd4/downloads/FASCICULE%20PC%203eme%202020_wahabdiop.pdf?ver=1773146127999",
+    "personal": false
+  },
+  {
+    "id": "pc-wahab-td-structure-4e-2025",
+    "title": "TD · Structure de la matière · 4e · 2025",
+    "grade": "4e",
+    "subject": "Physique-Chimie",
+    "kind": "Exercices",
+    "description": "Travaux dirigés de physique-chimie sur la structure de la matière, édition 2025.",
+    "source": "Wahab Diop · Série 2025",
+    "url": "https://img1.wsimg.com/blobby/go/92b1d401-89a0-4fda-accf-6ed9c6d46dd4/downloads/ed11dd04-71d4-4747-9a95-e578c69e04c3/TD-structure_matiere_4e_2025-tiv_wahabdiop.pdf?ver=1773146129466",
+    "personal": false
+  },
+  {
+    "id": "pc-wahab-td-forces-3e-2025",
+    "title": "TD · Forces · 3e · 2025",
+    "grade": "3e",
+    "subject": "Physique-Chimie",
+    "kind": "Exercices",
+    "description": "Travaux dirigés de physique sur les forces pour la classe de troisième, édition 2025.",
+    "source": "Wahab Diop · Série 2025",
+    "url": "https://img1.wsimg.com/blobby/go/92b1d401-89a0-4fda-accf-6ed9c6d46dd4/downloads/2278296c-b51f-4c18-bdb4-4b4398b2894c/TD-forces-3e-2025-tiv_wahabdiop.pdf?ver=1773146129563",
+    "personal": false
+  },
+  {
+    "id": "pc-wahab-td-metaux-3e-2024",
+    "title": "TD · Les métaux · 3e · 2024",
+    "grade": "3e",
+    "subject": "Physique-Chimie",
+    "kind": "Exercices",
+    "description": "Travaux dirigés de chimie sur les métaux pour la classe de troisième, édition 2024.",
+    "source": "Wahab Diop · Série 2024",
+    "url": "https://img1.wsimg.com/blobby/go/92b1d401-89a0-4fda-accf-6ed9c6d46dd4/downloads/TD-les%20metaux-3eme--2024-ltamba_wahabdiop.pdf?ver=1773146129563",
+    "personal": false
+  },
+  {
+    "id": "pc-wahab-td-travail-3e-2024",
+    "title": "TD · Travail et énergie · 3e · 2024",
+    "grade": "3e",
+    "subject": "Physique-Chimie",
+    "kind": "Exercices",
+    "description": "Travaux dirigés de physique sur le travail pour la classe de troisième, édition 2024.",
+    "source": "Wahab Diop · Série 2024",
+    "url": "https://img1.wsimg.com/blobby/go/92b1d401-89a0-4fda-accf-6ed9c6d46dd4/downloads/TD-travail-2024-3eme-tamba_wahabdiop.pdf?ver=1773146129563",
+    "personal": false
+  },
+  {
+    "id": "pc-wahab-td-electrisation-3e-2024",
+    "title": "Série académique · Électrisation par frottement · 3e · 2024",
+    "grade": "3e",
+    "subject": "Physique-Chimie",
+    "kind": "Exercices",
+    "description": "Série académique d’exercices sur l’électrisation par frottement pour la classe de troisième, édition 2024.",
+    "source": "Wahab Diop · Série académique 2024",
+    "url": "https://img1.wsimg.com/blobby/go/92b1d401-89a0-4fda-accf-6ed9c6d46dd4/downloads/SERIE%20ACADEMIQUE%20ELECTRISATION%20PAR%20FROTTEMENT%20.pdf?ver=1773146129563",
+    "personal": false
+  },
+  {
+    "id": "math-adem-6e",
+    "title": "Fascicule d’exercices de mathématiques · 6e",
+    "grade": "6e",
+    "subject": "Mathématiques",
+    "kind": "Exercices",
+    "description": "Activités numériques et géométriques couvrant le programme de mathématiques de sixième. 76 pages.",
+    "source": "ADEM-Dakar · APPRENDRE / AUF",
+    "url": "https://apprendre.auf.org/wp-content/uploads/2021/08/fascicule_adem_math_6e.pdf",
+    "personal": false
+  },
+  {
+    "id": "math-adem-5e",
+    "title": "Fascicule d’exercices de mathématiques · 5e",
+    "grade": "5e",
+    "subject": "Mathématiques",
+    "kind": "Exercices",
+    "description": "Activités numériques et géométriques couvrant le programme de mathématiques de cinquième. 73 pages.",
+    "source": "ADEM-Dakar · APPRENDRE / AUF",
+    "url": "https://apprendre.auf.org/wp-content/uploads/2021/08/fascicule_adem_math_5e.pdf",
+    "personal": false
+  },
+  {
+    "id": "math-adem-4e",
+    "title": "Fascicule d’exercices de mathématiques · 4e",
+    "grade": "4e",
+    "subject": "Mathématiques",
+    "kind": "Exercices",
+    "description": "Activités numériques et géométriques couvrant le programme de mathématiques de quatrième. 63 pages.",
+    "source": "ADEM-Dakar · APPRENDRE / AUF",
+    "url": "https://apprendre.auf.org/wp-content/uploads/2021/08/fascicule_adem_math_4e.pdf",
+    "personal": false
+  },
+  {
+    "id": "math-adem-3e",
+    "title": "Fascicule d’exercices de mathématiques · 3e",
+    "grade": "3e",
+    "subject": "Mathématiques",
+    "kind": "Exercices",
+    "description": "Activités numériques et géométriques couvrant le programme de mathématiques de troisième. 66 pages.",
+    "source": "ADEM-Dakar · APPRENDRE / AUF",
+    "url": "https://apprendre.auf.org/wp-content/uploads/2021/08/fascicule_adem_math_3e.pdf",
+    "personal": false
+  },
+  {
+    "id": "math-babacar-3e",
+    "title": "Réussir les maths au BFEM · Cours, exercices et corrigés",
+    "grade": "3e",
+    "subject": "Mathématiques",
+    "kind": "Cours et exercices",
+    "description": "Document complet sur le programme de troisième : résumés de cours par chapitre, séries d’exercices avec corrections, épreuves blanches et sujets de concours.",
+    "source": "Babacar Diarra · SunuMaths",
+    "url": "https://sunumaths.com/wp-content/uploads/2021/03/cours-3ieme-et-exercices-Babacar-DIARRA.pdf",
+    "personal": false
+  },
+  {
+    "id": "svt-adem-6e",
+    "title": "Fascicule ADEM de SVT · 6e",
+    "grade": "6e",
+    "subject": "SVT",
+    "kind": "Cours et exercices",
+    "description": "Fascicule sénégalais de sciences de la vie et de la Terre pour la sixième.",
+    "source": "ADEM-Dakar · SENPROF",
+    "url": "https://senprof.education.sn/ADEM/SVT%206e/res/SVT-6e.pdf",
+    "personal": false
+  },
+  {
+    "id": "svt-adem-5e",
+    "title": "Fascicule ADEM de SVT · 5e",
+    "grade": "5e",
+    "subject": "SVT",
+    "kind": "Cours et exercices",
+    "description": "Leçons, thèmes et exercices de maîtrise des connaissances, de méthode et d’intégration pour la cinquième. 50 pages.",
+    "source": "ADEM-Dakar · APPRENDRE / AUF",
+    "url": "https://apprendre.auf.org/wp-content/uploads/2021/08/fascicule_adem-_svt_5e.pdf",
+    "personal": false
+  },
+  {
+    "id": "svt-adem-4e",
+    "title": "Fascicule ADEM de SVT · 4e",
+    "grade": "4e",
+    "subject": "SVT",
+    "kind": "Cours et exercices",
+    "description": "Leçons et activités de sciences de la vie et de la Terre pour la quatrième. 70 pages.",
+    "source": "ADEM-Dakar · APPRENDRE / AUF",
+    "url": "https://apprendre.auf.org/wp-content/uploads/2021/08/fascicule_adem-_svt_4e.pdf",
+    "personal": false
+  },
+  {
+    "id": "svt-adem-3e",
+    "title": "Fascicule ADEM de SVT · 3e",
+    "grade": "3e",
+    "subject": "SVT",
+    "kind": "Cours et exercices",
+    "description": "Leçons et activités de sciences de la vie et de la Terre pour la troisième. 86 pages.",
+    "source": "ADEM-Dakar · APPRENDRE / AUF",
+    "url": "https://apprendre.auf.org/wp-content/uploads/2021/08/fascicule_adem-_svt_3e.pdf",
+    "personal": false
+  },
+  {
+    "id": "svt-cours-6e",
+    "title": "Cours de SVT · 6e",
+    "grade": "6e",
+    "subject": "SVT",
+    "kind": "Cours",
+    "description": "Fascicule de cours préparé par la cellule SVT de l’Inspection d’Académie de Kédougou.",
+    "source": "Inspection d’Académie de Kédougou · Sénégal",
+    "url": "https://img1.wsimg.com/blobby/go/92b1d401-89a0-4fda-accf-6ed9c6d46dd4/downloads/FASCICULE%20SVT%20COURS%206%20i%C3%A8me.pdf?ver=1791159802098",
+    "personal": false
+  },
+  {
+    "id": "svt-cours-5e",
+    "title": "Cours de SVT · 5e",
+    "grade": "5e",
+    "subject": "SVT",
+    "kind": "Cours",
+    "description": "Fascicule de cours de SVT pour la classe de cinquième.",
+    "source": "Inspection d’Académie de Kédougou · Sénégal",
+    "url": "https://img1.wsimg.com/blobby/go/92b1d401-89a0-4fda-accf-6ed9c6d46dd4/downloads/FASCICULE%20SVT%20COURS%205%20i%C3%A8me.pdf?ver=1791159802098",
+    "personal": false
+  },
+  {
+    "id": "svt-cours-4e",
+    "title": "Cours de SVT · 4e",
+    "grade": "4e",
+    "subject": "SVT",
+    "kind": "Cours",
+    "description": "Fascicule de cours de SVT pour la classe de quatrième.",
+    "source": "Inspection d’Académie de Kédougou · Sénégal",
+    "url": "https://img1.wsimg.com/blobby/go/92b1d401-89a0-4fda-accf-6ed9c6d46dd4/downloads/FASCICULE%20SVT%20COURS%204%20i%C3%A8me.pdf?ver=1791159802098",
+    "personal": false
+  },
+  {
+    "id": "svt-cours-3e",
+    "title": "Cours de SVT · 3e",
+    "grade": "3e",
+    "subject": "SVT",
+    "kind": "Cours",
+    "description": "Fascicule de cours de SVT pour la classe de troisième.",
+    "source": "Inspection d’Académie de Kédougou · Sénégal",
+    "url": "https://img1.wsimg.com/blobby/go/92b1d401-89a0-4fda-accf-6ed9c6d46dd4/downloads/FASCICULE%20SVT%20COURS%203%20IEME.pdf?ver=1791159802098",
+    "personal": false
+  },
+  {
+    "id": "svt-cours-ndao-6e",
+    "title": "Fascicule de cours de SVT · 6e",
+    "grade": "6e",
+    "subject": "SVT",
+    "kind": "Cours",
+    "description": "Fascicule de 61 pages résumant les leçons du programme de sixième.",
+    "source": "Cheikh Ah. Mbacké Ndao · Professeur de SVT · Top Education Sénégal",
+    "url": "https://topeducationsn.com/wp-content/uploads/2022/11/FASCICULE-COURS-SVT-6ie%CC%80me-M.NDAO_.pdf",
+    "personal": false
+  },
+  {
+    "id": "svt-cours-ndao-5e",
+    "title": "Fascicule de cours de SVT · 5e",
+    "grade": "5e",
+    "subject": "SVT",
+    "kind": "Cours et exercices",
+    "description": "Fascicule de 60 pages synthétisant des supports de cours et des manuels de SVT pour la cinquième.",
+    "source": "Cheikh Ah. Mbacké Ndao · Professeur de SVT · Top Education Sénégal",
+    "url": "https://topeducationsn.com/wp-content/uploads/2022/11/FASCICULE-COURS-SVT-5ieme-M.NDAO_.pdf",
+    "personal": false
+  },
+  {
+    "id": "svt-cours-ndao-4e",
+    "title": "Fascicule de cours de SVT · 4e",
+    "grade": "4e",
+    "subject": "SVT",
+    "kind": "Cours",
+    "description": "Fascicule de cours de SVT de 79 pages préparé pour la classe de quatrième.",
+    "source": "Cheikh Ah. Mbacké Ndao · Professeur de SVT · Top Education Sénégal",
+    "url": "https://topeducationsn.com/wp-content/uploads/2022/11/FASCICULE-COURS-SVT-4ieme-M.NDAO_.pdf",
+    "personal": false
+  },
+  {
+    "id": "svt-fascicule-ief-3e",
+    "title": "Fascicule de SVT · 3e · Approche par compétences",
+    "grade": "3e",
+    "subject": "SVT",
+    "kind": "Cours et exercices",
+    "description": "Fascicule de la cellule mixte SVT de l’IEF de Grand-Dakar et des Parcelles Assainies : activités pédagogiques organisées par thème selon l’approche par compétences.",
+    "source": "Équipe de professeurs de SVT · IEF Grand-Dakar",
+    "url": "https://topeducationsn.com/wp-content/uploads/2024/09/fascicule-svt-3e.pdf",
+    "personal": false
+  },
+  {
+    "id": "svt-livret-men-6e",
+    "title": "Mon livret de SVT · 6e",
+    "grade": "6e",
+    "subject": "SVT",
+    "kind": "Cours et exercices",
+    "description": "Livret de 79 pages conforme au programme en vigueur : essentiel du cours, exercices de contrôle et d’application.",
+    "source": "Ministère de l’Éducation nationale · DEMSG",
+    "url": "https://topeducationsn.com/wp-content/uploads/2024/09/Livret_SVT_6e_juin_23.docx.pdf",
+    "personal": false
+  },
+  {
+    "id": "svt-livret-men-5e",
+    "title": "Mon livret de SVT · 5e",
+    "grade": "5e",
+    "subject": "SVT",
+    "kind": "Cours et exercices",
+    "description": "Livret de 75 pages conforme au programme sénégalais : synthèses de cours, exercices et situations d’application.",
+    "source": "Ministère de l’Éducation nationale · DEMSG",
+    "url": "https://topeducationsn.com/wp-content/uploads/2024/09/Livret_SVT_5e_juin_23.pdf",
+    "personal": false
+  },
+  {
+    "id": "svt-livret-men-4e",
+    "title": "Mon livret de SVT · 4e",
+    "grade": "4e",
+    "subject": "SVT",
+    "kind": "Cours et exercices",
+    "description": "Livret de 102 pages conforme au programme sénégalais : essentiel du cours, exercices et problèmes d’application.",
+    "source": "Ministère de l’Éducation nationale · DEMSG",
+    "url": "https://topeducationsn.com/wp-content/uploads/2024/09/Livret_SVT_4e_juin_23.pdf",
+    "personal": false
+  },
+  {
+    "id": "svt-livret-men-3e",
+    "title": "Mon livret de SVT · 3e",
+    "grade": "3e",
+    "subject": "SVT",
+    "kind": "Cours et exercices",
+    "description": "Livret de 130 pages conforme au programme sénégalais : synthèses des leçons, exercices et situations d’application.",
+    "source": "Ministère de l’Éducation nationale · DEMSG",
+    "url": "https://topeducationsn.com/wp-content/uploads/2024/09/Livret_SVT_3e_juin_23.pdf",
+    "personal": false
+  },
+  {
+    "id": "math-6e-eval-2022",
+    "title": "Évaluation de mathématiques · 6e · Semestre 1",
+    "grade": "6e",
+    "subject": "Mathématiques",
+    "kind": "Devoirs",
+    "description": "Évaluation de niveau sixième portant sur les nombres décimaux, les ensembles et la géométrie.",
+    "source": "Top Education Sénégal · IA Saint-Louis",
+    "url": "https://topeducationsn.com/wp-content/uploads/2022/11/Evaluation-MATHS-N%C2%B01-Semestre1-Classe-6e-2022-2023.pdf",
+    "personal": false
+  },
+  {
+    "id": "math-6e-eval-dec-2022",
+    "title": "Évaluation de mathématiques · 6e · Décembre 2022",
+    "grade": "6e",
+    "subject": "Mathématiques",
+    "kind": "Devoirs",
+    "description": "Devoir de mathématiques de sixième : vocabulaire géométrique, solides, nombres et calculs.",
+    "source": "Top Education Sénégal · IA Saint-Louis",
+    "url": "https://topeducationsn.com/wp-content/uploads/2022/12/Evaluation-N%C2%B01-MATHS-Semestre-1-Classe-6eme-2022-2023.pdf",
+    "personal": false
+  },
+  {
+    "id": "math-6e-epreuve-found",
+    "title": "Épreuve de mathématiques · 6e",
+    "grade": "6e",
+    "subject": "Mathématiques",
+    "kind": "Devoirs",
+    "description": "Devoir semestriel de la cellule zonale de Foundiougne : numération, nombres décimaux et géométrie.",
+    "source": "Top Education Sénégal · IA Fatick",
+    "url": "https://topeducationsn.com/wp-content/uploads/2023/01/Epreuve-maths-6eme.pdf",
+    "personal": false
+  },
+  {
+    "id": "math-6e-devoir-oussouye",
+    "title": "Devoir départemental de mathématiques · 6e",
+    "grade": "6e",
+    "subject": "Mathématiques",
+    "kind": "Devoirs",
+    "description": "Devoir départemental du premier semestre 2022-2023, IEF Oussouye : activités numériques et géométriques.",
+    "source": "Top Education Sénégal · IA Ziguinchor",
+    "url": "https://topeducationsn.com/wp-content/uploads/2023/01/Devoir-departemental-6eme.pdf",
+    "personal": false
+  },
+  {
+    "id": "math-5e-multiples-1",
+    "title": "Série d’exercices · Multiples et diviseurs · 5e",
+    "grade": "5e",
+    "subject": "Mathématiques",
+    "kind": "Exercices",
+    "description": "Entraînement sur les multiples, les diviseurs, les nombres premiers, le PGCD et le PPCM.",
+    "source": "Top Education Sénégal · M. Sow",
+    "url": "https://topeducationsn.com/wp-content/uploads/2021/01/serie-dexercice-numerique-N%C2%B01-5eme-2020-2021.pdf",
+    "personal": false
+  },
+  {
+    "id": "math-5e-multiples-2",
+    "title": "Série d’exercices · Nombres et divisibilité · 5e",
+    "grade": "5e",
+    "subject": "Mathématiques",
+    "kind": "Exercices",
+    "description": "Exercices complémentaires sur les diviseurs, multiples et nombres premiers.",
+    "source": "Top Education Sénégal · M. Sow",
+    "url": "https://topeducationsn.com/wp-content/uploads/2021/01/serie-dexercice-numerique-N%C2%B02-5eme-2020-2021.pdf",
+    "personal": false
+  },
+  {
+    "id": "math-5e-multiples-3",
+    "title": "Série d’exercices numériques · 5e · N° 3",
+    "grade": "5e",
+    "subject": "Mathématiques",
+    "kind": "Exercices",
+    "description": "Série d’entraînement numérique pour la classe de cinquième.",
+    "source": "Top Education Sénégal · M. Sow",
+    "url": "https://topeducationsn.com/wp-content/uploads/2021/01/serie-dexercice-numerique-N%C2%B03-5eme-2020-2021.pdf",
+    "personal": false
+  },
+  {
+    "id": "math-5e-angles",
+    "title": "Série d’exercices sur les angles · 5e",
+    "grade": "5e",
+    "subject": "Mathématiques",
+    "kind": "Exercices",
+    "description": "Entraînement de géométrie sur les angles.",
+    "source": "Top Education Sénégal",
+    "url": "https://topeducationsn.com/wp-content/uploads/2023/01/SERIE-DEXERCICE-N%C2%B02-SUR-LES-ANGLES.pdf",
+    "personal": false
+  },
+  {
+    "id": "svt-5e-td1",
+    "title": "SVT 5e · Exercices sur les leçons 1 et 2",
+    "grade": "5e",
+    "subject": "SVT",
+    "kind": "Exercices",
+    "description": "Travaux dirigés de SVT portant sur les deux premières leçons de cinquième.",
+    "source": "Top Education Sénégal",
+    "url": "https://topeducationsn.com/wp-content/uploads/2022/11/TD-N%C2%B01-SVT-5eme-Lecon-1-et-Lecon-2.pdf",
+    "personal": false
+  },
+  {
+    "id": "svt-5e-td2",
+    "title": "SVT 5e · Exercices sur la leçon 3",
+    "grade": "5e",
+    "subject": "SVT",
+    "kind": "Exercices",
+    "description": "Leçon 3 : alimentation chez les animaux et adaptation aux différents régimes alimentaires.",
+    "source": "Top Education Sénégal",
+    "url": "https://topeducationsn.com/wp-content/uploads/2022/11/TD-N%C2%B02-SVT-5eme-Lecon-3.pdf",
+    "personal": false
+  },
+  {
+    "id": "svt-5e-td3",
+    "title": "SVT 5e · Exercices sur la leçon 4",
+    "grade": "5e",
+    "subject": "SVT",
+    "kind": "Exercices",
+    "description": "Travaux dirigés de SVT sur la quatrième leçon du programme de cinquième.",
+    "source": "Top Education Sénégal",
+    "url": "https://topeducationsn.com/wp-content/uploads/2022/11/TD-N%C2%B03-SVT-5eme-Lecon-4.pdf",
+    "personal": false
+  },
+  {
+    "id": "svt-5e-td4",
+    "title": "SVT 5e · Exercices sur la leçon 5",
+    "grade": "5e",
+    "subject": "SVT",
+    "kind": "Exercices",
+    "description": "Travaux dirigés de SVT sur la cinquième leçon du programme de cinquième.",
+    "source": "Top Education Sénégal",
+    "url": "https://topeducationsn.com/wp-content/uploads/2022/11/TD-N%C2%B04-SVT-5eme-Lecon-5.pdf",
+    "personal": false
+  },
+  {
+    "id": "svt-5e-td6",
+    "title": "SVT 5e · Exercices sur la leçon 7",
+    "grade": "5e",
+    "subject": "SVT",
+    "kind": "Exercices",
+    "description": "Travaux dirigés de SVT sur la septième leçon du programme de cinquième.",
+    "source": "Top Education Sénégal",
+    "url": "https://topeducationsn.com/wp-content/uploads/2022/11/TD-N%C2%B06-SVT-5eme-Lecon-7.pdf",
+    "personal": false
+  },
+  {
+    "id": "svt-5e-td7",
+    "title": "SVT 5e · Exercices sur la leçon 8",
+    "grade": "5e",
+    "subject": "SVT",
+    "kind": "Exercices",
+    "description": "Travaux dirigés de SVT sur la huitième leçon du programme de cinquième.",
+    "source": "Top Education Sénégal",
+    "url": "https://topeducationsn.com/wp-content/uploads/2022/11/TD-N%C2%B07-SVT-5eme-Lecon-8.pdf",
+    "personal": false
+  },
+  {
+    "id": "svt-5e-td8",
+    "title": "SVT 5e · Exercices sur les leçons 9 et 10",
+    "grade": "5e",
+    "subject": "SVT",
+    "kind": "Exercices",
+    "description": "Travaux dirigés de SVT sur les leçons 9 et 10 du programme de cinquième.",
+    "source": "Top Education Sénégal",
+    "url": "https://topeducationsn.com/wp-content/uploads/2022/11/TD-N%C2%B08-SVT-5eme-Lecon-9-et-Lecon-10.pdf",
+    "personal": false
+  },
+  {
+    "id": "svt-5e-td9",
+    "title": "SVT 5e · Exercices sur les leçons 11 et 12",
+    "grade": "5e",
+    "subject": "SVT",
+    "kind": "Exercices",
+    "description": "Travaux dirigés de SVT sur les leçons 11 et 12 du programme de cinquième.",
+    "source": "Top Education Sénégal",
+    "url": "https://topeducationsn.com/wp-content/uploads/2022/11/TD-N%C2%B09-SVT-5eme-Lecon-L11-et-Lecon-12.pdf",
+    "personal": false
+  },
+  {
+    "id": "math-4e-rationnels",
+    "title": "TD · Nombres rationnels · 4e",
+    "grade": "4e",
+    "subject": "Mathématiques",
+    "kind": "Exercices",
+    "description": "Travaux dirigés de mathématiques sur les nombres rationnels.",
+    "source": "Top Education Sénégal",
+    "url": "https://topeducationsn.com/wp-content/uploads/2021/01/TD-N%C2%B01-Nombre-rationnel.pdf",
+    "personal": false
+  },
+  {
+    "id": "math-4e-algebre",
+    "title": "TD · Calcul algébrique · 4e",
+    "grade": "4e",
+    "subject": "Mathématiques",
+    "kind": "Exercices",
+    "description": "Série d’exercices de calcul algébrique pour la quatrième.",
+    "source": "Top Education Sénégal",
+    "url": "https://topeducationsn.com/wp-content/uploads/2021/01/TD-N%C2%B02-Calcul-Algebrique.pdf",
+    "personal": false
+  },
+  {
+    "id": "math-4e-milieux",
+    "title": "TD · Droite des milieux · 4e",
+    "grade": "4e",
+    "subject": "Mathématiques",
+    "kind": "Exercices",
+    "description": "Travaux dirigés de géométrie sur la droite des milieux.",
+    "source": "Top Education Sénégal",
+    "url": "https://topeducationsn.com/wp-content/uploads/2021/01/TD-N%C2%B02-Droite-des-milieux.pdf",
+    "personal": false
+  },
+  {
+    "id": "math-4e-recueil",
+    "title": "Recueil d’exercices et de devoirs de maths · 4e",
+    "grade": "4e",
+    "subject": "Mathématiques",
+    "kind": "Devoirs",
+    "description": "Recueil de 19 pages d’exercices et de devoirs de mathématiques pour la quatrième.",
+    "source": "Top Education Sénégal · M. Sow",
+    "url": "https://topeducationsn.com/wp-content/uploads/2022/12/RECEUIL-DEXERCICES-ET-DE-DEVOIRS-DE-MATHS-4EME.pdf",
+    "personal": false
+  },
+  {
+    "id": "svt-4e-td1",
+    "title": "SVT 4e · Exercices sur la leçon 1",
+    "grade": "4e",
+    "subject": "SVT",
+    "kind": "Exercices",
+    "description": "Travaux dirigés de SVT sur la première leçon de quatrième.",
+    "source": "Top Education Sénégal",
+    "url": "https://topeducationsn.com/wp-content/uploads/2022/11/TD-N%C2%B01-SVT-4eme-Lecon-1.pdf",
+    "personal": false
+  },
+  {
+    "id": "svt-4e-td2",
+    "title": "SVT 4e · Exercices sur la leçon 2",
+    "grade": "4e",
+    "subject": "SVT",
+    "kind": "Exercices",
+    "description": "Travaux dirigés de SVT sur la deuxième leçon de quatrième.",
+    "source": "Top Education Sénégal",
+    "url": "https://topeducationsn.com/wp-content/uploads/2022/11/TD-N%C2%B02-SVT-4eme-Lecon-2.pdf",
+    "personal": false
+  },
+  {
+    "id": "svt-4e-td3",
+    "title": "SVT 4e · Exercices sur les leçons 3 à 5",
+    "grade": "4e",
+    "subject": "SVT",
+    "kind": "Exercices",
+    "description": "Travaux dirigés de SVT sur les leçons 3, 4 et 5 de quatrième.",
+    "source": "Top Education Sénégal",
+    "url": "https://topeducationsn.com/wp-content/uploads/2022/11/TD-N%C2%B03-SVT-4eme-Lecon-L3_4_5.pdf",
+    "personal": false
+  },
+  {
+    "id": "svt-4e-td4",
+    "title": "SVT 4e · Exercices sur la leçon 6",
+    "grade": "4e",
+    "subject": "SVT",
+    "kind": "Exercices",
+    "description": "Travaux dirigés de SVT sur la sixième leçon de quatrième.",
+    "source": "Top Education Sénégal",
+    "url": "https://topeducationsn.com/wp-content/uploads/2022/11/TD-N%C2%B04-SVT-4eme-Lecon-6.pdf",
+    "personal": false
+  },
+  {
+    "id": "svt-4e-td5",
+    "title": "SVT 4e · Exercices sur la leçon 7",
+    "grade": "4e",
+    "subject": "SVT",
+    "kind": "Exercices",
+    "description": "Travaux dirigés de SVT sur la septième leçon de quatrième.",
+    "source": "Top Education Sénégal",
+    "url": "https://topeducationsn.com/wp-content/uploads/2022/11/TD-N%C2%B05-SVT-4eme-Lecon-7.pdf",
+    "personal": false
+  },
+  {
+    "id": "svt-4e-td6",
+    "title": "SVT 4e · Exercices sur la leçon 8",
+    "grade": "4e",
+    "subject": "SVT",
+    "kind": "Exercices",
+    "description": "Travaux dirigés de SVT sur la huitième leçon de quatrième.",
+    "source": "Top Education Sénégal",
+    "url": "https://topeducationsn.com/wp-content/uploads/2022/11/TD-N%C2%B06-SVT-4eme-Lecon-8.pdf",
+    "personal": false
+  },
+  {
+    "id": "math-3e-racines",
+    "title": "Mathématiques 3e · Racines carrées",
+    "grade": "3e",
+    "subject": "Mathématiques",
+    "kind": "Exercices",
+    "description": "Série de 4 pages sur la définition, les opérations, les comparaisons et la simplification des racines carrées.",
+    "source": "Top Education Sénégal · M. Sow",
+    "url": "https://topeducationsn.com/wp-content/uploads/2022/11/TD-N%C2%B01-RACINE-CARREE.pdf",
+    "personal": false
+  },
+  {
+    "id": "math-3e-thales",
+    "title": "Mathématiques 3e · Théorème de Thalès",
+    "grade": "3e",
+    "subject": "Mathématiques",
+    "kind": "Exercices",
+    "description": "Travaux dirigés de géométrie sur le théorème de Thalès.",
+    "source": "Top Education Sénégal",
+    "url": "https://topeducationsn.com/wp-content/uploads/2022/11/TD-N%C2%B01-THEOREME-DE-THALES.pdf",
+    "personal": false
+  },
+  {
+    "id": "math-3e-equations",
+    "title": "Mathématiques 3e · Équations et inéquations",
+    "grade": "3e",
+    "subject": "Mathématiques",
+    "kind": "Exercices",
+    "description": "Série sur les équations et inéquations du premier degré à une inconnue.",
+    "source": "Top Education Sénégal",
+    "url": "https://topeducationsn.com/wp-content/uploads/2022/11/TD-N%C2%B02-EQUATION-INEQUATION-DU-PREMIER-DEGRE-A-UNE-INCONNUE.pdf",
+    "personal": false
+  },
+  {
+    "id": "math-3e-trigo",
+    "title": "Mathématiques 3e · Relations trigonométriques",
+    "grade": "3e",
+    "subject": "Mathématiques",
+    "kind": "Exercices",
+    "description": "Entraînement sur les relations trigonométriques dans un triangle.",
+    "source": "Top Education Sénégal",
+    "url": "https://topeducationsn.com/wp-content/uploads/2023/01/TD-N%C2%B02-RELATION-TRIOGONOMETRIQUE-DANS-UN-TRIANGLE.pdf",
+    "personal": false
+  },
+  {
+    "id": "math-3e-systemes",
+    "title": "Mathématiques 3e · Systèmes d’équations",
+    "grade": "3e",
+    "subject": "Mathématiques",
+    "kind": "Exercices",
+    "description": "Travaux dirigés sur les équations et systèmes du premier degré à deux inconnues.",
+    "source": "Top Education Sénégal",
+    "url": "https://topeducationsn.com/wp-content/uploads/2023/01/TD-N%C2%B03-EQUATION-ET-SYSTEME-DEQUATIONS-DU-PREMIER-DEGRE-A-DEUX-INCONNUES.pdf",
+    "personal": false
+  },
+  {
+    "id": "math-bfem-2021",
+    "title": "Épreuve BFEM · Mathématiques · 2021",
+    "grade": "3e",
+    "subject": "Mathématiques",
+    "kind": "Épreuves",
+    "description": "Sujet de mathématiques du BFEM 2021.",
+    "source": "Top Education Sénégal",
+    "url": "https://topeducationsn.com/wp-content/uploads/2022/11/BFEM-2021-MATHEMATIQUES.pdf",
+    "personal": false
+  },
+  {
+    "id": "pc-bfem-2022",
+    "title": "Épreuve BFEM · Physique-Chimie · 2022",
+    "grade": "3e",
+    "subject": "Physique-Chimie",
+    "kind": "Épreuves",
+    "description": "Sujet de physique-chimie du BFEM 2022.",
+    "source": "Top Education Sénégal",
+    "url": "https://topeducationsn.com/wp-content/uploads/2022/11/BFEM-2022-PC.pdf",
+    "personal": false
+  },
+  {
+    "id": "svt-3e-bfem-synthese",
+    "title": "SVT 3e · Synthèse d’exercices BFEM",
+    "grade": "3e",
+    "subject": "SVT",
+    "kind": "Exercices",
+    "description": "Fascicule de synthèse de 27 pages pour réviser la SVT en vue du BFEM.",
+    "source": "Top Education Sénégal",
+    "url": "https://topeducationsn.com/wp-content/uploads/2023/01/Synthese-BFEM.pdf",
+    "personal": false
+  },
+  {
+    "id": "svt-3e-recueil",
+    "title": "SVT 3e · Recueil d’exercices",
+    "grade": "3e",
+    "subject": "SVT",
+    "kind": "Exercices",
+    "description": "Recueil de 6 pages de travaux d’entraînement de SVT pour la troisième.",
+    "source": "Top Education Sénégal",
+    "url": "https://topeducationsn.com/wp-content/uploads/2022/11/RECEUIL-DEXERCICE-SVT.pdf",
+    "personal": false
+  },
   {
     "id": "math6-d1",
     "title": "Devoir N°1 · Maths · 6e · S1",
@@ -931,9 +1554,7 @@ const seedResources = [
     "source": "Top Education · CEM Bambey 3",
     "url": "https://topeducationsn.com/wp-content/uploads/2024/09/ANNALE-DE-SVT-3eme.pdf",
     "personal": false
-  }
-,
-
+  },
   {
     "id": "svt6-eval-ief-grand-dakar-2018",
     "title": "Évaluation standardisée de SVT · 6e · 2e semestre",
