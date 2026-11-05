@@ -140,6 +140,10 @@
 .pdf-viewer-card{background:#fff;width:min(100%,1100px);height:min(94vh,900px);border-radius:17px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 25px 70px #0b17394d}
 .pdf-viewer-header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 17px;border-bottom:1px solid var(--line);flex:0 0 auto}
 .pdf-viewer-header h2{font-family:Manrope;font-size:15px;line-height:1.3;margin:4px 0 0;color:#26324d}
+.pdf-back-button{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:0 15px;border:1px solid var(--line);border-radius:999px;background:#f8faff;color:#17294d;font-size:13px;font-weight:700;white-space:nowrap;cursor:pointer;flex:0 0 auto}
+.pdf-back-button:focus-visible{outline:3px solid rgba(54,95,173,.25);outline-offset:2px}
+.pdf-viewer-header>div{min-width:0}
+
 #pdfFrame{width:100%;height:100%;border:0;background:#eef1f6;flex:1 1 auto}
 @media(max-width:680px){.pdf-viewer-backdrop{padding:0}.pdf-viewer-card{width:100%;height:100dvh;max-height:100dvh;border-radius:0}.pdf-viewer-header{padding:10px 13px}.pdf-viewer-header h2{font-size:13px}}
 
