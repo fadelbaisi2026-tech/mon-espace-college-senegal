@@ -35,6 +35,14 @@ function parseAllowedPdfUrl(raw) {
   return url;
 }
 
+function redirectToOriginalPdf(res, target) {
+  res.statusCode = 302;
+  res.setHeader('Location', target.toString());
+  res.setHeader('Cache-Control', 'no-store');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.end();
+}
+
 function sendError(res, statusCode, message) {
   if (res.headersSent) {
     res.destroy();
@@ -48,6 +56,7 @@ function sendError(res, statusCode, message) {
 }
 
 module.exports = async function pdfProxy(req, res) {
+  let target = null;
   if (req.method !== 'GET' && req.method !== 'HEAD') {
     res.setHeader('Allow', 'GET, HEAD');
     return sendError(res, 405, 'Méthode non autorisée.');
@@ -59,7 +68,7 @@ module.exports = async function pdfProxy(req, res) {
       return sendError(res, 400, 'Adresse PDF manquante ou trop longue.');
     }
 
-    let target = parseAllowedPdfUrl(rawUrl);
+    target = parseAllowedPdfUrl(rawUrl);
     const requestHeaders = {
       'User-Agent': 'Mozilla/5.0 (compatible; MonEspaceCollegePDF/1.0)',
       'Accept': 'application/pdf,application/octet-stream;q=0.9,*/*;q=0.5'
@@ -91,13 +100,17 @@ module.exports = async function pdfProxy(req, res) {
     }
 
     if (!upstream || (!upstream.ok && upstream.status !== 206)) {
-      const status = upstream && upstream.status === 404 ? 404 : 502;
-      return sendError(res, status, 'Le fichier PDF est indisponible à sa source. Réessaie plus tard.');
+      if (!upstream || [403, 429, 500, 502, 503, 504].includes(upstream.status)) {
+        return redirectToOriginalPdf(res, target);
+      }
+      return sendError(res, upstream.status === 404 ? 404 : 502, 'Le fichier PDF est indisponible à sa source.');
     }
 
     const contentType = (upstream.headers.get('content-type') || '').toLowerCase();
-    if (contentType && !/(application\/pdf|application\/octet-stream|application\/x-pdf|binary\/octet-stream)/i.test(contentType)) {
-      return sendError(res, 502, 'La source a renvoyé une page web au lieu d’un fichier PDF.');
+    const isPdfContent = ['application/pdf', 'application/octet-stream', 'application/x-pdf', 'binary/octet-stream']
+      .some(type => contentType.includes(type));
+    if (contentType && !isPdfContent) {
+      return redirectToOriginalPdf(res, target);
     }
 
     res.statusCode = upstream.status;
@@ -125,7 +138,10 @@ module.exports = async function pdfProxy(req, res) {
     }).pipe(res);
   } catch (error) {
     const status = Number.isInteger(error.statusCode) ? error.statusCode : 502;
-    if (status >= 500) console.error('Erreur du relais PDF :', error);
+    if (status >= 500) {
+      console.error('Erreur du relais PDF :', error);
+      if (target && status === 502) return redirectToOriginalPdf(res, target);
+    }
     return sendError(res, status, error.message || 'Impossible de charger ce PDF pour le moment.');
   }
 };
