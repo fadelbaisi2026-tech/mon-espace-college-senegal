@@ -1281,28 +1281,6 @@ const seedResources = [
     "personal": false
   },
   {
-    "id": "svt6-comp",
-    "title": "Composition de SVT · 6e · IA Dakar · 2023-2024",
-    "grade": "6e",
-    "subject": "SVT",
-    "kind": "Devoirs",
-    "description": "Composition du second semestre publiée par la cellule SVT Kennedy, IEF Dakar Plateau.",
-    "source": "Réseau Scolaire · IA Dakar",
-    "url": "https://reseauscolaire.com/wp-content/uploads/2024/06/composition-des-6eme-du-second-semestre.pdf",
-    "personal": false
-  },
-  {
-    "id": "svt6-d1",
-    "title": "Premier devoir de SVT · 6e · 2022-2023",
-    "grade": "6e",
-    "subject": "SVT",
-    "kind": "Devoirs",
-    "description": "Devoir de SVT de sixième du Cours privé IAC.",
-    "source": "Réseau Scolaire · Cours privé IAC",
-    "url": "https://reseauscolaire.com/wp-content/uploads/2022/11/premier-devoir-6em-ps-2023-cscin.pdf",
-    "personal": false
-  },
-  {
     "id": "svt3-d1",
     "title": "Devoir N°1 · SVT · 3e · 2023-2024",
     "grade": "3e",
@@ -1366,28 +1344,6 @@ const seedResources = [
     "description": "Annale élaborée par la cellule pédagogique de SVT du CEM Bambey 3.",
     "source": "Top Education · CEM Bambey 3",
     "url": "https://topeducationsn.com/wp-content/uploads/2024/09/ANNALE-DE-SVT-3eme.pdf",
-    "personal": false
-  },
-  {
-    "id": "svt6-eval-ief-grand-dakar-2018",
-    "title": "Évaluation standardisée de SVT · 6e · 2e semestre",
-    "grade": "6e",
-    "subject": "SVT",
-    "kind": "Devoirs",
-    "description": "Évaluation standardisée du second semestre 2018-2019, Inspection d’Académie de Dakar, IEF Grand-Dakar.",
-    "source": "Halwar · IA Dakar · IEF Grand-Dakar",
-    "url": "https://www.halwar.sn/IMG/pdf/svt_6_eme_standardisee.pdf",
-    "personal": false
-  },
-  {
-    "id": "svt5-eval-ief-grand-dakar-2018",
-    "title": "Évaluation standardisée de SVT · 5e · 2e semestre",
-    "grade": "5e",
-    "subject": "SVT",
-    "kind": "Devoirs",
-    "description": "Évaluation standardisée du second semestre 2018-2019, Inspection d’Académie de Dakar, IEF Grand-Dakar.",
-    "source": "Halwar · IA Dakar · IEF Grand-Dakar",
-    "url": "https://www.halwar.sn/IMG/pdf/svt_5eme.pdf",
     "personal": false
   },
   {
@@ -1579,9 +1535,25 @@ let pdfViewerHistoryEntryOpen=false;
 function showPdfViewer(src,title){
   const modal=document.getElementById('pdfViewerModal');
   document.getElementById('pdfViewerTitle').textContent=title||'Document PDF';
-  const frameSource=/^blob:/i.test(src)||/^\/api\/pdf\?/.test(src)
-    ? src
-    : '/api/pdf?url='+encodeURIComponent(src);
+  const proxyHosts = [
+    'sunumaths.com',
+    'img1.wsimg.com',
+    'senprof.education.sn',
+    'senprof2.education.sn',
+    'apprendre.auf.org',
+    'topeducationsn.com'
+  ];
+  let frameSource=src;
+  if(!/^blob:/i.test(src)&&!/^\/api\/pdf\?/.test(src)){
+    try{
+      const sourceUrl=new URL(src,window.location.href);
+      if(sourceUrl.protocol==='https:'&&proxyHosts.includes(sourceUrl.hostname.toLowerCase())){
+        frameSource='/api/pdf?url='+encodeURIComponent(sourceUrl.toString());
+      }
+    }catch(error){
+      console.info('Ouverture directe du PDF :',error);
+    }
+  }
   document.getElementById('pdfFrame').src=frameSource;
   if(!pdfViewerHistoryEntryOpen){
     try{
