@@ -50,22 +50,22 @@ const seedResources = [
   },
   {
     "id": "pc-wahab-fascicule-4e",
-    "title": "Fascicule de cours et exercices de Physique-Chimie · 4e",
+    "title": "Fascicule d’exercices de Physique-Chimie · 4e",
     "grade": "4e",
     "subject": "Physique-Chimie",
-    "kind": "Cours et exercices",
-    "description": "Fascicule de sciences physiques pour la quatrième, issu de la collection de Wahab Diop.",
+    "kind": "Exercices",
+    "description": "Fascicule d’entraînement de physique-chimie pour la quatrième, issu de la collection de Wahab Diop.",
     "source": "Wahab Diop · PhysiqueChimie Sénégal",
     "url": "https://img1.wsimg.com/blobby/go/92b1d401-89a0-4fda-accf-6ed9c6d46dd4/downloads/FASCICULE%20pc%204%C3%A8m_wahabdiop.pdf?ver=1773146128104",
     "personal": false
   },
   {
     "id": "pc-wahab-fascicule-3e",
-    "title": "Fascicule de cours et exercices de Physique-Chimie · 3e",
+    "title": "Fascicule d’exercices de Physique-Chimie · 3e",
     "grade": "3e",
     "subject": "Physique-Chimie",
-    "kind": "Cours et exercices",
-    "description": "Fascicule de sciences physiques pour la troisième, édition 2020, de la collection de Wahab Diop.",
+    "kind": "Exercices",
+    "description": "Fascicule d’entraînement de physique-chimie pour la troisième, édition 2020, issu de la collection de Wahab Diop.",
     "source": "Wahab Diop · PhysiqueChimie Sénégal",
     "url": "https://img1.wsimg.com/blobby/go/92b1d401-89a0-4fda-accf-6ed9c6d46dd4/downloads/FASCICULE%20PC%203eme%202020_wahabdiop.pdf?ver=1773146127999",
     "personal": false
@@ -1477,6 +1477,39 @@ const seedResources = [
     "source": "Top Education Sénégal",
     "url": "https://topeducationsn.com/wp-content/uploads/2024/09/Fascicule-Exos-BFEM-SVT-2023.pdf",
     "personal": false
+  },
+  {
+    "id": "pc-wahab-course-4e",
+    "title": "Cours de Physique-Chimie · 4e",
+    "grade": "4e",
+    "subject": "Physique-Chimie",
+    "kind": "Cours",
+    "description": "Support de cours de sciences physiques organisé par chapitres : grandeurs et mesures, masse volumique, poids, électricité, lumière et chimie.",
+    "source": "Wahab Diop · IREMPT",
+    "url": "https://img1.wsimg.com/blobby/go/92b1d401-89a0-4fda-accf-6ed9c6d46dd4/downloads/fascicule-sciences-physiques-4eme-_wahabdiop.pdf?ver=1773146128104",
+    "personal": false
+  },
+  {
+    "id": "pc-wahab-course-3e-physics",
+    "title": "Cours de Physique · 3e",
+    "grade": "3e",
+    "subject": "Physique-Chimie",
+    "kind": "Cours",
+    "description": "Leçons de physique pour la classe de troisième : optique, forces, énergie et électricité.",
+    "source": "Wahab Diop · IREMPT",
+    "url": "https://img1.wsimg.com/blobby/go/92b1d401-89a0-4fda-accf-6ed9c6d46dd4/downloads/PHYSIQUE%203E%20irempt.pdf?ver=1773146127999",
+    "personal": false
+  },
+  {
+    "id": "pc-wahab-course-3e-chemistry",
+    "title": "Cours de Chimie · 3e",
+    "grade": "3e",
+    "subject": "Physique-Chimie",
+    "kind": "Cours",
+    "description": "Leçons de chimie pour la classe de troisième, issues de la collection pédagogique de Wahab Diop.",
+    "source": "Wahab Diop · IREMPT",
+    "url": "https://img1.wsimg.com/blobby/go/92b1d401-89a0-4fda-accf-6ed9c6d46dd4/downloads/CHIMIE%203E%20irempt.pdf?ver=1773146127999",
+    "personal": false
   }
 ];
 
@@ -1568,7 +1601,10 @@ let pdfViewerHistoryEntryOpen=false;
 function showPdfViewer(src,title){
   const modal=document.getElementById('pdfViewerModal');
   document.getElementById('pdfViewerTitle').textContent=title||'Document PDF';
-  document.getElementById('pdfFrame').src=src;
+  const frameSource=/^blob:/i.test(src)||/^\/api\/pdf\?/.test(src)
+    ? src
+    : '/api/pdf?url='+encodeURIComponent(src);
+  document.getElementById('pdfFrame').src=frameSource;
   if(!pdfViewerHistoryEntryOpen){
     try{
       const currentState=window.history.state;
