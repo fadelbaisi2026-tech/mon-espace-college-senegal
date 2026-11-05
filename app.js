@@ -126,50 +126,6 @@ const seedResources = [
     "personal": false
   },
   {
-    "id": "math-adem-6e",
-    "title": "Fascicule d’exercices de mathématiques · 6e",
-    "grade": "6e",
-    "subject": "Mathématiques",
-    "kind": "Exercices",
-    "description": "Activités numériques et géométriques couvrant le programme de mathématiques de sixième. 76 pages.",
-    "source": "ADEM-Dakar · APPRENDRE / AUF",
-    "url": "https://apprendre.auf.org/wp-content/uploads/2021/08/fascicule_adem_math_6e.pdf",
-    "personal": false
-  },
-  {
-    "id": "math-adem-5e",
-    "title": "Fascicule d’exercices de mathématiques · 5e",
-    "grade": "5e",
-    "subject": "Mathématiques",
-    "kind": "Exercices",
-    "description": "Activités numériques et géométriques couvrant le programme de mathématiques de cinquième. 73 pages.",
-    "source": "ADEM-Dakar · APPRENDRE / AUF",
-    "url": "https://apprendre.auf.org/wp-content/uploads/2021/08/fascicule_adem_math_5e.pdf",
-    "personal": false
-  },
-  {
-    "id": "math-adem-4e",
-    "title": "Fascicule d’exercices de mathématiques · 4e",
-    "grade": "4e",
-    "subject": "Mathématiques",
-    "kind": "Exercices",
-    "description": "Activités numériques et géométriques couvrant le programme de mathématiques de quatrième. 63 pages.",
-    "source": "ADEM-Dakar · APPRENDRE / AUF",
-    "url": "https://apprendre.auf.org/wp-content/uploads/2021/08/fascicule_adem_math_4e.pdf",
-    "personal": false
-  },
-  {
-    "id": "math-adem-3e",
-    "title": "Fascicule d’exercices de mathématiques · 3e",
-    "grade": "3e",
-    "subject": "Mathématiques",
-    "kind": "Exercices",
-    "description": "Activités numériques et géométriques couvrant le programme de mathématiques de troisième. 66 pages.",
-    "source": "ADEM-Dakar · APPRENDRE / AUF",
-    "url": "https://apprendre.auf.org/wp-content/uploads/2021/08/fascicule_adem_math_3e.pdf",
-    "personal": false
-  },
-  {
     "id": "math-babacar-3e",
     "title": "Réussir les maths au BFEM · Cours, exercices et corrigés",
     "grade": "3e",
@@ -401,50 +357,6 @@ const seedResources = [
     "personal": false
   },
   {
-    "id": "math-5e-multiples-1",
-    "title": "Série d’exercices · Multiples et diviseurs · 5e",
-    "grade": "5e",
-    "subject": "Mathématiques",
-    "kind": "Exercices",
-    "description": "Entraînement sur les multiples, les diviseurs, les nombres premiers, le PGCD et le PPCM.",
-    "source": "Top Education Sénégal · M. Sow",
-    "url": "https://topeducationsn.com/wp-content/uploads/2021/01/serie-dexercice-numerique-N%C2%B01-5eme-2020-2021.pdf",
-    "personal": false
-  },
-  {
-    "id": "math-5e-multiples-2",
-    "title": "Série d’exercices · Nombres et divisibilité · 5e",
-    "grade": "5e",
-    "subject": "Mathématiques",
-    "kind": "Exercices",
-    "description": "Exercices complémentaires sur les diviseurs, multiples et nombres premiers.",
-    "source": "Top Education Sénégal · M. Sow",
-    "url": "https://topeducationsn.com/wp-content/uploads/2021/01/serie-dexercice-numerique-N%C2%B02-5eme-2020-2021.pdf",
-    "personal": false
-  },
-  {
-    "id": "math-5e-multiples-3",
-    "title": "Série d’exercices numériques · 5e · N° 3",
-    "grade": "5e",
-    "subject": "Mathématiques",
-    "kind": "Exercices",
-    "description": "Série d’entraînement numérique pour la classe de cinquième.",
-    "source": "Top Education Sénégal · M. Sow",
-    "url": "https://topeducationsn.com/wp-content/uploads/2021/01/serie-dexercice-numerique-N%C2%B03-5eme-2020-2021.pdf",
-    "personal": false
-  },
-  {
-    "id": "math-5e-angles",
-    "title": "Série d’exercices sur les angles · 5e",
-    "grade": "5e",
-    "subject": "Mathématiques",
-    "kind": "Exercices",
-    "description": "Entraînement de géométrie sur les angles.",
-    "source": "Top Education Sénégal",
-    "url": "https://topeducationsn.com/wp-content/uploads/2023/01/SERIE-DEXERCICE-N%C2%B02-SUR-LES-ANGLES.pdf",
-    "personal": false
-  },
-  {
     "id": "svt-5e-td1",
     "title": "SVT 5e · Exercices sur les leçons 1 et 2",
     "grade": "5e",
@@ -533,39 +445,6 @@ const seedResources = [
     "personal": false
   },
   {
-    "id": "math-4e-rationnels",
-    "title": "TD · Nombres rationnels · 4e",
-    "grade": "4e",
-    "subject": "Mathématiques",
-    "kind": "Exercices",
-    "description": "Travaux dirigés de mathématiques sur les nombres rationnels.",
-    "source": "Top Education Sénégal",
-    "url": "https://topeducationsn.com/wp-content/uploads/2021/01/TD-N%C2%B01-Nombre-rationnel.pdf",
-    "personal": false
-  },
-  {
-    "id": "math-4e-algebre",
-    "title": "TD · Calcul algébrique · 4e",
-    "grade": "4e",
-    "subject": "Mathématiques",
-    "kind": "Exercices",
-    "description": "Série d’exercices de calcul algébrique pour la quatrième.",
-    "source": "Top Education Sénégal",
-    "url": "https://topeducationsn.com/wp-content/uploads/2021/01/TD-N%C2%B02-Calcul-Algebrique.pdf",
-    "personal": false
-  },
-  {
-    "id": "math-4e-milieux",
-    "title": "TD · Droite des milieux · 4e",
-    "grade": "4e",
-    "subject": "Mathématiques",
-    "kind": "Exercices",
-    "description": "Travaux dirigés de géométrie sur la droite des milieux.",
-    "source": "Top Education Sénégal",
-    "url": "https://topeducationsn.com/wp-content/uploads/2021/01/TD-N%C2%B02-Droite-des-milieux.pdf",
-    "personal": false
-  },
-  {
     "id": "math-4e-recueil",
     "title": "Recueil d’exercices et de devoirs de maths · 4e",
     "grade": "4e",
@@ -640,61 +519,6 @@ const seedResources = [
     "description": "Travaux dirigés de SVT sur la huitième leçon de quatrième.",
     "source": "Top Education Sénégal",
     "url": "https://topeducationsn.com/wp-content/uploads/2022/11/TD-N%C2%B06-SVT-4eme-Lecon-8.pdf",
-    "personal": false
-  },
-  {
-    "id": "math-3e-racines",
-    "title": "Mathématiques 3e · Racines carrées",
-    "grade": "3e",
-    "subject": "Mathématiques",
-    "kind": "Exercices",
-    "description": "Série de 4 pages sur la définition, les opérations, les comparaisons et la simplification des racines carrées.",
-    "source": "Top Education Sénégal · M. Sow",
-    "url": "https://topeducationsn.com/wp-content/uploads/2022/11/TD-N%C2%B01-RACINE-CARREE.pdf",
-    "personal": false
-  },
-  {
-    "id": "math-3e-thales",
-    "title": "Mathématiques 3e · Théorème de Thalès",
-    "grade": "3e",
-    "subject": "Mathématiques",
-    "kind": "Exercices",
-    "description": "Travaux dirigés de géométrie sur le théorème de Thalès.",
-    "source": "Top Education Sénégal",
-    "url": "https://topeducationsn.com/wp-content/uploads/2022/11/TD-N%C2%B01-THEOREME-DE-THALES.pdf",
-    "personal": false
-  },
-  {
-    "id": "math-3e-equations",
-    "title": "Mathématiques 3e · Équations et inéquations",
-    "grade": "3e",
-    "subject": "Mathématiques",
-    "kind": "Exercices",
-    "description": "Série sur les équations et inéquations du premier degré à une inconnue.",
-    "source": "Top Education Sénégal",
-    "url": "https://topeducationsn.com/wp-content/uploads/2022/11/TD-N%C2%B02-EQUATION-INEQUATION-DU-PREMIER-DEGRE-A-UNE-INCONNUE.pdf",
-    "personal": false
-  },
-  {
-    "id": "math-3e-trigo",
-    "title": "Mathématiques 3e · Relations trigonométriques",
-    "grade": "3e",
-    "subject": "Mathématiques",
-    "kind": "Exercices",
-    "description": "Entraînement sur les relations trigonométriques dans un triangle.",
-    "source": "Top Education Sénégal",
-    "url": "https://topeducationsn.com/wp-content/uploads/2023/01/TD-N%C2%B02-RELATION-TRIOGONOMETRIQUE-DANS-UN-TRIANGLE.pdf",
-    "personal": false
-  },
-  {
-    "id": "math-3e-systemes",
-    "title": "Mathématiques 3e · Systèmes d’équations",
-    "grade": "3e",
-    "subject": "Mathématiques",
-    "kind": "Exercices",
-    "description": "Travaux dirigés sur les équations et systèmes du premier degré à deux inconnues.",
-    "source": "Top Education Sénégal",
-    "url": "https://topeducationsn.com/wp-content/uploads/2023/01/TD-N%C2%B03-EQUATION-ET-SYSTEME-DEQUATIONS-DU-PREMIER-DEGRE-A-DEUX-INCONNUES.pdf",
     "personal": false
   },
   {
@@ -1586,6 +1410,50 @@ const seedResources = [
     "description": "Compilation de sujets du BFEM de sciences de la vie et de la Terre, dont l’épreuve 2018.",
     "source": "Halwar · RESAFAD Sénégal · OIF",
     "url": "https://www.halwar.sn/IMG/pdf/compile_sujets_svt_3eme.pdf",
+    "personal": false
+  },
+  {
+    "id": "math-sunumaths-exos-6e",
+    "title": "Fascicule d’exercices de mathématiques · 6e",
+    "grade": "6e",
+    "subject": "Mathématiques",
+    "kind": "Exercices",
+    "description": "Fascicule complet d’activités numériques et géométriques couvrant le programme de mathématiques de sixième, avec des exercices organisés par chapitre.",
+    "source": "ADEM-Dakar · SUNUMATHS",
+    "url": "https://sunumaths.com/wp-content/uploads/2019/04/fascicule-de-Maths-6ieme-Sixieme-Adem-Dakar.pdf",
+    "personal": false
+  },
+  {
+    "id": "math-sunumaths-exos-5e",
+    "title": "Fascicule d’exercices de mathématiques · 5e",
+    "grade": "5e",
+    "subject": "Mathématiques",
+    "kind": "Exercices",
+    "description": "Fascicule d’activités numériques et géométriques pour la classe de cinquième, avec des exercices classés par chapitre.",
+    "source": "ADEM-Dakar · SUNUMATHS",
+    "url": "https://sunumaths.com/wp-content/uploads/2019/04/fascicule-de-Maths-5ieme-Cinquieme-Adem-Dakar.pdf",
+    "personal": false
+  },
+  {
+    "id": "math-sunumaths-exos-4e",
+    "title": "Fascicule d’exercices de mathématiques · 4e",
+    "grade": "4e",
+    "subject": "Mathématiques",
+    "kind": "Exercices",
+    "description": "Fascicule d’activités numériques et géométriques couvrant le programme de quatrième, avec des exercices organisés par chapitre.",
+    "source": "ADEM-Dakar · SUNUMATHS",
+    "url": "https://sunumaths.com/wp-content/uploads/2019/04/fascicule-de-Maths-4ieme-Quaterieme-Adem-Dakar.pdf",
+    "personal": false
+  },
+  {
+    "id": "math-sunumaths-exos-3e",
+    "title": "Fascicule d’exercices de mathématiques · 3e",
+    "grade": "3e",
+    "subject": "Mathématiques",
+    "kind": "Exercices",
+    "description": "Fascicule d’activités numériques et géométriques pour la classe de troisième, couvrant les principaux chapitres du programme et la préparation au BFEM.",
+    "source": "ADEM-Dakar · SUNUMATHS",
+    "url": "https://sunumaths.com/wp-content/uploads/2019/04/ADEM_FASCICULE_MATHS_3eme_v10.17-1.pdf",
     "personal": false
   }
 ];
