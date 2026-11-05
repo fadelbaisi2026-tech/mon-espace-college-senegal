@@ -1,4 +1,4 @@
-const CACHE_NAME = 'mon-espace-college-v12-20261105';
+const CACHE_NAME = 'mon-espace-college-v13-20261105';
 const APP_SHELL = ['./', './index.html', './styles.css', './app.js', './manifest.webmanifest', './favicon.svg'];
 
 self.addEventListener('install', event => {
@@ -21,6 +21,11 @@ self.addEventListener('fetch', event => {
   if (event.request.method !== 'GET') return;
   const url = new URL(event.request.url);
   if (url.origin !== self.location.origin) return;
+
+  if (url.pathname === '/api/pdf') {
+    event.respondWith(fetch(event.request));
+    return;
+  }
 
   const isAppFile = event.request.mode === 'navigate' || /\.(html|css|js|webmanifest)$/.test(url.pathname);
   if (isAppFile) {
