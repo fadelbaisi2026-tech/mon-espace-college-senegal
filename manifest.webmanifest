@@ -6,5 +6,13 @@
   "display": "standalone",
   "background_color": "#f7f8fb",
   "theme_color": "#101d3a",
-  "description": "Bibliothèque personnelle et agenda scolaire du collège."
+  "description": "Bibliothèque personnelle et agenda scolaire du collège.",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
 }
