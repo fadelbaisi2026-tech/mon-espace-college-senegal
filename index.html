@@ -61,12 +61,16 @@
     <section class="pdf-viewer-card">
       <header class="pdf-viewer-header">
         <div><div class="eyebrow">LECTURE DANS MON ESPACE COLLÈGE</div><h2 id="pdfViewerTitle">Document PDF</h2></div>
-        <button class="pdf-back-button" id="pdfBackBtn" type="button" data-close-pdf aria-label="Retour à la bibliothèque">← Retour</button>
+        <div class="pdf-viewer-header-actions">
+          <a class="pdf-source-link hidden" id="pdfSourceLink" href="#" target="_blank" rel="noopener noreferrer">Ouvrir à la source <span aria-hidden="true">↗</span></a>
+          <button class="pdf-back-button" id="pdfBackBtn" type="button" data-close-pdf aria-label="Retour à la bibliothèque">← Retour</button>
+        </div>
       </header>
       <iframe id="pdfFrame" title="Lecteur PDF intégré" src="about:blank"></iframe>
     </section>
   </div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="catalog-utils.js"></script>
 <script src="app.js"></script>
 </body>
 </html>
