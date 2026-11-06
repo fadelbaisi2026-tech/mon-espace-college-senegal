@@ -1459,6 +1459,7 @@ const state = {
 };
 const STORAGE_KEY = 'mon-espace-college-v1';
 let toastTimer;
+let pendingRelinkResourceId = null;
 
 function readState(){
   try{
@@ -1476,11 +1477,22 @@ function persist(){
   }catch(err){ showToast('Espace de stockage presque plein. Exporte tes données.'); console.error(err); }
 }
 function isPdfUrl(value){
-  return typeof value==='string' && /\.pdf(?:$|[?#])/i.test(value.trim());
+  if(typeof value!=='string' || !value.trim()) return false;
+  try{
+    const url=new URL(value.trim(),window.location.href);
+    const secureProtocol=url.protocol==='https:' || (url.protocol==='http:' && url.origin===window.location.origin);
+    return secureProtocol && /\.pdf$/i.test(url.pathname);
+  }catch(error){
+    return false;
+  }
 }
 function allResources(){
   return [...seedResources, ...state.resources].filter(item =>
-    (item.fileId && /\.pdf$/i.test(item.fileName||'')) || isPdfUrl(item.url)
+    item && (
+      item.personal===true ||
+      (item.fileId && /\.pdf$/i.test(item.fileName||'')) ||
+      isPdfUrl(item.url)
+    )
   );
 }
 function esc(value){ return String(value ?? '').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
@@ -1532,19 +1544,29 @@ function goTo(){
 }
 let activePdfObjectUrl='';
 let pdfViewerHistoryEntryOpen=false;
+function isLocalPreview(){
+  const hostname=window.location.hostname.toLowerCase();
+  return window.location.protocol==='file:' || ['localhost','127.0.0.1','0.0.0.0','::1'].includes(hostname);
+}
 function showPdfViewer(src,title){
   const modal=document.getElementById('pdfViewerModal');
+  const frame=document.getElementById('pdfFrame');
+  const status=document.getElementById('pdfViewerStatus');
+  const sourceLink=document.getElementById('pdfOpenSource');
   document.getElementById('pdfViewerTitle').textContent=title||'Document PDF';
   const proxyHosts = [
     'sunumaths.com',
+    'www.sunumaths.com',
     'img1.wsimg.com',
     'senprof.education.sn',
     'senprof2.education.sn',
     'apprendre.auf.org',
-    'topeducationsn.com'
+    'topeducationsn.com',
+    'www.topeducationsn.com'
   ];
+  const isLocalFile=/^blob:/i.test(src);
   let frameSource=src;
-  if(!/^blob:/i.test(src)&&!/^\/api\/pdf\?/.test(src)){
+  if(!isLocalFile && !isLocalPreview() && !/^\/api\/pdf\?/.test(src)){
     try{
       const sourceUrl=new URL(src,window.location.href);
       if(sourceUrl.protocol==='https:'&&proxyHosts.includes(sourceUrl.hostname.toLowerCase())){
@@ -1554,7 +1576,23 @@ function showPdfViewer(src,title){
       console.info('Ouverture directe du PDF :',error);
     }
   }
-  document.getElementById('pdfFrame').src=frameSource;
+  if(sourceLink){
+    if(!isLocalFile && isPdfUrl(src)){
+      sourceLink.href=src;
+      sourceLink.classList.remove('hidden');
+    }else{
+      sourceLink.removeAttribute('href');
+      sourceLink.classList.add('hidden');
+    }
+  }
+  if(status) status.textContent=isLocalPreview()?'Ouverture directe de la source PDF…':'Chargement du document PDF…';
+  frame.onload=()=>{
+    if(status) status.textContent='Le lecteur a reçu une réponse. Si le document reste vide ou affiche une erreur, ouvre la source dans un nouvel onglet.';
+  };
+  frame.onerror=()=>{
+    if(status) status.textContent='Le document ne peut pas être affiché ici. Utilise le lien vers la source.';
+  };
+  frame.src=frameSource;
   if(!pdfViewerHistoryEntryOpen){
     try{
       const currentState=window.history.state;
@@ -1584,7 +1622,9 @@ function resourceCard(item){
     ? `<button class="resource-open" data-open-file="${esc(item.fileId)}">Lire le PDF <span>→</span></button>`
     : isPdfUrl(item.url)
       ? `<button class="resource-open" data-open-pdf="${esc(item.url)}">Lire le PDF <span>→</span></button>`
-      : '<span class="source-label">PDF indisponible</span>';
+      : item.personal && (item.needsFile || item.fileName)
+        ? '<button class="resource-open" data-relink-file="'+esc(item.id)+'">Réimporter le PDF <span>↥</span></button>'
+        : '<span class="source-label">PDF indisponible</span>';
   return `<article class="resource-card ${subjectClass(item.subject)}">
     <div class="resource-card-top"><span class="resource-symbol">${subjectSymbol(item.subject)}</span><span class="resource-grade">${esc(item.grade||'—')}</span></div>
     <h4>${esc(item.title)}</h4><p>${esc(item.description||item.notes||'Document PDF.')}</p>
@@ -1768,6 +1808,7 @@ function openModal(prefill={}){
   document.body.style.overflow='hidden';
   returnToLibraryAfterSave=Boolean(prefill.returnToLibrary);
   const form=document.getElementById('resourceForm');
+  form.reset();
   if(prefill.grade) form.elements.grade.value=prefill.grade;
   if(prefill.subject) form.elements.subject.value=prefill.subject;
   if(prefill.kind) form.elements.kind.value=prefill.kind;
@@ -1780,14 +1821,78 @@ function updateUserName(){
   const cleaned=newName.trim().slice(0,24); state.userName=cleaned||'Élève';persist();setUserName();showToast('Nom mis à jour.');
 }
 function setUserName(){document.getElementById('profileName').textContent=state.userName;document.getElementById('welcomeName').textContent=state.userName==='Élève'?'!':state.userName+' !';document.querySelector('.avatar').textContent=(state.userName[0]||'É').toLocaleUpperCase('fr-FR');}
-function downloadFile(name,content,mime){const blob=new Blob([content],{type:mime});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1500);}
+function downloadFile(name,content,mime){
+  const blob=new Blob([content],{type:mime});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  a.download=name;
+  a.hidden=true;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1500);
+}
 function exportBackup(){
-  const data={app:'Mon Espace Collège',version:1,exportedAt:new Date().toISOString(),notice:'La sauvegarde JSON contient les fiches, tâches et préférences. Les fichiers binaires importés dans le navigateur ne sont pas inclus.',resources:state.resources.map(({fileId,...r})=>r),tasks:state.tasks,favorites:state.favorites,completed:state.completed,userName:state.userName};
+  const data={
+    app:'Mon Espace Collège',
+    version:1,
+    exportedAt:new Date().toISOString(),
+    notice:'La sauvegarde JSON contient les fiches, tâches et préférences. Les fichiers PDF binaires restent sur cet appareil et doivent être réimportés séparément.',
+    resources:state.resources.map(({fileId,...resource})=>({
+      ...resource,
+      needsFile:Boolean(resource.needsFile || (fileId && !isPdfUrl(resource.url)))
+    })),
+    tasks:state.tasks,
+    favorites:state.favorites,
+    completed:state.completed,
+    userName:state.userName
+  };
   downloadFile('sauvegarde-mon-espace-college.json',JSON.stringify(data,null,2),'application/json');
-  showToast('Sauvegarde JSON exportée. Les fichiers eux-mêmes sont à conserver séparément.');
+  showToast('Sauvegarde exportée. Les fichiers PDF locaux ne sont pas inclus.');
 }
 function importBackup(file){
-  const reader=new FileReader();reader.onload=()=>{try{const data=JSON.parse(reader.result);if(!data||!Array.isArray(data.tasks)||!Array.isArray(data.resources))throw new Error('Format inconnu');state.resources=data.resources.map(r=>({...r,personal:true,fileId:undefined}));state.tasks=Array.isArray(data.tasks)?data.tasks:[];state.favorites=Array.isArray(data.favorites)?data.favorites:[];state.completed=Array.isArray(data.completed)?data.completed:[];state.userName=typeof data.userName==='string'?data.userName:'Élève';persist();setUserName();renderAll();showToast('Sauvegarde importée. Réajoute séparément tes fichiers locaux si nécessaire.');}catch(e){showToast('Ce fichier ne semble pas être une sauvegarde compatible.');}};reader.readAsText(file);
+  if(!file) return;
+  const reader=new FileReader();
+  reader.onerror=()=>showToast('Impossible de lire ce fichier de sauvegarde.');
+  reader.onload=()=>{
+    try{
+      const data=JSON.parse(String(reader.result||''));
+      if(!data || !Array.isArray(data.resources) || !Array.isArray(data.tasks)) throw new Error('Format inconnu');
+      const importedAt=Date.now();
+      const usedIds=new Set();
+      state.resources=data.resources
+        .filter(resource=>resource && typeof resource==='object' && typeof resource.title==='string')
+        .map((resource,index)=>{
+          const url=isPdfUrl(resource.url)?String(resource.url).trim():'';
+          let id=typeof resource.id==='string' && resource.id.trim()?resource.id:'';
+          if(!id || usedIds.has(id)) id='restored-'+importedAt+'-'+index;
+          usedIds.add(id);
+          return {
+            ...resource,
+            id,
+            grade:typeof resource.grade==='string' && resource.grade.trim()?resource.grade:'6e',
+            subject:typeof resource.subject==='string' && resource.subject.trim()?resource.subject:'Mathématiques',
+            kind:typeof resource.kind==='string' && resource.kind.trim()?resource.kind:'Autre',
+            url,
+            fileId:undefined,
+            personal:true,
+            needsFile:!url && Boolean(resource.needsFile || resource.fileName)
+          };
+        });
+      state.tasks=data.tasks;
+      state.favorites=Array.isArray(data.favorites)?data.favorites.filter(id=>typeof id==='string'):[];
+      state.completed=Array.isArray(data.completed)?data.completed.filter(id=>typeof id==='string'):[];
+      state.userName=typeof data.userName==='string'?data.userName.trim().slice(0,24)||'Élève':'Élève';
+      persist();
+      renderAll();
+      showToast('Sauvegarde importée. Réimporte les PDF locaux marqués comme manquants.');
+    }catch(error){
+      console.warn('Import de sauvegarde refusé :',error);
+      showToast('Ce fichier ne semble pas être une sauvegarde compatible.');
+    }
+  };
+  reader.readAsText(file);
 }
 function renderAll(){renderLibrary();}
 
@@ -1843,6 +1948,14 @@ document.addEventListener('click',async event=>{
   renderLibrary();scrollLibraryTools();return;
  }
  if(event.target.closest('[data-close-modal]')){closeModal();return;}
+ const relink=event.target.closest('[data-relink-file]');
+ if(relink){
+  pendingRelinkResourceId=relink.dataset.relinkFile;
+  const picker=document.getElementById('reattachFileInput');
+  picker.value='';
+  picker.click();
+  return;
+ }
  const openPdf=event.target.closest('[data-open-pdf]');
  if(openPdf){showPdfViewer(openPdf.dataset.openPdf,openPdf.closest('.resource-card')?.querySelector('h4')?.textContent||'Document PDF');return;}
  if(event.target.id==='pdfViewerModal'){closePdfViewer();return;}
@@ -1850,7 +1963,8 @@ document.addEventListener('click',async event=>{
  if(openFile){
   try{
    const item=await getLocalFile(openFile.dataset.openFile);
-   if(!item||!/\.pdf$/i.test(item.name||''))throw new Error('PDF introuvable');
+   if(!item||!/\.pdf$/i.test(item.name||'')||!item.blob)throw new Error('PDF introuvable');
+   if(activePdfObjectUrl){URL.revokeObjectURL(activePdfObjectUrl);activePdfObjectUrl='';}
    activePdfObjectUrl=URL.createObjectURL(item.blob);
    showPdfViewer(activePdfObjectUrl,item.name);
   }catch(error){showToast('Fichier PDF local introuvable. Réimporte-le.');}
@@ -1887,6 +2001,41 @@ document.getElementById('resourceForm').addEventListener('submit',async event=>{
  }
  state.resources.unshift(item);
  persist();form.reset();closeModal();renderAll();showToast('PDF ajouté à la bibliothèque.');
+});
+document.getElementById('backupExportBtn').addEventListener('click',exportBackup);
+document.getElementById('backupImportBtn').addEventListener('click',()=>document.getElementById('backupFileInput').click());
+document.getElementById('backupFileInput').addEventListener('change',event=>{
+  const file=event.currentTarget.files && event.currentTarget.files[0];
+  if(file) importBackup(file);
+  event.currentTarget.value='';
+});
+document.getElementById('reattachFileInput').addEventListener('change',async event=>{
+  const file=event.currentTarget.files && event.currentTarget.files[0];
+  const resourceId=pendingRelinkResourceId;
+  pendingRelinkResourceId=null;
+  event.currentTarget.value='';
+  if(!file || !resourceId) return;
+  if(file.type!=='application/pdf' && !/\.pdf$/i.test(file.name||'')){
+    showToast('Choisis un fichier PDF.');
+    return;
+  }
+  const resource=state.resources.find(item=>item.id===resourceId);
+  if(!resource){showToast('Cette ressource n’existe plus.');return;}
+  try{
+    const previousFileId=resource.fileId;
+    resource.fileId=await saveLocalFile(file);
+    resource.fileName=file.name;
+    resource.fileSize=file.size;
+    resource.url='';
+    resource.needsFile=false;
+    if(previousFileId) await deleteLocalFile(previousFileId).catch(error=>console.info('Ancien fichier local non supprimé :',error));
+    persist();
+    renderAll();
+    showToast('Fichier PDF réimporté avec succès.');
+  }catch(error){
+    console.error('Réimport du PDF impossible :',error);
+    showToast('Impossible d’enregistrer ce PDF sur cet appareil.');
+  }
 });
 readState();
 renderAll();
