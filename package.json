@@ -1,0 +1,8 @@
+{
+  "name": "mon-espace-college-senegal",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Bibliothèque de ressources pédagogiques pour le collège au Sénégal.",
+  "engines": { "node": ">=20" },
+  "scripts": { "test": "node --test" }
+}
