@@ -1,68 +1,82 @@
 MON ESPACE COLLÈGE — SÉNÉGAL
 ============================
 
-Une petite application web personnelle, mobile-first, réalisée en HTML, CSS et JavaScript.
-Elle permet d'organiser des ressources de Mathématiques, Physique-Chimie et SVT de la 6e à la 3e,
-de garder ses propres fichiers, ses favoris et un agenda de devoirs/examens.
+Application web progressive (PWA), pensée pour les élèves du collège au Sénégal.
+La version actuelle est centrée sur une bibliothèque de ressources PDF pour les classes de
+6e, 5e, 4e et 3e.
 
-DÉMARRER
---------
-- Pour un essai simple : ouvrez index.html dans un navigateur récent.
-- Pour activer l'installation PWA et le cache hors ligne, servez le dossier en HTTP(S).
-  Exemple si Python est installé : ouvrez un terminal dans le dossier, puis lancez
-  `python -m http.server 8000` et ouvrez http://localhost:8000
-- Le site ne nécessite aucune bibliothèque JavaScript externe. La police Google Fonts est
-  facultative ; une police système est utilisée en secours.
+FONCTIONNALITÉS DISPONIBLES
+---------------------------
+- Catalogue de 131 ressources initiales en Mathématiques, Physique-Chimie et SVT.
+- Parcours de navigation : classe → matière → type de document.
+- Recherche dans les titres, descriptions, classes et matières.
+- Lecteur PDF intégré avec lien de secours vers le document hébergé à la source.
+- Ajout de liens PDF et de fichiers personnels.
+- Fichiers personnels enregistrés dans IndexedDB sur l'appareil utilisé.
+- Export et import d'une sauvegarde JSON.
+- Réimport des PDF locaux après restauration d'une sauvegarde.
+- Service worker pour mettre en cache l'interface et permettre son ouverture hors ligne.
 
-FONCTIONS
----------
-- Bibliothèque préremplie avec des ressources trouvées sur des sites sénégalais.
-- Navigation hiérarchique de la bibliothèque : classe → matière → cours, exercices, devoirs, examens et épreuves.
-- Recherche globale par mots-clés et ajout direct d'un document dans la rubrique sélectionnée.
-- Favoris et indicateur « étudié » pour suivre sa progression.
-- Agenda pour les devoirs, examens, révisions et projets.
-- Ajout de liens ou de fichiers personnels (PDF, documents, images).
-- Fichiers importés stockés localement dans IndexedDB ; tâches et préférences dans localStorage.
-- Export/import de sauvegarde JSON. Les fichiers binaires ne sont pas inclus dans la sauvegarde JSON :
-  gardez aussi les originaux dans un dossier personnel.
-- Service worker pour mettre en cache l'interface lorsque l'application est servie en HTTP(S).
+DÉMARRER EN LOCAL
+-----------------
+Pour afficher l'interface sans configurer de serveur :
 
-SOURCES DU CATALOGUE
---------------------
-1. SunuMaths — site consacré aux ressources de mathématiques pour les élèves du Sénégal.
-   Accueil : https://sunumaths.com/
-   6e : https://sunumaths.com/sixieme/
-   5e : https://sunumaths.com/cinquieme/
-   4e : https://sunumaths.com/quaterieme/
-   3e : https://sunumaths.com/troisieme/
-2. Physique-Chimie au Sénégal — page « Fascicules » fournie par l'utilisateur.
-   https://physiquechimie.godaddysites.com/fascicules
-   La page liste notamment des fascicules ADEM PC pour les classes de 4e et 3e, des exercices IREMPT
-   de 3e, les fascicules ADEM Maths 6e-3e et ADEM SVT 6e-3e. Les liens des cartes pointent vers
-   les fichiers hébergés à la source.
-3. Sama Bac — Programmes officiels de SVT au collège (guides pratiques / guides d'usage).
-   https://www.samabac.sn/svt-au-college
-4. APPRENDRE / AUF — Répertoire de fascicules d'exercices de SVT du collège.
-   https://apprendre.auf.org/discipline_ressource/sciences-de-la-vie-et-de-la-terre/page/12/
-5. Sama Bac — Épreuves BFEM (mathématiques, SVT, physique-chimie selon les publications disponibles).
-   https://samabac.sn/category/epreuves-bfem
+  python -m http.server 8000
 
-NOTE DE COUVERTURE
-------------------
-Lors de la recherche, des fascicules sénégalais étaient identifiables pour les trois matières :
-- Mathématiques : ressources SunuMaths pour les quatre classes et fascicules ADEM Maths 6e-3e.
-- SVT : fascicules ADEM SVT 6e-3e, fascicules de cours locaux et guides par classe.
-- Physique-Chimie : les ressources collège clairement repérées sur la source fournie concernent surtout
-  la 4e et la 3e. Aucune ressource PC 6e/5e suffisamment fiable n'a été repérée dans les sources
-  consultées au moment de la constitution du catalogue. Les classes 6e/5e restent sélectionnables
-  pour permettre l'ajout de documents de l'établissement.
+Puis ouvrir http://localhost:8000.
 
-Les sites externes et leurs fichiers peuvent changer ou devenir indisponibles. Les ressources restent
-hébergées par leurs auteurs/éditeurs ; cette application ne copie ni ne réhéberge les PDF. Vérifiez
-l'adéquation au programme et à la progression de la classe avec l'enseignant.
+En local, l'application ouvre directement les PDF distants. Le relais /api/pdf est une fonction
+Vercel et n'existe pas sur le simple serveur Python. Le lecteur affiche également un lien vers
+la source si un document ne s'affiche pas dans la fenêtre intégrée.
 
-CONFIDENTIALITÉ
----------------
-Aucun compte, aucune base de données distante, aucun suivi analytique. Les données sont conservées
-sur l'appareil et dans le profil du navigateur utilisé. Effacer les données du navigateur peut les
-supprimer ; exportez régulièrement une sauvegarde.
+DÉPLOIEMENT
+-----------
+Le dépôt est configuré pour Vercel. Le point d'entrée de la fonction PDF est api/pdf.js.
+Cette fonction relaie les documents HTTPS provenant uniquement des domaines explicitement
+autorisés dans son ALLOWED_HOSTS. Les redirections sont contrôlées à chaque étape afin de
+ne pas transformer le relais PDF en proxy ouvert.
+
+Le projet peut aussi être servi comme site statique, mais la fonction /api/pdf ne sera alors
+pas disponible. Dans ce cas, les documents restent accessibles via leurs liens sources lorsque
+le fournisseur autorise leur ouverture directe.
+
+RESSOURCES ET FOURNISSEURS
+--------------------------
+Les documents sont hébergés par leurs auteurs ou éditeurs ; l'application ne copie et ne
+réhéberge pas leurs PDF. Les domaines utilisés par le catalogue initial sont :
+- sunumaths.com
+- img1.wsimg.com
+- senprof.education.sn
+- apprendre.auf.org
+- topeducationsn.com
+
+Les liens, fichiers et règles d'accès de ces sites peuvent changer. Un document indisponible à
+sa source ne peut pas être réparé par le lecteur de l'application. Le lien « Ouvrir la source »
+permet de distinguer un problème du lecteur intégré d'un problème du fournisseur.
+
+DONNÉES ET CONFIDENTIALITÉ
+--------------------------
+Aucun compte ni base de données distante n'est utilisé. Les ressources personnelles, tâches et
+préférences conservées par cette version sont stockées dans le profil du navigateur. Les fichiers
+importés sont enregistrés dans IndexedDB sur l'appareil courant.
+
+La sauvegarde JSON contient les fiches et préférences, mais pas les octets des PDF enregistrés
+localement. Après import sur un appareil ou un navigateur différent, les fiches concernées restent
+visibles et proposent de réimporter leur PDF. Exportez régulièrement une sauvegarde et conservez
+les fichiers originaux.
+
+Le mode hors ligne met en cache l'interface. Les PDF distants nécessitent une connexion et restent
+dépendants de leur site d'origine ; les fichiers personnels déjà enregistrés restent dans la base
+IndexedDB du navigateur tant que ses données ne sont pas effacées.
+
+VÉRIFICATIONS
+-------------
+Les contrôles automatisés s'exécutent avec Node.js :
+
+  node --check app.js
+  node --check api/pdf.js
+  node --test tests/*.test.cjs
+
+La vérification du catalogue contrôle le format des URL et leur domaine, pas leur disponibilité
+réseau permanente. Les serveurs externes peuvent refuser les requêtes automatisées, limiter les
+accès ou déplacer leurs fichiers.
