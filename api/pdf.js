@@ -9,7 +9,7 @@ const ALLOWED_HOSTS = new Set([
   'senprof2.education.sn',
   'apprendre.auf.org',
   'topeducationsn.com',
-  'topeducationsn.com'
+  'www.topeducationsn.com'
 ]);
 
 function parseAllowedPdfUrl(raw) {
@@ -69,8 +69,10 @@ module.exports = async function pdfProxy(req, res) {
 
     target = parseAllowedPdfUrl(rawUrl);
     const requestHeaders = {
-      'User-Agent': 'Mozilla/5.0 (compatible; MonEspaceCollegePDF/1.0)',
-      'Accept': 'application/pdf,application/octet-stream;q=0.9,*/*;q=0.5'
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+      'Accept': 'application/pdf,application/octet-stream;q=0.9,*/*;q=0.8',
+      'Accept-Language': 'fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7',
+      'Referer': target.origin + '/'
     };
     if (typeof req.headers.range === 'string') {
       requestHeaders.Range = req.headers.range;
