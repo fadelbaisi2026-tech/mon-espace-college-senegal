@@ -4,6 +4,7 @@ const { Readable } = require('stream');
 
 const ALLOWED_HOSTS = new Set([
   'sunumaths.com',
+  'www.sunumaths.com',
   'img1.wsimg.com',
   'senprof.education.sn',
   'senprof2.education.sn',
@@ -83,6 +84,7 @@ module.exports = async function pdfProxy(req, res) {
 
     let upstream;
     for (let redirects = 0; redirects <= 5; redirects += 1) {
+      requestHeaders.Referer = target.origin + '/';
       upstream = await fetch(target.toString(), {
         method: req.method,
         headers: requestHeaders,
