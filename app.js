@@ -1,5 +1,7 @@
 'use strict';
 
+const { isPdfUrl, displayResourceKind, libraryCategories, isLocalPdfResource } = window.MonEspaceCatalogUtils;
+
 const ADEM_ROOT = 'https://img1.wsimg.com/blobby/go/92b1d401-89a0-4fda-accf-6ed9c6d46dd4/downloads/';
 const ADEM_VER = '?ver=1791159802098';
 
@@ -1463,7 +1465,7 @@ let toastTimer;
 function readState(){
   try{
     const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
-    state.resources = Array.isArray(saved.resources) ? saved.resources : [];
+    state.resources = Array.isArray(saved.resources) ? saved.resources.filter(item => item && typeof item === 'object' && typeof item.id === 'string') : [];
     state.tasks = Array.isArray(saved.tasks) ? saved.tasks : [];
     state.favorites = Array.isArray(saved.favorites) ? saved.favorites : [];
     state.completed = Array.isArray(saved.completed) ? saved.completed : [];
@@ -1475,12 +1477,9 @@ function persist(){
     localStorage.setItem(STORAGE_KEY, JSON.stringify({resources:state.resources,tasks:state.tasks,favorites:state.favorites,completed:state.completed,userName:state.userName}));
   }catch(err){ showToast('Espace de stockage presque plein. Exporte tes données.'); console.error(err); }
 }
-function isPdfUrl(value){
-  return typeof value==='string' && /\.pdf(?:$|[?#])/i.test(value.trim());
-}
 function allResources(){
   return [...seedResources, ...state.resources].filter(item =>
-    (item.fileId && /\.pdf$/i.test(item.fileName||'')) || isPdfUrl(item.url)
+    item && (isLocalPdfResource(item) || isPdfUrl(item.url))
   );
 }
 function esc(value){ return String(value ?? '').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
@@ -1535,6 +1534,11 @@ let pdfViewerHistoryEntryOpen=false;
 function showPdfViewer(src,title){
   const modal=document.getElementById('pdfViewerModal');
   document.getElementById('pdfViewerTitle').textContent=title||'Document PDF';
+  const sourceLink=document.getElementById('pdfSourceLink');
+  if(sourceLink){
+    if(/^https:\/\//i.test(src)){sourceLink.href=src;sourceLink.classList.remove('hidden');}
+    else{sourceLink.removeAttribute('href');sourceLink.classList.add('hidden');}
+  }
   const proxyHosts = [
     'sunumaths.com',
     'img1.wsimg.com',
@@ -1572,6 +1576,8 @@ function closePdfViewer(options={}){
   const modal=document.getElementById('pdfViewerModal');
   if(modal.classList.contains('hidden'))return;
   document.getElementById('pdfFrame').src='about:blank';
+  const sourceLink=document.getElementById('pdfSourceLink');
+  if(sourceLink){sourceLink.removeAttribute('href');sourceLink.classList.add('hidden');}
   modal.classList.add('hidden');
   document.body.style.overflow='';
   if(activePdfObjectUrl){URL.revokeObjectURL(activePdfObjectUrl);activePdfObjectUrl='';}
@@ -1604,25 +1610,6 @@ const LIBRARY_CATEGORIES = [
   {name:'Devoirs',icon:'✓',description:'Devoirs, exercices, compositions, examens, tests et annales.'},
   {name:'Autres',icon:'＋',description:'Les autres documents que tu ajoutes.'}
 ];
-function isAssessmentKind(kind){
-  const value=String(kind||'Autre').toLocaleLowerCase('fr-FR').normalize('NFD').replace(/[\u0300-\u036f]/g,'');
-  return ['devoir','examen','composition','epreuve','annale','bfem','test','evaluation','controle','interrogation','sujet','concours','exercice'].some(term=>value.includes(term));
-}
-function displayResourceKind(item){
-  const value=String(item.kind||'Autre').toLocaleLowerCase('fr-FR').normalize('NFD').replace(/[\u0300-\u036f]/g,'');
-  if(value.includes('cours')&&value.includes('exercice')) return item.kind;
-  return isAssessmentKind(value)?(value.includes('exercice')?'Exercices':'Devoirs'):(item.kind||'Autre');
-}
-function libraryCategories(item){
-  const kind=String(item.kind||'Autre').toLocaleLowerCase('fr-FR').normalize('NFD').replace(/[\u0300-\u036f]/g,'');
-  const categories=[];
-  if(kind.includes('cours')) categories.push('Cours');
-  if(kind.includes('exercice')) categories.push('Exercices');
-  if(isAssessmentKind(kind)) categories.push('Devoirs');
-  if(!categories.length&&kind.includes('fascicule')) categories.push('Cours');
-  if(!categories.length) categories.push('Autres');
-  return [...new Set(categories)];
-}
 function isInLibraryGrade(item,grade){
   return grade==='Toutes' || item.grade===grade || item.grade==='6e–3e' || item.grade==='6e-3e';
 }
@@ -1735,7 +1722,7 @@ function renderTasks(){
   document.querySelectorAll('[data-task-filter]').forEach(b=>b.classList.toggle('active',b.dataset.taskFilter===state.taskFilter));
 }
 function renderFilesCounts(){
-  const personal=state.resources.filter(r=>(r.fileId&&/\.pdf$/i.test(r.fileName||''))||isPdfUrl(r.url));
+  const personal=state.resources.filter(r=>isLocalPdfResource(r)||isPdfUrl(r.url));
   const by=s=>personal.filter(r=>r.subject===s).length;
   document.getElementById('folderMath').textContent=`${by('Mathématiques')} document${by('Mathématiques')>1?'s':''}`;
   document.getElementById('folderPC').textContent=`${by('Physique-Chimie')} document${by('Physique-Chimie')>1?'s':''}`;
@@ -1743,7 +1730,7 @@ function renderFilesCounts(){
   document.getElementById('folderOther').textContent=`${by('Autre')} document${by('Autre')>1?'s':''}`;
 }
 function renderFiles(){
-  const items=state.resources.filter(r=>((r.fileId&&/\.pdf$/i.test(r.fileName||''))||isPdfUrl(r.url))&&(state.fileSubjectFilter==='all'||r.subject===state.fileSubjectFilter));
+  const items=state.resources.filter(r=>(isLocalPdfResource(r)||isPdfUrl(r.url))&&(state.fileSubjectFilter==='all'||r.subject===state.fileSubjectFilter));
   document.getElementById('personalFilesGrid').innerHTML=items.map(item=>resourceCard(item)).join('');
   document.getElementById('filesEmpty').classList.toggle('hidden',items.length>0);
   renderFilesCounts();
@@ -1763,17 +1750,28 @@ function syncResourceSubjectOptions(){
   pc.disabled=['6e','5e'].includes(grade.value);
   if(pc.disabled&&subject.value==='Physique-Chimie')subject.value='Mathématiques';
 }
+let resourceModalTrigger=null;
 function openModal(prefill={}){
+  const form=document.getElementById('resourceForm');
+  resourceModalTrigger=document.activeElement;
+  form.reset();
   document.getElementById('resourceModal').classList.remove('hidden');
   document.body.style.overflow='hidden';
   returnToLibraryAfterSave=Boolean(prefill.returnToLibrary);
-  const form=document.getElementById('resourceForm');
   if(prefill.grade) form.elements.grade.value=prefill.grade;
   if(prefill.subject) form.elements.subject.value=prefill.subject;
   if(prefill.kind) form.elements.kind.value=prefill.kind;
   syncResourceSubjectOptions();
+  form.elements.title.focus();
 }
-function closeModal(){document.getElementById('resourceModal').classList.add('hidden');document.body.style.overflow='';}
+function closeModal(){
+  const modal=document.getElementById('resourceModal');
+  if(modal.classList.contains('hidden'))return;
+  modal.classList.add('hidden');
+  document.body.style.overflow='';
+  const trigger=resourceModalTrigger;resourceModalTrigger=null;
+  if(trigger&&typeof trigger.focus==='function')trigger.focus();
+}
 function updateUserName(){
   const newName=window.prompt('Quel prénom afficher dans ton espace ?',state.userName);
   if(newName===null)return;
@@ -1805,6 +1803,7 @@ document.addEventListener('click',async event=>{
   document.getElementById('libraryBrowser').classList.add('hidden');
   document.getElementById('libraryResults').classList.remove('hidden');
   state.libraryPath={grade:'Toutes',subject:'',category:''};
+  syncClassBottomNav();
   document.getElementById('libraryBackBtn').classList.remove('hidden');
   document.getElementById('libraryBreadcrumb').innerHTML='<button type="button" data-library-step="root">Bibliothèque</button><span>›</span><strong>Toutes les ressources</strong>';
   document.getElementById('libraryIntro').innerHTML='<div class="eyebrow">BIBLIOTHÈQUE COMPLÈTE</div><h2>Tous les PDF disponibles</h2><p>'+resources.length+' documents PDF à consulter dans la bibliothèque.</p>';
@@ -1842,6 +1841,7 @@ document.addEventListener('click',async event=>{
   else state.libraryPath.grade='';
   renderLibrary();scrollLibraryTools();return;
  }
+ if(event.target.id==='resourceModal'){closeModal();return;}
  if(event.target.closest('[data-close-modal]')){closeModal();return;}
  const openPdf=event.target.closest('[data-open-pdf]');
  if(openPdf){showPdfViewer(openPdf.dataset.openPdf,openPdf.closest('.resource-card')?.querySelector('h4')?.textContent||'Document PDF');return;}
@@ -1878,9 +1878,12 @@ document.getElementById('resourceForm').addEventListener('submit',async event=>{
  const file=form.elements.file.files[0];
  if(!title){showToast('Ajoute un nom à ce document.');return;}
  if(url&&!isPdfUrl(url)){showToast('Le lien doit pointer directement vers un fichier PDF. Les pages web ne sont pas acceptées.');return;}
- if(file&&file.type!=='application/pdf'&&!/\.pdf$/i.test(file.name)){showToast('Seuls les fichiers PDF sont acceptés.');return;}
+ if(file){
+  const signature=new TextDecoder().decode(await file.slice(0,5).arrayBuffer());
+  if(signature!=='%PDF-'){showToast('Le fichier sélectionné ne semble pas être un PDF valide.');return;}
+ }
  if(!url&&!file){showToast('Ajoute un lien PDF direct ou choisis un fichier PDF.');return;}
- const item={id:`personal-${Date.now()}`,title,grade:String(data.get('grade')),subject:String(data.get('subject')),kind:String(data.get('kind')),description:String(data.get('notes')).trim()||'Document PDF ajouté à la bibliothèque.',notes:String(data.get('notes')).trim(),source:file?'PDF personnel':'PDF ajouté',url:url||'',personal:true,createdAt:Date.now()};
+ const item={id:`personal-${Date.now()}`,title,grade:String(data.get('grade')),subject:String(data.get('subject')),kind:String(data.get('kind')),description:String(data.get('notes')).trim()||'Document PDF ajouté à la bibliothèque.',notes:String(data.get('notes')).trim(),source:file?'PDF personnel':'PDF ajouté',url:url||'',fileType:file?(file.type||'application/pdf'):'',personal:true,createdAt:Date.now()};
  if(file){
   try{item.fileId=await saveLocalFile(file);item.fileName=file.name;item.fileSize=file.size;item.url='';}
   catch(error){showToast('Impossible d’enregistrer ce PDF sur cet appareil.');return;}
@@ -1902,5 +1905,7 @@ window.addEventListener('popstate',()=>{
  if(pdfViewerHistoryEntryOpen)closePdfViewer({fromHistory:true});
 });
 document.addEventListener('keydown',event=>{
- if(event.key==='Escape'&&!document.getElementById('pdfViewerModal').classList.contains('hidden'))closePdfViewer();
+ if(event.key!=='Escape')return;
+ if(!document.getElementById('pdfViewerModal').classList.contains('hidden'))closePdfViewer();
+ else if(!document.getElementById('resourceModal').classList.contains('hidden'))closeModal();
 });

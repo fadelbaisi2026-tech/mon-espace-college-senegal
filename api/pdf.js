@@ -34,6 +34,16 @@ function parseAllowedPdfUrl(raw) {
   return url;
 }
 
+async function fetchResponseHeaders(url, options, timeoutMs = 15000) {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    return await fetch(url, { ...options, signal: controller.signal });
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
 function redirectToOriginalPdf(res, target) {
   res.statusCode = 302;
   res.setHeader('Location', target.toString());
@@ -83,7 +93,7 @@ module.exports = async function pdfProxy(req, res) {
 
     let upstream;
     for (let redirects = 0; redirects <= 5; redirects += 1) {
-      upstream = await fetch(target.toString(), {
+      upstream = await fetchResponseHeaders(target.toString(), {
         method: req.method,
         headers: requestHeaders,
         redirect: 'manual'
@@ -95,6 +105,7 @@ module.exports = async function pdfProxy(req, res) {
           return sendError(res, 502, 'La source du PDF redirige vers une adresse indisponible.');
         }
         target = parseAllowedPdfUrl(new URL(location, target).toString());
+        if (upstream.body) await upstream.body.cancel().catch(() => {});
         continue;
       }
       break;
@@ -120,7 +131,9 @@ module.exports = async function pdfProxy(req, res) {
     res.setHeader('X-Content-Type-Options', 'nosniff');
     res.setHeader('Cache-Control', 'public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800');
 
+    const upstreamIsEncoded = Boolean(upstream.headers.get('content-encoding'));
     for (const header of ['content-length', 'content-range', 'accept-ranges', 'last-modified', 'etag']) {
+      if (header === 'content-length' && upstreamIsEncoded) continue;
       const value = upstream.headers.get(header);
       if (value) res.setHeader(header, value);
     }
@@ -146,3 +159,6 @@ module.exports = async function pdfProxy(req, res) {
     return sendError(res, status, error.message || 'Impossible de charger ce PDF pour le moment.');
   }
 };
+
+// Exported for dependency-free regression tests.
+module.exports.parseAllowedPdfUrl = parseAllowedPdfUrl;
