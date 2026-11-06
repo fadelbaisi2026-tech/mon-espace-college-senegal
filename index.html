@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#101d3a">
 <meta name="description" content="Bibliothèque de PDF pour apprendre et réviser les matières du collège au Sénégal, en autonomie.">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Espace Collège">
+<meta name="color-scheme" content="light">
 <title>Bibliothèque · Mon Espace Collège</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
@@ -25,7 +28,7 @@
             <div class="library-selfstudy-copy"><strong>Tu peux apprendre ici en autonomie.</strong><p>Choisis ton niveau pour suivre les notions du collège, ou une matière pour explorer les ressources de toutes les classes. Ouvre les cours, entraîne-toi avec les exercices et révise avec les épreuves.</p></div>
           </section>
           <div class="library-tools" id="libraryTools">
-            <label class="search-field"><span>⌕</span><input id="searchInput" type="search" placeholder="Rechercher dans toute la bibliothèque…" autocomplete="off"></label>
+            <label class="search-field"><span>⌕</span><input id="searchInput" type="search" placeholder="Rechercher dans toute la bibliothèque…" autocomplete="off" aria-label="Rechercher dans toute la bibliothèque"></label>
             <button class="secondary-button library-back hidden" id="libraryBackBtn" type="button" aria-label="Revenir à la rubrique précédente">← Retour</button>
           </div>
           <nav class="library-breadcrumb" id="libraryBreadcrumb" aria-label="Emplacement dans la bibliothèque"></nav>
@@ -34,6 +37,19 @@
           <div class="resource-grid hidden" id="libraryResults"></div>
           <div class="empty-state hidden" id="libraryEmpty"><div class="empty-illustration">⌕</div><h3>Aucun document pour le moment</h3><p>Tu peux ajouter ton propre document dans cette rubrique.</p><button class="primary-button" data-add-to-library>＋ Ajouter un document</button></div>
           <div class="coverage-note"><div class="coverage-icon">i</div><div><strong>Repères pour réviser en autonomie</strong><p>La Physique-Chimie est proposée uniquement en 4e et en 3e. Les cours de Mathématiques de 6e et de 5e sont maintenant disponibles, avec un livret du Ministère en complément pour la 6e. Les fascicules ADEM de Mathématiques sont, eux, classés comme exercices et non comme cours lorsqu’ils ne contiennent pas de leçons.</p></div></div>
+          <section class="backup-panel" aria-labelledby="backupPanelTitle">
+            <div class="backup-panel-copy">
+              <div class="eyebrow">DONNÉES PERSONNELLES</div>
+              <h2 id="backupPanelTitle">Sauvegarder ma bibliothèque</h2>
+              <p>Exporte les fiches et préférences de cet appareil. Les PDF enregistrés localement ne sont pas inclus dans le fichier JSON. Après une restauration, utilise « Réimporter le PDF » sur les fiches qui le demandent.</p>
+            </div>
+            <div class="backup-panel-actions">
+              <button type="button" class="secondary-button" id="backupExportBtn">Exporter la sauvegarde</button>
+              <button type="button" class="primary-button" id="backupImportBtn">Importer une sauvegarde</button>
+            </div>
+            <input id="backupFileInput" type="file" accept=".json,application/json" hidden>
+          </section>
+          <input id="reattachFileInput" type="file" accept=".pdf,application/pdf" hidden>
         </section></div>
  </main>
  <nav class="class-bottom-nav" aria-label="Navigation par classe">
@@ -63,6 +79,10 @@
         <div><div class="eyebrow">LECTURE DANS MON ESPACE COLLÈGE</div><h2 id="pdfViewerTitle">Document PDF</h2></div>
         <button class="pdf-back-button" id="pdfBackBtn" type="button" data-close-pdf aria-label="Retour à la bibliothèque">← Retour</button>
       </header>
+      <div class="pdf-viewer-tools">
+        <p id="pdfViewerStatus" role="status" aria-live="polite">Préparation du document PDF…</p>
+        <a id="pdfOpenSource" class="pdf-source-link hidden" target="_blank" rel="noopener noreferrer">Ouvrir la source du PDF <span>↗</span></a>
+      </div>
       <iframe id="pdfFrame" title="Lecteur PDF intégré" src="about:blank"></iframe>
     </section>
   </div>
