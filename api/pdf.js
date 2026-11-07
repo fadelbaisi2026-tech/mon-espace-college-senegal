@@ -7,6 +7,7 @@ const ALLOWED_HOSTS = new Set([
   'img1.wsimg.com',
   'senprof.education.sn',
   'senprof2.education.sn',
+  'irempt.ucad.sn',
   'apprendre.auf.org',
   'topeducationsn.com',
   'www.topeducationsn.com'
