@@ -410,3 +410,18 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 }
 @media(max-width:380px){.category-grid{grid-template-columns:1fr}.library-tools .library-back{min-width:73px}.pdf-viewer-header-actions{gap:5px}.pdf-source-link,.pdf-back-button{padding:0 7px;font-size:9px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+
+
+/* Keep the welcome/landing content on the library root only. */
+#page-library.is-browsing > .page-heading-row{
+  justify-content:flex-end;
+  align-items:center;
+  margin-bottom:10px;
+}
+#page-library.is-browsing > .page-heading-row > div:first-child{
+  display:none;
+}
+#page-library.is-browsing > .library-selfstudy,
+#page-library.is-browsing > .coverage-note{
+  display:none!important;
+}

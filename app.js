@@ -1,6 +1,6 @@
 'use strict';
 
-const { isPdfUrl, displayResourceKind, libraryCategories, isLocalPdfResource } = window.MonEspaceCatalogUtils;
+const { isPdfUrl, displayResourceKind, libraryCategories, isLocalPdfResource, isLibraryLandingView } = window.MonEspaceCatalogUtils;
 
 const ADEM_ROOT = 'https://img1.wsimg.com/blobby/go/92b1d401-89a0-4fda-accf-6ed9c6d46dd4/downloads/';
 const ADEM_VER = '?ver=1791159802098';
@@ -1630,6 +1630,7 @@ function renderLibrary(){
   const query=(document.getElementById('searchInput')?.value||'').trim().toLocaleLowerCase('fr-FR');
   syncClassBottomNav(query);
   const path=state.libraryPath;
+  document.getElementById('page-library').classList.toggle('is-browsing', !isLibraryLandingView(query, path));
   const browser=document.getElementById('libraryBrowser');
   const results=document.getElementById('libraryResults');
   const empty=document.getElementById('libraryEmpty');
@@ -1804,6 +1805,7 @@ document.addEventListener('click',async event=>{
   document.getElementById('libraryResults').classList.remove('hidden');
   state.libraryPath={grade:'Toutes',subject:'',category:''};
   syncClassBottomNav();
+  document.getElementById('page-library').classList.add('is-browsing');
   document.getElementById('libraryBackBtn').classList.remove('hidden');
   document.getElementById('libraryBreadcrumb').innerHTML='<button type="button" data-library-step="root">Bibliothèque</button><span>›</span><strong>Toutes les ressources</strong>';
   document.getElementById('libraryIntro').innerHTML='<div class="eyebrow">BIBLIOTHÈQUE COMPLÈTE</div><h2>Tous les PDF disponibles</h2><p>'+resources.length+' documents PDF à consulter dans la bibliothèque.</p>';
