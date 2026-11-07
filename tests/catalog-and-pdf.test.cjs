@@ -93,3 +93,24 @@ test('PDF proxy rejects unsupported methods and non-allowlisted hosts', async ()
   }, hostResponse);
   assert.equal(hostResponse.statusCode, 403);
 });
+
+
+test('subject cards follow a mobile-first responsive grid', () => {
+  const styles = fs.readFileSync(path.join(__dirname, '..', 'styles.css'), 'utf8');
+  const mobileStart = styles.lastIndexOf('@media(max-width:680px){');
+  const mobileEnd = styles.indexOf('\n}', mobileStart);
+  assert.notEqual(mobileStart, -1, 'mobile breakpoint must exist');
+  assert.notEqual(mobileEnd, -1, 'mobile breakpoint must close');
+  const mobileStyles = styles.slice(mobileStart, mobileEnd);
+
+  assert.match(styles, /\.subject-grid\{grid-template-columns:minmax\(0,1fr\)\}/,
+    'one column is the default layout');
+  assert.match(styles, /@media\(min-width:681px\)\{\.subject-grid,\.category-grid\{grid-template-columns:repeat\(2,minmax\(0,1fr\)\)\}/,
+    'tablet layout uses two columns');
+  assert.match(styles, /@media\(min-width:981px\)\{\.subject-grid,\.category-grid\{grid-template-columns:repeat\(3,minmax\(0,1fr\)\)\}/,
+    'desktop layout uses three columns');
+  assert.match(mobileStyles, /\.subject-grid \.subject-tile\{min-height:88px;padding:14px 16px\}/,
+    'mobile subject cards have a comfortable touch target');
+  assert.doesNotMatch(mobileStyles, /\.subject-grid\{grid-template-columns:repeat\(2/,
+    'mobile subject cards must not be squeezed into two columns');
+});
