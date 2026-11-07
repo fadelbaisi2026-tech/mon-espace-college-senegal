@@ -172,3 +172,14 @@ test('the fourth-grade Physics-Chemistry course opens outside the embedded PDF f
     'the fourth-grade course must open the validated same-origin PDF proxy in a new tab'
   );
 });
+
+
+test('the fourth-grade Physics-Chemistry course uses the 100-page teaching guide from Wahab Diop’s resource collection', () => {
+  const item = readSeedResources().find(resource => resource.id === 'pc-wahab-course-4e');
+  assert.ok(item, 'the fourth-grade course must remain available');
+  assert.equal(item.kind, 'Cours et exercices');
+  assert.match(item.title, /Guide pédagogique.*100 pages/);
+  assert.match(item.url, /\/Guide_prof_col_4eme\.pdf\?/);
+  assert.match(item.source, /Collection de Wahab Diop.*Coordination Nationale/);
+  assert.deepEqual(catalog.libraryCategories(item), ['Cours', 'Exercices']);
+});
