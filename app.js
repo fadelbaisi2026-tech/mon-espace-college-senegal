@@ -1416,13 +1416,13 @@ const seedResources = [
   },
   {
     "id": "pc-wahab-course-4e",
-    "title": "Cahier de leçons et d’applications en Physique-Chimie · 4e",
+    "title": "Guide pédagogique de Sciences Physiques · 4e · 100 pages",
     "grade": "4e",
     "subject": "Physique-Chimie",
     "kind": "Cours et exercices",
-    "description": "Cahier de leçons de Physique-Chimie de Wahab Diop : notions essentielles, observations, applications et exercices.",
-    "source": "Wahab Diop · IREMPT",
-    "url": "https://img1.wsimg.com/blobby/go/92b1d401-89a0-4fda-accf-6ed9c6d46dd4/downloads/fascicule-sciences-physiques-4eme-_wahabdiop.pdf?ver=1773146128104",
+    "description": "Support pédagogique détaillé pour la quatrième : notions du programme, compétences, déroulement des leçons, expériences et fiches d’évaluation. Document d’accompagnement du programme.",
+    "source": "Collection de Wahab Diop · Coordination Nationale de la Formation Continue",
+    "url": "https://img1.wsimg.com/blobby/go/92b1d401-89a0-4fda-accf-6ed9c6d46dd4/downloads/Guide_prof_col_4eme.pdf?ver=1793921314458",
     "personal": false
   },
   {
