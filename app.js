@@ -1416,13 +1416,112 @@ const seedResources = [
   },
   {
     "id": "pc-wahab-course-4e",
-    "title": "Guide pédagogique de Sciences Physiques · 4e · 100 pages",
+    "title": "Cahier de leçons de Sciences Physiques · 4e · Wahab Diop",
     "grade": "4e",
     "subject": "Physique-Chimie",
     "kind": "Cours et exercices",
-    "description": "Support pédagogique détaillé pour la quatrième : notions du programme, compétences, déroulement des leçons, expériences et fiches d’évaluation. Document d’accompagnement du programme.",
-    "source": "Collection de Wahab Diop · Coordination Nationale de la Formation Continue",
-    "url": "https://img1.wsimg.com/blobby/go/92b1d401-89a0-4fda-accf-6ed9c6d46dd4/downloads/Guide_prof_col_4eme.pdf?ver=1793921314458",
+    "description": "Véritable cahier de leçons de 54 pages : notions du programme, définitions, expériences et applications de physique-chimie pour la quatrième.",
+    "source": "Cellule pédagogique du BST Liberté III · diffusé par Wahab Diop",
+    "url": "https://img1.wsimg.com/blobby/go/92b1d401-89a0-4fda-accf-6ed9c6d46dd4/downloads/fascicule-sciences-physiques-4eme-_wahabdiop.pdf?ver=1793921314458",
+    "personal": false
+  },
+  {
+    "id": "pc-irempt-4e-c1-melanges",
+    "title": "Mélanges et corps purs · 4e · IREMPT",
+    "grade": "4e",
+    "subject": "Physique-Chimie",
+    "kind": "Cours et exercices",
+    "description": "Chapitre de cours sur les mélanges et les corps purs, avec activités d’application.",
+    "source": "IREMPT · UCAD",
+    "url": "https://irempt.ucad.sn/sites/default/files/MELANGE_ET_CORPS_PUR.pdf",
+    "personal": false
+  },
+  {
+    "id": "pc-irempt-4e-c2-structure",
+    "title": "Structure de la matière · 4e · IREMPT",
+    "grade": "4e",
+    "subject": "Physique-Chimie",
+    "kind": "Cours et exercices",
+    "description": "Chapitre de cours consacré à la structure de la matière.",
+    "source": "IREMPT · UCAD",
+    "url": "https://irempt.ucad.sn/sites/default/files/docspedagogiques/ChapC2._STRUCTURE_DE_LA_MATIERE.pdf",
+    "personal": false
+  },
+  {
+    "id": "pc-irempt-4e-c3-mole",
+    "title": "Mole et grandeurs molaires · 4e · IREMPT",
+    "grade": "4e",
+    "subject": "Physique-Chimie",
+    "kind": "Cours et exercices",
+    "description": "Chapitre de cours sur la mole et les grandeurs molaires.",
+    "source": "IREMPT · UCAD",
+    "url": "https://irempt.ucad.sn/sites/default/files/docspedagogiques/MOLE_ET_GRANDEURS_MOLAIRES_revue.pdf",
+    "personal": false
+  },
+  {
+    "id": "pc-irempt-4e-c4-reaction",
+    "title": "Notion de réaction chimique · 4e · IREMPT",
+    "grade": "4e",
+    "subject": "Physique-Chimie",
+    "kind": "Cours et exercices",
+    "description": "Chapitre de cours sur la réaction chimique, accompagné d’activités d’application.",
+    "source": "IREMPT · UCAD",
+    "url": "https://irempt.ucad.sn/sites/default/files/NOTIONS_DE_REACTION_CHIMIQUE.pdf",
+    "personal": false
+  },
+  {
+    "id": "pc-irempt-4e-p2-grandeurs",
+    "title": "Grandeurs physiques et mesures · 4e · IREMPT",
+    "grade": "4e",
+    "subject": "Physique-Chimie",
+    "kind": "Cours et exercices",
+    "description": "Chapitre de cours sur les grandeurs physiques, les unités et les mesures.",
+    "source": "IREMPT · UCAD",
+    "url": "https://irempt.ucad.sn/sites/default/files/docspedagogiques/chapP2._Grandeursphysiquesetmesures.pdf",
+    "personal": false
+  },
+  {
+    "id": "pc-irempt-4e-p3-masse",
+    "title": "Masse, masse volumique et densité · 4e · IREMPT",
+    "grade": "4e",
+    "subject": "Physique-Chimie",
+    "kind": "Cours et exercices",
+    "description": "Chapitre de cours sur la masse, la masse volumique et la densité.",
+    "source": "IREMPT · UCAD",
+    "url": "https://irempt.ucad.sn/sites/default/files/docspedagogiques/chapP3._Masse-massevolumique-densite.pdf",
+    "personal": false
+  },
+  {
+    "id": "pc-irempt-4e-p4-poids",
+    "title": "Poids d’un corps et relation poids-masse · 4e · IREMPT",
+    "grade": "4e",
+    "subject": "Physique-Chimie",
+    "kind": "Cours et exercices",
+    "description": "Chapitre de cours sur le poids d’un corps et la relation entre poids et masse.",
+    "source": "IREMPT · UCAD",
+    "url": "https://irempt.ucad.sn/sites/default/files/docspedagogiques/chapP4._Poidsduncorps.Relationpoids-masse.pdf",
+    "personal": false
+  },
+  {
+    "id": "pc-irempt-4e-p6-lumiere",
+    "title": "Sources et récepteurs de lumière · 4e · IREMPT",
+    "grade": "4e",
+    "subject": "Physique-Chimie",
+    "kind": "Cours et exercices",
+    "description": "Chapitre de cours sur les sources et les récepteurs de lumière.",
+    "source": "IREMPT · UCAD",
+    "url": "https://irempt.ucad.sn/sites/default/files/docspedagogiques/chapP6._Sources_et_recepteurs_de_lumier.pdf",
+    "personal": false
+  },
+  {
+    "id": "pc-irempt-4e-p8-optique",
+    "title": "Réflexion et réfraction de la lumière · 4e · IREMPT",
+    "grade": "4e",
+    "subject": "Physique-Chimie",
+    "kind": "Cours et exercices",
+    "description": "Chapitre de cours sur la réflexion et la réfraction de la lumière.",
+    "source": "IREMPT · UCAD",
+    "url": "https://irempt.ucad.sn/sites/default/files/docspedagogiques/chapP8._reflexion_et_refraction_de_la_lumiere.pdf",
     "personal": false
   },
   {
@@ -1534,17 +1633,13 @@ let pdfViewerHistoryEntryOpen=false;
 function showPdfViewer(src,title){
   const modal=document.getElementById('pdfViewerModal');
   document.getElementById('pdfViewerTitle').textContent=title||'Document PDF';
-  const sourceLink=document.getElementById('pdfSourceLink');
-  if(sourceLink){
-    if(/^https:\/\//i.test(src)){sourceLink.href=src;sourceLink.classList.remove('hidden');}
-    else{sourceLink.removeAttribute('href');sourceLink.classList.add('hidden');}
-  }
   const proxyHosts = [
     'sunumaths.com',
     'img1.wsimg.com',
     'senprof.education.sn',
     'senprof2.education.sn',
     'apprendre.auf.org',
+    'irempt.ucad.sn',
     'topeducationsn.com'
   ];
   let frameSource=src;
@@ -1589,9 +1684,7 @@ function resourceCard(item){
   const action = item.fileId
     ? `<button class="resource-open" data-open-file="${esc(item.fileId)}">Lire le PDF <span>→</span></button>`
     : isPdfUrl(item.url)
-      ? item.id === 'pc-wahab-course-4e'
-        ? `<a class="resource-open" href="/api/pdf?url=${encodeURIComponent(item.url)}" target="_blank" rel="noopener noreferrer">Ouvrir le cours <span>↗</span></a>`
-        : `<button class="resource-open" data-open-pdf="${esc(item.url)}">Lire le PDF <span>→</span></button>`
+      ? `<button class="resource-open" data-open-pdf="${esc(item.url)}">Lire le PDF <span>→</span></button>`
       : '<span class="source-label">PDF indisponible</span>';
   return `<article class="resource-card ${subjectClass(item.subject)}">
     <div class="resource-card-top"><span class="resource-symbol">${subjectSymbol(item.subject)}</span><span class="resource-grade">${esc(item.grade||'—')}</span></div>

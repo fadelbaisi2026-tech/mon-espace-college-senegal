@@ -164,22 +164,48 @@ test('ADEM Physics-Chemistry fascicules are classified as exercises, not courses
 });
 
 
-test('the fourth-grade Physics-Chemistry course opens outside the embedded PDF frame', () => {
+test('remote PDFs, including the fourth-grade Physics-Chemistry course, stay in the in-app reader', () => {
   const appSource = fs.readFileSync(path.join(__dirname, '..', 'app.js'), 'utf8');
-  assert.match(
-    appSource,
-    /item\.id === 'pc-wahab-course-4e'[\s\S]*?href="\/api\/pdf\?url=\$\{encodeURIComponent\(item\.url\)\}" target="_blank" rel="noopener noreferrer"/,
-    'the fourth-grade course must open the validated same-origin PDF proxy in a new tab'
-  );
+  const htmlSource = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+  const cardStart = appSource.indexOf('function resourceCard(item)');
+  const cardEnd = appSource.indexOf('\nconst LIBRARY_SUBJECTS', cardStart);
+  const cardSource = appSource.slice(cardStart, cardEnd);
+  assert.ok(cardSource.includes('data-open-pdf='), 'remote PDFs must use the in-app PDF button');
+  assert.doesNotMatch(cardSource, /target="_blank"/, 'resource cards must not open PDFs in another tab');
+  assert.match(htmlSource, /id="pdfFrame"/, 'the in-app PDF frame must be present');
+  assert.doesNotMatch(htmlSource, /target="_blank"/, 'the PDF viewer must not offer a link that opens another tab');
+  assert.doesNotMatch(htmlSource, /id="pdfSourceLink"/, 'the external source link must be removed from the PDF reader');
 });
 
-
-test('the fourth-grade Physics-Chemistry course uses the 100-page teaching guide from Wahab Diop’s resource collection', () => {
+test('the fourth-grade Physics-Chemistry course uses Wahab Diop’s 54-page lesson booklet', () => {
   const item = readSeedResources().find(resource => resource.id === 'pc-wahab-course-4e');
   assert.ok(item, 'the fourth-grade course must remain available');
   assert.equal(item.kind, 'Cours et exercices');
-  assert.match(item.title, /Guide pédagogique.*100 pages/);
-  assert.match(item.url, /\/Guide_prof_col_4eme\.pdf\?/);
-  assert.match(item.source, /Collection de Wahab Diop.*Coordination Nationale/);
+  assert.match(item.title, /Cahier de leçons.*4e.*Wahab Diop/);
+  assert.match(item.url, /fascicule-sciences-physiques-4eme-_wahabdiop\.pdf\?/);
+  assert.match(item.source, /BST Liberté III.*Wahab Diop/);
   assert.deepEqual(catalog.libraryCategories(item), ['Cours', 'Exercices']);
+});
+
+test('the IREMPT fourth-grade Physics-Chemistry lessons are included and proxy-allowed', () => {
+  const resources = readSeedResources();
+  const expected = [
+    'pc-irempt-4e-c1-melanges', 'pc-irempt-4e-c2-structure',
+    'pc-irempt-4e-c3-mole', 'pc-irempt-4e-c4-reaction',
+    'pc-irempt-4e-p2-grandeurs', 'pc-irempt-4e-p3-masse',
+    'pc-irempt-4e-p4-poids', 'pc-irempt-4e-p6-lumiere',
+    'pc-irempt-4e-p8-optique'
+  ];
+  for (const id of expected) {
+    const item = resources.find(resource => resource.id === id);
+    assert.ok(item, id + ' must be present in the fourth-grade catalogue');
+    assert.equal(item.grade, '4e');
+    assert.equal(item.subject, 'Physique-Chimie');
+    assert.equal(item.source, 'IREMPT · UCAD');
+    assert.equal(item.kind, 'Cours et exercices');
+    assert.doesNotThrow(() => pdfHandler.parseAllowedPdfUrl(item.url), id + ' must be accepted by the PDF proxy');
+  }
+  assert.equal(new Set(resources.map(item => item.id)).size, resources.length, 'resource identifiers must remain unique');
+  const appSource = fs.readFileSync(path.join(__dirname, '..', 'app.js'), 'utf8');
+  assert.ok(appSource.includes("'irempt.ucad.sn'"), 'IREMPT PDFs must be sent through the same-origin PDF proxy');
 });
