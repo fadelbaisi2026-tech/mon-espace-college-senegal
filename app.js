@@ -1589,7 +1589,9 @@ function resourceCard(item){
   const action = item.fileId
     ? `<button class="resource-open" data-open-file="${esc(item.fileId)}">Lire le PDF <span>→</span></button>`
     : isPdfUrl(item.url)
-      ? `<button class="resource-open" data-open-pdf="${esc(item.url)}">Lire le PDF <span>→</span></button>`
+      ? item.id === 'pc-wahab-course-4e'
+        ? `<a class="resource-open" href="/api/pdf?url=${encodeURIComponent(item.url)}" target="_blank" rel="noopener noreferrer">Ouvrir le cours <span>↗</span></a>`
+        : `<button class="resource-open" data-open-pdf="${esc(item.url)}">Lire le PDF <span>→</span></button>`
       : '<span class="source-label">PDF indisponible</span>';
   return `<article class="resource-card ${subjectClass(item.subject)}">
     <div class="resource-card-top"><span class="resource-symbol">${subjectSymbol(item.subject)}</span><span class="resource-grade">${esc(item.grade||'—')}</span></div>

@@ -162,3 +162,13 @@ test('ADEM Physics-Chemistry fascicules are classified as exercises, not courses
       id + ' contains lesson material and applications');
   }
 });
+
+
+test('the fourth-grade Physics-Chemistry course opens outside the embedded PDF frame', () => {
+  const appSource = fs.readFileSync(path.join(__dirname, '..', 'app.js'), 'utf8');
+  assert.match(
+    appSource,
+    /item\.id === 'pc-wahab-course-4e'[\s\S]*?href="\/api\/pdf\?url=\$\{encodeURIComponent\(item\.url\)\}" target="_blank" rel="noopener noreferrer"/,
+    'the fourth-grade course must open the validated same-origin PDF proxy in a new tab'
+  );
+});
