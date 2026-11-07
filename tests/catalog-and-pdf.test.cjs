@@ -114,3 +114,30 @@ test('subject cards follow a mobile-first responsive grid', () => {
   assert.doesNotMatch(mobileStyles, /\.subject-grid\{grid-template-columns:repeat\(2/,
     'mobile subject cards must not be squeezed into two columns');
 });
+
+
+test('Physique-Chimie resources use live, proxy-allowed PDF hosts', () => {
+  const resources = readSeedResources().filter(item => item.subject === 'Physique-Chimie');
+  assert.ok(resources.length >= 20, 'the Physics-Chemistry catalogue must remain populated');
+  assert.equal(
+    resources.filter(item => item.url.startsWith('https://topeducationsn.com/')).length,
+    0,
+    'the unavailable Top Education host must not be used by Physics-Chemistry resources'
+  );
+
+  for (const resource of resources) {
+    assert.doesNotThrow(
+      () => pdfHandler.parseAllowedPdfUrl(resource.url),
+      resource.id + ' must be accepted by the PDF proxy'
+    );
+  }
+
+  assert.ok(resources.some(item => item.grade === '4e' && item.source.startsWith('ADEM-Dakar')),
+    'the fourth-grade ADEM fascicule must be present');
+  assert.ok(resources.some(item => item.grade === '3e' && item.source.startsWith('ADEM-Dakar')),
+    'the third-grade ADEM fascicule must be present');
+
+  const appSource = fs.readFileSync(path.join(__dirname, '..', 'app.js'), 'utf8');
+  assert.ok(appSource.includes("'senprof2.education.sn'"),
+    'the browser must send SenProf2 PDFs through the same-origin PDF proxy');
+});
