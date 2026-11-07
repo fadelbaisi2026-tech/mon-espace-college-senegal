@@ -1119,11 +1119,11 @@ const seedResources = [
   },
   {
     "id": "pc4-comp2",
-    "title": "Fascicule de sciences physiques · 4e · ADEM-Dakar",
+    "title": "Fascicule d’exercices de sciences physiques · 4e · ADEM-Dakar",
     "grade": "4e",
     "subject": "Physique-Chimie",
-    "kind": "Cours et exercices",
-    "description": "Fascicule complet de sciences physiques de quatrième, conçu dans le cadre du projet ADEM-Dakar avec le Ministère de l’Éducation nationale et l’AFD.",
+    "kind": "Exercices",
+    "description": "Fascicule d’entraînement en sciences physiques pour la quatrième, issu du projet ADEM-Dakar. À utiliser pour s’exercer et consolider les notions du programme.",
     "source": "ADEM-Dakar · Ministère de l’Éducation nationale / AFD",
     "url": "https://senprof2.education.sn/%C3%89l%C3%A8ves/3.Moyen/3.Quatri%C3%A8me/PC/res/PC_4e.pdf",
     "personal": false
@@ -1273,11 +1273,11 @@ const seedResources = [
   },
   {
     "id": "pc3-bfem16",
-    "title": "Fascicule de sciences physiques · 3e · ADEM-Dakar",
+    "title": "Fascicule d’exercices de sciences physiques · 3e · ADEM-Dakar",
     "grade": "3e",
     "subject": "Physique-Chimie",
-    "kind": "Cours et exercices",
-    "description": "Fascicule complet de sciences physiques de troisième, conçu dans le cadre du projet ADEM-Dakar pour les élèves du Sénégal.",
+    "kind": "Exercices",
+    "description": "Fascicule d’entraînement en sciences physiques pour la troisième, issu du projet ADEM-Dakar. À utiliser pour s’exercer et préparer les évaluations du collège.",
     "source": "ADEM-Dakar · Ministère de l’Éducation nationale / AFD",
     "url": "https://senprof2.education.sn/%C3%89l%C3%A8ves/3.Moyen/4.Troisi%C3%A8me/PC/res/PC_3e.pdf",
     "personal": false

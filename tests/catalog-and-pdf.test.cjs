@@ -141,3 +141,24 @@ test('Physique-Chimie resources use live, proxy-allowed PDF hosts', () => {
   assert.ok(appSource.includes("'senprof2.education.sn'"),
     'the browser must send SenProf2 PDFs through the same-origin PDF proxy');
 });
+
+
+test('ADEM Physics-Chemistry fascicules are classified as exercises, not courses', () => {
+  const resources = readSeedResources();
+  for (const id of ['pc4-comp2', 'pc3-bfem16']) {
+    const item = resources.find(resource => resource.id === id);
+    assert.ok(item, id + ' must remain in the catalogue');
+    assert.equal(item.kind, 'Exercices', id + ' must be classified as exercises');
+    assert.ok(item.title.toLocaleLowerCase('fr-FR').includes('exercices'),
+      id + ' must clearly identify the fascicule as an exercise resource');
+    assert.deepEqual(catalog.libraryCategories(item), ['Exercices'],
+      id + ' must not appear under Cours');
+  }
+
+  for (const id of ['pc-wahab-course-4e', 'pc-wahab-course-3e-physics', 'pc-wahab-course-3e-chemistry']) {
+    const item = resources.find(resource => resource.id === id);
+    assert.ok(item, id + ' must remain available');
+    assert.deepEqual(catalog.libraryCategories(item), ['Cours', 'Exercices'],
+      id + ' contains lesson material and applications');
+  }
+});
