@@ -1544,7 +1544,6 @@ function showPdfViewer(src,title){
     'img1.wsimg.com',
     'senprof.education.sn',
     'senprof2.education.sn',
-    'senprof2.education.sn',
     'apprendre.auf.org',
     'topeducationsn.com'
   ];
