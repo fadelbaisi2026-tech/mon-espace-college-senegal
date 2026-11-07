@@ -50,6 +50,14 @@ test('PDF URL validation accepts only direct HTTPS PDF URLs', () => {
   assert.equal(catalog.isPdfUrl('not a url'), false);
 });
 
+test('the landing panel is shown only at the root of the library', () => {
+  assert.equal(catalog.isLibraryLandingView('', {}), true);
+  assert.equal(catalog.isLibraryLandingView('svt', {}), false);
+  assert.equal(catalog.isLibraryLandingView('', { grade: '6e' }), false);
+  assert.equal(catalog.isLibraryLandingView('', { grade: '6e', subject: 'SVT' }), false);
+  assert.equal(catalog.isLibraryLandingView('', { grade: 'Toutes' }), false);
+});
+
 test('local files are visible by PDF name or MIME type', () => {
   assert.equal(catalog.isLocalPdfResource({
     fileId: 'file-1', fileName: 'cours-sans-extension', fileType: 'application/pdf'

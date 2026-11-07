@@ -35,7 +35,21 @@
   function isLocalPdfResource(item) {
     return Boolean(item && item.fileId && (/\.pdf$/i.test(String(item.fileName || '')) || item.fileType === 'application/pdf'));
   }
-  const api = Object.freeze({isPdfUrl,isAssessmentKind,displayResourceKind,libraryCategories,isLocalPdfResource});
+  function isLibraryLandingView(query, path) {
+    const currentPath = path && typeof path === 'object' ? path : {};
+    return !String(query || '').trim() &&
+      !currentPath.grade &&
+      !currentPath.subject &&
+      !currentPath.category;
+  }
+  const api = Object.freeze({
+    isPdfUrl,
+    isAssessmentKind,
+    displayResourceKind,
+    libraryCategories,
+    isLocalPdfResource,
+    isLibraryLandingView
+  });
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   if (root) root.MonEspaceCatalogUtils = api;
 })(typeof window !== 'undefined' ? window : globalThis);
